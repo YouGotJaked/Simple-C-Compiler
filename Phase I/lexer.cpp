@@ -2,17 +2,13 @@
 #include <cctype>
 #include <string>
 #include <iostream>
-#include <sstream>
 #include <set>
-#include <algorithm>
 
 using std::string;
-using std::stringstream;
 using std::cin;
 using std::cout;
 using std::endl;
 using std::set;
-using std::find;
 
 enum {
     KEYWORD, ID, INTEGER, REAL, STRING, OPERATOR, DONE,
@@ -86,15 +82,16 @@ set<string> operators = {
     ","
 };
 
-void whitespace_handler(char* c) {
-
-}
 /*
-void comment_handler() {
-    
+void whitespace_handler(char c) {
+
 }
 
-int id_keyword_handler() {
+void comment_handler(char c) {
+
+}
+
+int id_keyword_handler(char *c, string *lexbuf) {
     
 }
 
@@ -110,6 +107,7 @@ int operator_handler() {
     
 }
 */
+
 // Store matched text in lexbuf and return an integer token value.
 int lexan(string &lexbuf) {
     char c = cin.get();
@@ -162,7 +160,7 @@ int lexan(string &lexbuf) {
                 do {
                     lexbuf += c;
                     c = cin.get();
-                } while (isdigit(c));
+                } while (isdigit(c) || c == 'e' || c == 'E' || c == '-' || c == '+');
                 // TODO: implement scientific notation ([eE][+-]?[0-9]+)?
             }
             return REAL;

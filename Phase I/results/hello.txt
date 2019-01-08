@@ -1,0 +1,9 @@
+keyword:int
+identifier:main
+keyword:void
+operator:{
+identifier:printf
+string:"hello world\n"
+operator:)
+operator:;
+operator:}
