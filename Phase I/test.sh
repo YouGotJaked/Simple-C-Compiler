@@ -21,3 +21,13 @@ echo "Analyzing test C programs..."
 ./scc < examples/sum.c > results/sum.txt
 ./scc < examples/tricky.c > results/tricky.txt
 echo "DONE"
+
+echo "Testing difference..."
+diff examples/fib.out results/fib.txt
+diff examples/hello.out results/hello.txt
+diff examples/list.out results/list.txt
+diff examples/malloc.out results/malloc.txt
+diff examples/real.out results/real.txt
+diff examples/sum.out results/sum.txt
+diff examples/tricky.out results/tricky.txt
+echo "DONE"

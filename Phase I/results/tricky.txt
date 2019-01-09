@@ -1,19 +1,23 @@
-identifier:nt 
-identifier:ain(
-identifier:oid)
+keyword:int
+identifier:main
+operator:(
+keyword:void
+operator:)
 operator:{
-identifier:har 
-identifier:,
+keyword:char
+identifier:c
+operator:,
 operator:*
+identifier:s
 operator:;
-identifier: 
+identifier:s
 operator:=
 string:"I said 'hello there'"
 operator:;
-identifier: 
+identifier:c
 operator:++
 operator:;
 operator:--
-identifier:;
+identifier:s
+operator:;
 operator:}
-ILLEGAL TOKEN ÿ ON LINE 3

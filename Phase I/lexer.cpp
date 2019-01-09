@@ -15,7 +15,7 @@ enum {
 };
 
 // Keywords that may not be used as identifiers
-static set<string> keywords = {
+set<string> keywords = {
     "auto",
     "break",
     "case",
@@ -50,71 +50,12 @@ static set<string> keywords = {
     "while"
 };
 
-static set<string> operators = {
-    "=",
-    "||",
-    "&&",
-    "==",
-    "!=",
-    "<",
-    ">",
-    "<=",
-    ">=",
-    "+",
-    "-",
-    "*",
-    "/",
-    "%",
-    "&",
-    "!",
-    "++",
-    "--",
-    ".",
-    "->",
-    "(",
-    ")",
-    "[",
-    "]",
-    "{",
-    "}",
-    ";",
-    ":",
-    ","
-};
-
-/*
-void whitespace_handler(char c) {
-
-}
-
-void comment_handler(char c) {
-
-}
-
-int id_keyword_handler(char *c, string *lexbuf) {
-    
-}
-
-int int_real_handler() {
-    
-}
-
-int string_handler() {
-    
-}
-
-int operator_handler() {
-    
-}
-*/
-
-int line = 1;
-
 // Store matched text in lexbuf and return an integer token value.
 int lexan(string &lexbuf) {
+    static char c = cin.get();
+    char p;
+    
     while (!cin.eof()) {
-        char c = cin.get();
-
         // clear buffer
         lexbuf.clear();
         
@@ -123,23 +64,8 @@ int lexan(string &lexbuf) {
             c = cin.get();
         }
         
-        // handle comments and division
-        if (c == '/') {
-            c = cin.get();
-            if (c == '*') {
-                while (c != '/' && !cin.eof()) {
-                    while (c != '*' && !cin.eof()) {
-                        c = cin.get();
-                    }
-                    c = cin.get();
-                }
-            } else {
-                lexbuf += c;
-                return OPERATOR;
-            }
-        }
         // handle identifiers and keywords
-        else if (isalpha(c) || c == '_') {
+        if (isalpha(c) || c == '_') {
             do {
                 lexbuf += c;
                 c = cin.get();
@@ -154,10 +80,10 @@ int lexan(string &lexbuf) {
         // handle integers and real numbers
         else if (isdigit(c)) {
             // [0-9]+
-            while (isdigit(c)) {
+            do {
                 lexbuf += c;
                 c = cin.get();
-            }
+            } while (isdigit(c));
             
             if (c != '.') {
                 return INTEGER;
@@ -168,30 +94,159 @@ int lexan(string &lexbuf) {
                 } while (isdigit(c) || c == 'e' || c == 'E' || c == '-' || c == '+');
             }
             return REAL;
-        }
-        // handle string literals
-        else if (c == '"') {
-            do {
-                lexbuf += c;
-                c = cin.get();
-            } while(c != '"' && c != '\n' && !cin.eof());
-            lexbuf += c;
-            return STRING;
-        }
-
-        else if (operators.find(string(1,c).c_str()) != operators.end()) {
-            lexbuf += c;
-            c = cin.get();
-            string temp = lexbuf + string(1,c);
-            if (operators.find(temp.c_str()) != operators.end()) {
-                lexbuf += c;
-            }
-            return OPERATOR;
         } else {
-            cout << "ILLEGAL TOKEN " << c << " ON LINE " << line << endl;
-            c = cin.get();
+            lexbuf += c;
+
+            switch (c) {
+                // string literals
+                case '"':
+                    do {
+                        p = c;
+                        c = cin.get();
+                        lexbuf += c;
+                    } while((c != '"' || p == '\\') && c != '\n' && !cin.eof());
+                    c = cin.get();
+                    return STRING;
+                // handle comments and division
+                case '/':
+                    c = cin.get();
+                    if (c == '*') {
+                        do {
+                            while (c != '*' && !cin.eof()) {
+                                c = cin.get();
+                            }
+                            c = cin.get();
+                        } while (c != '/' && !cin.eof());
+                        c = cin.get();
+                        break;
+                    } else {
+                        lexbuf += c;
+                        return OPERATOR;
+                    }
+                // ||
+                case '|':
+                    c = cin.get();
+                    if (c == '|') {
+                        lexbuf += c;
+                        c = cin.get();
+                        return OPERATOR;
+                    }
+                    break;
+                // = and ==
+                case '=':
+                    c = cin.get();
+                    if (c == '=') {
+                        lexbuf += c;
+                        c = cin.get();
+                    }
+                    return OPERATOR;
+                // & and &&
+                case '&':
+                    c = cin.get();
+                    if (c == '&') {
+                        lexbuf += c;
+                        c = cin.get();
+                    }
+                    return OPERATOR;
+                // ! and !=
+                case '!':
+                    c = cin.get();
+                    if (c == '=') {
+                        lexbuf += c;
+                        c = cin.get();
+                    }
+                    return OPERATOR;
+                // < and <=
+                case '<':
+                    c = cin.get();
+                    if (c == '=') {
+                        lexbuf += c;
+                        c = cin.get();
+                    }
+                    return OPERATOR;
+                // > and >=
+                case '>':
+                    c = cin.get();
+                    if (c == '=') {
+                        lexbuf += c;
+                        c = cin.get();
+                    }
+                    return OPERATOR;
+                // + and ++
+                case '+':
+                    c = cin.get();
+                    if (c == '+') {
+                        lexbuf += c;
+                        c = cin.get();
+                    }
+                    return OPERATOR;
+                // - and -- and ->
+                case '-':
+                    c = cin.get();
+                    if (c == '-') {
+                        lexbuf += c;
+                        c = cin.get();
+                        if (c == '>') {
+                            lexbuf += c;
+                            c = cin.get();
+                        }
+                    }
+                    return OPERATOR;
+                // *
+                case '*':
+                    c = cin.get();
+                    return OPERATOR;
+                // %
+                case '%':
+                    c = cin.get();
+                    return OPERATOR;
+                // .
+                case '.':
+                    c = cin.get();
+                    return OPERATOR;
+                // (
+                case '(':
+                    c = cin.get();
+                    return OPERATOR;
+                // )
+                case ')':
+                    c = cin.get();
+                    return OPERATOR;
+                // [
+                case '[':
+                    c = cin.get();
+                    return OPERATOR;
+                // ]
+                case ']':
+                    c = cin.get();
+                    return OPERATOR;
+                // {
+                case '{':
+                    c = cin.get();
+                    return OPERATOR;
+                // }
+                case '}':
+                    c = cin.get();
+                    return OPERATOR;
+                // ;
+                case ';':
+                    c = cin.get();
+                    return OPERATOR;
+                // :
+                case ':':
+                    c = cin.get();
+                    return OPERATOR;
+                // ,
+                case ',':
+                    c = cin.get();
+                    return OPERATOR;
+                case EOF:
+                    return DONE;
+                default:
+                    c = cin.get();
+                    break;
+            }
         }
-        line++;
     }
     return DONE;
 }
