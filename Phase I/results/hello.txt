@@ -1,0 +1,9 @@
+identifier:nt 
+identifier:ain(
+identifier:oid)
+operator:{
+identifier:rintf(
+string:"hello world\n"
+operator:)
+operator:}
+ILLEGAL TOKEN ÿ ON LINE 2

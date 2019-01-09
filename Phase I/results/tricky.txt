@@ -1,0 +1,19 @@
+identifier:nt 
+identifier:ain(
+identifier:oid)
+operator:{
+identifier:har 
+identifier:,
+operator:*
+operator:;
+identifier: 
+operator:=
+string:"I said 'hello there'"
+operator:;
+identifier: 
+operator:++
+operator:;
+operator:--
+identifier:;
+operator:}
+ILLEGAL TOKEN ÿ ON LINE 3

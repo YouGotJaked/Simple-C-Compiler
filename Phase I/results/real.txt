@@ -1,0 +1,24 @@
+identifier:nt 
+identifier:ain(
+identifier:oid)
+operator:{
+identifier:ouble 
+identifier:i,
+identifier:n2;
+identifier:ouble 
+identifier:ax_flt,
+identifier:in_flt;
+identifier:i 
+operator:=
+real:3.14159265358979323846
+identifier:n2 
+operator:=
+real:0.69314718055994530942
+identifier:ax_flt 
+operator:=
+real:3.402823e+38
+identifier:in_flt 
+operator:=
+real:1.175494E-38
+operator:}
+ILLEGAL TOKEN ÿ ON LINE 2
