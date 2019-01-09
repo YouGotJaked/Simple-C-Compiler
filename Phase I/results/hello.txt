@@ -1,9 +1,9 @@
-keyword:int
-identifier:main
-keyword:void
+identifier:nt 
+identifier:ain(
+identifier:oid)
 operator:{
-identifier:printf
+identifier:rintf(
 string:"hello world\n"
 operator:)
-operator:;
 operator:}
+ILLEGAL TOKEN ÿ ON LINE 2

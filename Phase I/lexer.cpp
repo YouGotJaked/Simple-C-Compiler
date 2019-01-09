@@ -15,7 +15,7 @@ enum {
 };
 
 // Keywords that may not be used as identifiers
-set<string> keywords = {
+static set<string> keywords = {
     "auto",
     "break",
     "case",
@@ -50,7 +50,7 @@ set<string> keywords = {
     "while"
 };
 
-set<string> operators = {
+static set<string> operators = {
     "=",
     "||",
     "&&",
@@ -108,11 +108,13 @@ int operator_handler() {
 }
 */
 
+int line = 1;
+
 // Store matched text in lexbuf and return an integer token value.
 int lexan(string &lexbuf) {
-    char c = cin.get();
-    
     while (!cin.eof()) {
+        char c = cin.get();
+
         // clear buffer
         lexbuf.clear();
         
@@ -121,16 +123,19 @@ int lexan(string &lexbuf) {
             c = cin.get();
         }
         
-        // handle comments
+        // handle comments and division
         if (c == '/') {
             c = cin.get();
             if (c == '*') {
-                do {
+                while (c != '/' && !cin.eof()) {
                     while (c != '*' && !cin.eof()) {
                         c = cin.get();
                     }
                     c = cin.get();
-                } while (c != '/' && !cin.eof());
+                }
+            } else {
+                lexbuf += c;
+                return OPERATOR;
             }
         }
         // handle identifiers and keywords
@@ -149,10 +154,10 @@ int lexan(string &lexbuf) {
         // handle integers and real numbers
         else if (isdigit(c)) {
             // [0-9]+
-            do {
+            while (isdigit(c)) {
                 lexbuf += c;
                 c = cin.get();
-            } while (isdigit(c));
+            }
             
             if (c != '.') {
                 return INTEGER;
@@ -161,7 +166,6 @@ int lexan(string &lexbuf) {
                     lexbuf += c;
                     c = cin.get();
                 } while (isdigit(c) || c == 'e' || c == 'E' || c == '-' || c == '+');
-                // TODO: implement scientific notation ([eE][+-]?[0-9]+)?
             }
             return REAL;
         }
@@ -170,26 +174,25 @@ int lexan(string &lexbuf) {
             do {
                 lexbuf += c;
                 c = cin.get();
-            } while (c != '"' && c != '\n' && !cin.eof());  // TODO: ignore \n
+            } while(c != '"' && c != '\n' && !cin.eof());
             lexbuf += c;
             return STRING;
         }
-        // handle operators
-        else {
-            lexbuf += c;
-            // single operators
-            if (operators.find(lexbuf.c_str()) != operators.end()) {
-                return OPERATOR;
-            } else {    // double operators
-                c = cin.get();
-                lexbuf += c;
-                if (operators.find(lexbuf.c_str()) != operators.end()) {
-                    return OPERATOR;
-                }
-            }
-        }
-    }
 
+        else if (operators.find(string(1,c).c_str()) != operators.end()) {
+            lexbuf += c;
+            c = cin.get();
+            string temp = lexbuf + string(1,c);
+            if (operators.find(temp.c_str()) != operators.end()) {
+                lexbuf += c;
+            }
+            return OPERATOR;
+        } else {
+            cout << "ILLEGAL TOKEN " << c << " ON LINE " << line << endl;
+            c = cin.get();
+        }
+        line++;
+    }
     return DONE;
 }
 
