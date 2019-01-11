@@ -1,0 +1,10 @@
+operator:%
+operator:+
+operator:/
+identifier:hello
+identifier:world
+operator:*
+operator:-
+identifier:ubuntu
+operator:++
+integer:42

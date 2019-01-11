@@ -71,8 +71,7 @@ operator:)
 operator:)
 operator:;
 identifier:node
-operator:-
-operator:>
+operator:->
 identifier:link
 operator:=
 operator:(
@@ -92,11 +91,9 @@ operator:=
 identifier:node
 operator:;
 identifier:list
-operator:-
-operator:>
+operator:->
 identifier:head
-operator:-
-operator:>
+operator:->
 identifier:data
 operator:=
 operator:--

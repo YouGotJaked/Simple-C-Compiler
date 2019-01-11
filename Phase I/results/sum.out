@@ -58,7 +58,7 @@ identifier:n
 operator:+
 integer:1
 operator:)
-operator:/ 
+operator:/
 integer:2
 operator:)
 operator:;

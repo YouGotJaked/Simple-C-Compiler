@@ -10,11 +10,17 @@ using std::cout;
 using std::endl;
 using std::set;
 
+// QUESTIONS
+// directives
+// single line comments
+// escaped double quote
+
+
 enum {
     KEYWORD, ID, INTEGER, REAL, STRING, OPERATOR, DONE,
 };
 
-// Keywords that may not be used as identifiers
+// keywords that may not be used as identifiers
 set<string> keywords = {
     "auto",
     "break",
@@ -50,16 +56,17 @@ set<string> keywords = {
     "while"
 };
 
-// Store matched text in lexbuf and return an integer token value.
+/*
+ * store matched text in lexbuf and return an integer token value
+ */
 int lexan(string &lexbuf) {
     static char c = cin.get();
-    char p;
     
     while (!cin.eof()) {
         // clear buffer
         lexbuf.clear();
         
-        // ignore whitespace
+        // handle comments
         while (isspace(c)) {
             c = cin.get();
         }
@@ -79,7 +86,6 @@ int lexan(string &lexbuf) {
         }
         // handle integers and real numbers
         else if (isdigit(c)) {
-            // [0-9]+
             do {
                 lexbuf += c;
                 c = cin.get();
@@ -101,15 +107,15 @@ int lexan(string &lexbuf) {
                 // string literals
                 case '"':
                     do {
-                        p = c;
                         c = cin.get();
                         lexbuf += c;
-                    } while((c != '"' || p == '\\') && c != '\n' && !cin.eof());
+                    } while(c != '"' && c != '\n' && !cin.eof());
                     c = cin.get();
                     return STRING;
                 // handle comments and division
                 case '/':
                     c = cin.get();
+                    // comments
                     if (c == '*') {
                         do {
                             while (c != '*' && !cin.eof()) {
@@ -119,11 +125,12 @@ int lexan(string &lexbuf) {
                         } while (c != '/' && !cin.eof());
                         c = cin.get();
                         break;
-                    } else {
-                        lexbuf += c;
+                    }
+                    // division
+                    else {
                         return OPERATOR;
                     }
-                // ||
+                // handle || operator
                 case '|':
                     c = cin.get();
                     if (c == '|') {
@@ -132,7 +139,7 @@ int lexan(string &lexbuf) {
                         return OPERATOR;
                     }
                     break;
-                // = and ==
+                // handle = and == operators
                 case '=':
                     c = cin.get();
                     if (c == '=') {
@@ -140,7 +147,7 @@ int lexan(string &lexbuf) {
                         c = cin.get();
                     }
                     return OPERATOR;
-                // & and &&
+                // handle & and && operators
                 case '&':
                     c = cin.get();
                     if (c == '&') {
@@ -148,7 +155,7 @@ int lexan(string &lexbuf) {
                         c = cin.get();
                     }
                     return OPERATOR;
-                // ! and !=
+                // handle ! and != operators
                 case '!':
                     c = cin.get();
                     if (c == '=') {
@@ -156,7 +163,7 @@ int lexan(string &lexbuf) {
                         c = cin.get();
                     }
                     return OPERATOR;
-                // < and <=
+                // handle < and <= operators
                 case '<':
                     c = cin.get();
                     if (c == '=') {
@@ -164,7 +171,7 @@ int lexan(string &lexbuf) {
                         c = cin.get();
                     }
                     return OPERATOR;
-                // > and >=
+                // handle > and >= operators
                 case '>':
                     c = cin.get();
                     if (c == '=') {
@@ -172,7 +179,7 @@ int lexan(string &lexbuf) {
                         c = cin.get();
                     }
                     return OPERATOR;
-                // + and ++
+                // handle + and ++ operators
                 case '+':
                     c = cin.get();
                     if (c == '+') {
@@ -180,68 +187,64 @@ int lexan(string &lexbuf) {
                         c = cin.get();
                     }
                     return OPERATOR;
-                // - and -- and ->
+                // handle - and -- and -> operators
                 case '-':
                     c = cin.get();
-                    if (c == '-') {
+                    if (c == '-' || c == '>') {
                         lexbuf += c;
                         c = cin.get();
-                        if (c == '>') {
-                            lexbuf += c;
-                            c = cin.get();
-                        }
                     }
+                    
                     return OPERATOR;
-                // *
+                // handle * operator
                 case '*':
                     c = cin.get();
                     return OPERATOR;
-                // %
+                // handle % operator
                 case '%':
                     c = cin.get();
                     return OPERATOR;
-                // .
+                // handle . operator
                 case '.':
                     c = cin.get();
                     return OPERATOR;
-                // (
+                // handle ( operator
                 case '(':
                     c = cin.get();
                     return OPERATOR;
-                // )
+                // handle ) operator
                 case ')':
                     c = cin.get();
                     return OPERATOR;
-                // [
+                // handle [ operator
                 case '[':
                     c = cin.get();
                     return OPERATOR;
-                // ]
+                // handle ] operator
                 case ']':
                     c = cin.get();
                     return OPERATOR;
-                // {
+                // handle { operator
                 case '{':
                     c = cin.get();
                     return OPERATOR;
-                // }
+                // handle } operator
                 case '}':
                     c = cin.get();
                     return OPERATOR;
-                // ;
+                // handle ; operator
                 case ';':
                     c = cin.get();
                     return OPERATOR;
-                // :
+                // handle : operator
                 case ':':
                     c = cin.get();
                     return OPERATOR;
-                // ,
+                // handle , operator
                 case ',':
                     c = cin.get();
                     return OPERATOR;
-                case EOF:
-                    return DONE;
+                // handle illegal tokens
                 default:
                     c = cin.get();
                     break;
