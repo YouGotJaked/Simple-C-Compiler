@@ -20,12 +20,6 @@ echo "Analyzing test C programs..."
 ./scc < examples/real.c > results/real.out
 ./scc < examples/sum.c > results/sum.out
 ./scc < examples/tricky.c > results/tricky.out
-./scc < tcase/abc_period.txt > results/abc_period.out
-./scc < tcase/five_white_spaces.txt > results/five_white_spaces.out
-./scc < tcase/keywords.txt > results/keywords.out
-./scc < tcase/number.txt > results/number.out
-./scc < tcase/numbers.txt > results/numbers.out
-./scc < tcase/operators.txt > results/operators.out
 echo "DONE"
 
 echo "Testing difference..."
