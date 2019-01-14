@@ -1,7 +1,0 @@
-auto
-hello
-123
-casewhile
-++
-+
-caes

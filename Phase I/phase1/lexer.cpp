@@ -78,12 +78,14 @@ int lexan(string &lexbuf) {
         }
         // handle integers and real numbers
         else if (isdigit(c)) {
+            // integer half
             do {
                 lexbuf += c;
                 c = cin.get();
-            } while (isdigit(c));
+            } while (isdigit(c) || c == 'e' || c == 'E' || c == '+');
             
-            if (c != '.') {
+            // decimal half
+            if (c != '.' && c != '-') {
                 return INTEGER;
             } else {
                 do {
