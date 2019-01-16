@@ -1,5 +1,11 @@
-scc:	parser.cpp
-	g++ -std=c++11 -o scc parser.cpp
+CXX		= g++ -std=c++11
+CXXFLAGS	= -g -Wall
+OBJS		= lexer.o parser.o
+PROG		= scc
 
-clean:
-	rm -f scc core *.o
+all:		$(PROG)
+
+$(PROG):	$(OBJS)
+		$(CXX) -o $(PROG) $(OBJS)
+
+clean:;		$(RM) -f $(PROG) core *.o

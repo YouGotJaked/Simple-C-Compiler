@@ -3,9 +3,12 @@
 #include <iostream>
 #include <string>
 #include "../Phase I/lexer.h"
+#include "tokens.h"
 #include "parser.h"
 
 using std::string;
+using std::cout;
+using std::endl;
 
 static int lookahead;
 static string lexbuf;
@@ -14,7 +17,7 @@ static void error() {
     exit(EXIT_FAILURE);
 }
 
-static void match (int token) {
+static void match(int token) {
     if (lookahead != token) {
         error();
     }
@@ -26,8 +29,9 @@ static void match (int token) {
  *              |   * pointers
  */
 static void pointers() {
-    while (lookahead == '*') {
-        match('*');
+    while (lookahead == PTR) {
+        match(PTR);
+        cout << "PTR" << endl;
     }
 }
 
@@ -38,10 +42,24 @@ static void pointers() {
  */
 static int specifier() {
     if (lookahead == CHAR || lookahead == INT || lookahead == DOUBLE) {
+        switch (lookahead) {
+            case CHAR:
+                cout << "CHAR" << endl;
+                break;
+            case INT:
+                cout << "INT" << endl;
+                break;
+            case DOUBLE:
+                cout << "DOUBLE" << endl;
+                break;
+                
+            default:
+                break;
+        }
         match(lookahead);
     } else {
         error();
-        return ERROR;
+        return 0;   // TODO: actually do something
     }
     return lookahead;
 }
@@ -83,7 +101,7 @@ static void parameters() {
  * parameter-list   ->  parameter parameter-list_p
  * parameter-list_p ->  , parameter-list
  */
-static void parameter-list() {
+static void parameterList() {
     
 }
 
@@ -118,7 +136,7 @@ static void declaration() {
  * declarator-list   ->  declarator declarator-list_p
  * declarator-list_p ->  , declarator-list
  */
-static void declarator-list() {
+static void declaratorList() {
     
 }
 
@@ -136,10 +154,12 @@ static void declarator() {
     pointers();
     match(ID);
     
-    if (lookahead == '[') {
-        match('[');
+    if (lookahead == LBRACKET) {
+        match(LBRACKET);
         match(INT);
-        match(']');
+        match(RBRACKET);
+        cout << "LBRACKET" << endl;
+        cout << "RBRACKET" << endl;
     }
 }
 
@@ -167,26 +187,57 @@ static void statement() {
 /*
  * exprOR       ->  exprOR || exprAND
  *              |   exprAND
+ *
+ * After left-factoring:
+ * exprOR       ->  exprAND exprOR_p
+ * exprOR_p     ->  || exprAND exprOR_p
+ *              |   ε
  */
 static void exprOR() {
-    
+    exprAND();
+    while (lookahead == OR) {
+        match(lookahead);
+        exprAND();
+        cout << "OR" << endl;
+    }
 }
 
 /*
  * exprAND      ->  exprAND && exprEQL
  *              |   exprEQL
+ *
+ * After left-factoring:
+ * exprAND      ->  exprEQL exprAND_p
+ * exprAND_p    ->  && exprEQL exprAND_p
+ *              |   ε
  */
 static void exprAND() {
-    
+    exprEQL();
+    while (lookahead == AND) {
+        cout << "AND" << endl;
+        match(lookahead);
+        exprEQL();
+    }
 }
 
 /*
  * exprEQL      ->  exprEQL == exprCOMP
  *              |   exprEQL != exprCOMP
  *              |   exprCOMP
+ *
+ * After left-factoring:
+ * exprEQL      ->  exprCOMP exprEQL_p
+ * exprEQL_p    ->  == exprCOMP exprEQL_p
+ *              |   != exprCOMP exprEQL_p
+ *              |   ε
  */
 static void exprEQL() {
-    
+    exprCOMP();
+    while (lookahead == EQL || lookahead == NEQ) {
+        match(lookahead);
+        exprCOMP();
+        cout << ((lookahead == EQL) ? "EQL" : "NEQ") << endl;
+    }
 }
 
 /*
@@ -195,61 +246,190 @@ static void exprEQL() {
  *              |   exprCOMP <= exprADDSUB
  *              |   exprCOMP >= exprADDSUB
  *              |   exprADDSUB
+ *
+ * After left-factoring:
+ * exprCOMP     ->  exprADDSUB exprCOMP_p
+ * exprCOMP_p   ->  < exprADDSUB exprCOMP_p
+ *              |   > exprADDSUB exprCOMP_p
+ *              |   <= exprADDSUB exprCOMP_p
+ *              |   >= exprADDSUB exprCOMP_p
+ *              |   ε
  */
 static void exprCOMP() {
-    
+    exprADDSUB();
+    while (lookahead == LTN || lookahead == GTN || lookahead == LEQ || lookahead == GEQ) {
+        match(lookahead);
+        exprADDSUB();
+        switch (lookahead) {
+            case LTN:
+                cout << "LTN" << endl;
+                break;
+            case GTN:
+                cout << "GTN" << endl;
+                break;
+            case LEQ:
+                cout << "LEQ" << endl;
+                break;
+            case GEQ:
+                cout << "GEQ" << endl;
+                break;
+            default:
+                break;
+        }
+    }
 }
 
 /*
  * exprADDSUB   ->  exprADDSUB + exprMULDIV
  *              |   exprADDSUB - exprMULDIV
  *              |   exprMULDIV
+ *
+ * After left-factoring:
+ * exprADDSUB   ->  exprMULDIV exprADDSUB_p
+ * exprADDSUB_p ->  + exprMULDIV exprADDSUB_p
+ *              |   - exprMULDIV exprADDSUB_p
+ *              |   exprMULDIV
  */
 static void exprADDSUB() {
-    
+    exprMULDIV();
+    while (lookahead == ADD || lookahead == SUB) {
+        match(lookahead);
+        exprMULDIV();
+        cout << ((lookahead == ADD) ? "ADD" : "SUB") << endl;
+    }
 }
 
 /*
- * exprMULDIV   ->  exprMULDIV * exprUNARY
- *              |   exprMULDIV / exprUNARY
- *              |   exprMULDIV % exprUNARY
- *              |   exprUNARY
+ * exprMULDIV   ->  exprMULDIV * exprPREFIX
+ *              |   exprMULDIV / exprPREFIX
+ *              |   exprMULDIV % exprPREFIX
+ *              |   exprPREFIX
+ *
+ * After left-factoring:
+ * exprMULDIV   ->  exprPREFIX exprMULDIV_p
+ * exprMULDIV_p ->  * exprPREFIX exprMULDIV_p
+ *              |   / exprPREFIX exprMULDIV_p
+ *              |   % exprPREFIX exprMULDIV_p
+ *              |   exprPREFIX
  */
 static void exprMULDIV() {
-    
+    exprPREFIX();
+    while (lookahead == MUL || lookahead == DIV || lookahead == REM) {
+        match(lookahead);
+        exprPREFIX();
+        switch (lookahead) {
+            case MUL:
+                cout << "MUL" << endl;
+                break;
+            case DIV:
+                cout << "DIV" << endl;
+                break;
+            case REM:
+                cout << "REM" << endl;
+                break;
+            default:
+                break;
+        }
+    }
 }
 
 /*
- * exprUNARY    ->  & exprUNARY
- *              |   * exprUNARY
- *              |   ! exprUNARY
- *              |   - exprUNARY
- *              |   sizeof exprUNARY
- *              |   exprINDEX
+ * exprPREFIX   ->  ( specifier pointers ) exprPREFIX
+ *              |   & exprPREFIX
+ *              |   * exprPREFIX
+ *              |   ! exprPREFIX
+ *              |   - exprPREFIX
+ *              |   sizeof ( specifier pointers )
+ *              |   exprPOSTFIX
+ *
  */
-static void exprUNARY() {
-    
+static void exprPREFIX() {
+    while (lookahead == ADDR || lookahead == DEREF || lookahead == NOT || lookahead == NEG || lookahead == SIZEOF) {
+        match(lookahead);
+        exprPREFIX();
+        switch (lookahead) {
+            case ADDR:
+                cout << "ADDR" << endl;
+                break;
+            case DEREF:
+                cout << "DEREF" << endl;
+            case NOT:
+                cout << "NOT" << endl;
+            case NEG:
+                cout << "NEG" << endl;
+            case SIZEOF:
+                cout << "SIZEOF" << endl;
+            default:
+                break;
+        }
+    }
+    exprPOSTFIX();
 }
 
 /*
- * exprINDEX    ->  [ exprOR ]
- *              |   exprID
+ * exprPOSTFIX      ->  exprPRIMARY exprPOSTFIX_p
+ * exprPOSTFIX_p    ->  [ exprOR ] exprPOSTFIX_p
  */
-static void exprINDEX() {
-    
+static void exprPOSTFIX() {
+    if (lookahead == LBRACKET) {
+        match(lookahead);
+        while (lookahead != RBRACKET) {
+            exprOR();
+        }
+        
+        match(lookahead);
+        cout << "LBRACKET" << endl;
+        cout << "RBRACKET" << endl;
+    }
+    exprPRIMARY();
 }
 
 /*
- * exprID       ->  ID ( exprList )
+ * exprPRIMARY  ->  ID
  *              |   ID ( )
- *              |   ID
+ *              |   ID ( exprList )
  *              |   REAL
  *              |   INT
  *              |   STRING
  *              |   ( exprOR )
  */
-static void exprID() {
-    
+static void exprPRIMARY() {
+    if (lookahead == ID) {
+        match(lookahead);
+        if (lookahead == LPAREN) {
+            match(lookahead);
+            while (lookahead != RPAREN) {
+                exprList();
+            }
+            match(lookahead);
+            cout << "LPAREN" << endl;
+            cout << "RPAREN" << endl;
+        }
+    } else if (lookahead == REAL || lookahead == INT || lookahead == STRING) {
+        match(lookahead);
+        switch (lookahead) {
+            case REAL:
+                cout << "REAL" << endl;
+                break;
+            case INT:
+                cout << "INT" << endl;
+                break;
+            case STRING:
+                cout << "STRING" << endl;
+                break;
+            default:
+                break;
+        }
+    } else if (lookahead == LPAREN) {
+        match(lookahead);
+        while (lookahead != RPAREN) {
+            exprOR();
+        }
+        match(lookahead);
+        cout << "LPAREN" << endl;
+        cout << "RPAREN" << endl;
+        
+    }
 }
 
 /*
@@ -257,5 +437,18 @@ static void exprID() {
  *              |   exprOR , exprList
  */
 static void exprList() {
-    
+    exprOR();
+    while (lookahead == COMMA) {
+        match(lookahead);
+        exprOR();
+        cout << "COMMA" << endl;
+    }
+}
+
+int main() {
+    lookahead = lexan(lexbuf);
+    while (lookahead != DONE) {
+        exprOR();
+    }
+    return 0;
 }

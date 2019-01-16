@@ -1,7 +1,7 @@
 # ifndef TOKENS_H
 # define TOKENS_H
 
-enum operators{
+enum types {
     ASSIGN = '=',
     LBRACKET = '[',
     RBRACKET = ']',
@@ -32,13 +32,15 @@ enum operators{
     OR,
     DEC,
     INC,
-    PTR,              // = 264
+    PTR,
     DEREF,
-    NEG
-};
-
-enum keywords{
-    AUTO = 267,
+    NEG,
+    ID,
+    INTEGER,
+    REAL,
+    STRING,
+    DONE,
+    AUTO,
     BREAK,
     CASE,
     CHAR,

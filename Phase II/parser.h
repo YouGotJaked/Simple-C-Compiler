@@ -21,9 +21,9 @@ static void exprEQL();
 static void exprCOMP();
 static void exprADDSUB();
 static void exprMULDIV();
-static void exprUNARY();
-static void exprINDEX();
-static void exprID();
+static void exprPREFIX();
+static void exprPOSTFIX();
+static void exprPRIMARY();
 static void exprList();
 
 #endif /* PARSER_H */

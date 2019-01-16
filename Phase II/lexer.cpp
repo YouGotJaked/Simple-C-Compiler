@@ -12,10 +12,6 @@ using std::cout;
 using std::endl;
 using std::unordered_map;
 
-enum {
-    ID, INTEGER, REAL, STRING, DONE
-};
-
 // keywords that may not be used as identifiers
 static unordered_map<string, int> keywords = {
     {"auto",        AUTO},
@@ -288,6 +284,7 @@ int lexan(string &lexbuf) {
     return DONE;
 }
 
+/*
 int main() {
     int token;
     string lexbuf, type;
@@ -568,3 +565,4 @@ int main() {
     
     return 0;
 }
+*/
