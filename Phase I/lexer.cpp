@@ -2,57 +2,84 @@
 #include <cctype>
 #include <string>
 #include <iostream>
-#include <set>
+#include <map>
+#include "lexer.h"
+#include "../Phase II/tokens.h"
 
 using std::string;
 using std::cin;
 using std::cout;
 using std::endl;
-using std::set;
+using std::map;
 
 enum {
-    KEYWORD, ID, INTEGER, REAL, STRING, OPERATOR, DONE,
+    ID, INTEGER, REAL, STRING, DONE
 };
 
 // keywords that may not be used as identifiers
-set<string> keywords = {
-    "auto",
-    "break",
-    "case",
-    "char",
-    "const",
-    "continue",
-    "default",
-    "do",
-    "double",
-    "else",
-    "enum",
-    "extern",
-    "float",
-    "for",
-    "goto",
-    "if",
-    "int",
-    "long",
-    "register",
-    "return",
-    "short",
-    "signed",
-    "sizeof",
-    "static",
-    "struct",
-    "switch",
-    "typedef",
-    "union",
-    "unsigned",
-    "void",
-    "volatile",
-    "while"
+static map<string, int> keywords = {
+    {"auto",        AUTO},
+    {"break",       BREAK},
+    {"case",        CASE},
+    {"char",        CHAR},
+    {"const",       CONST},
+    {"continue",    CONTINUE},
+    {"default",     DEFAULT},
+    {"do",          DO},
+    {"double",      DOUBLE},
+    {"else",        ELSE},
+    {"enum",        ENUM},
+    {"extern",      EXTERN},
+    {"float",       FLOAT},
+    {"for",         FOR},
+    {"goto",        GOTO},
+    {"if",          IF},
+    {"int",         INT},
+    {"long",        LONG},
+    {"register",    REGISTER},
+    {"return",      RETURN},
+    {"short",       SHORT},
+    {"signed",      SIGNED},
+    {"sizeof",      SIZEOF},
+    {"static",      STATIC},
+    {"struct",      STRUCT},
+    {"switch",      SWITCH},
+    {"typedef",     TYPEDEF},
+    {"union",       UNION},
+    {"unsigned",    UNSIGNED},
+    {"void",        VOID},
+    {"volatile",    VOLATILE},
+    {"while",       WHILE}
 };
 
-// store matched text in lexbuf and return an integer token value
+/*
+ * Function:    report
+ *
+ * Description:    Report an error to the standard error prefixed with the
+ *        line number.  We'll be using this a lot later with an
+ *        optional string argument, but C++'s stupid streams don't do
+ *        positional arguments, so we actually resort to snprintf.
+ *        You just can't beat C for doing things down and dirty.
+ */
+
+/*
+void report(const string &str, const string &arg)
+{
+    char buf[1000];
+    
+    snprintf(buf, sizeof(buf), str.c_str(), arg.c_str());
+    cerr << "line " << lineno << ": " << buf << endl;
+    numerrors++;
+}
+*/
+
+/*
+ * Function:    lexan
+ *
+ * Description: Store matched text in lexbuf and return an integer token value.
+ */
 int lexan(string &lexbuf) {
-    static char c = cin.get();
+    static int c = cin.get();
     
     while (!cin.eof()) {
         // clear buffer
@@ -70,7 +97,10 @@ int lexan(string &lexbuf) {
                 c = cin.get();
             } while (isalnum(c) || c == '_');
             
-            if (keywords.find(lexbuf.c_str()) != keywords.end()) {
+            auto iter = keywords.find(lexbuf.c_str());
+            int KEYWORD = keywords[lexbuf.c_str()];
+            
+            if (iter != keywords.end()) {
                 return KEYWORD;
             } else {
                 return ID;
@@ -122,7 +152,7 @@ int lexan(string &lexbuf) {
                     }
                     // division
                     else {
-                        return OPERATOR;
+                        return DIV;
                     }
                 // handle || operator
                 case '|':
@@ -130,114 +160,124 @@ int lexan(string &lexbuf) {
                     if (c == '|') {
                         lexbuf += c;
                         c = cin.get();
-                        return OPERATOR;
+                        return OR;
                     }
-                    break;
+                    break; // return ERROR?
                 // handle = and == operators
                 case '=':
                     c = cin.get();
                     if (c == '=') {
                         lexbuf += c;
                         c = cin.get();
+                        return EQL;
                     }
-                    return OPERATOR;
+                    return ASSIGN;
                 // handle & and && operators
                 case '&':
                     c = cin.get();
                     if (c == '&') {
                         lexbuf += c;
                         c = cin.get();
+                        return AND;
                     }
-                    return OPERATOR;
+                    return ADDR;
                 // handle ! and != operators
                 case '!':
                     c = cin.get();
                     if (c == '=') {
                         lexbuf += c;
                         c = cin.get();
+                        return NEQ;
                     }
-                    return OPERATOR;
+                    return NOT;
                 // handle < and <= operators
                 case '<':
                     c = cin.get();
                     if (c == '=') {
                         lexbuf += c;
                         c = cin.get();
+                        return LEQ;
                     }
-                    return OPERATOR;
+                    return LTN;
                 // handle > and >= operators
                 case '>':
                     c = cin.get();
                     if (c == '=') {
                         lexbuf += c;
                         c = cin.get();
+                        return GEQ;
                     }
-                    return OPERATOR;
+                    return GTN;
                 // handle + and ++ operators
                 case '+':
                     c = cin.get();
                     if (c == '+') {
                         lexbuf += c;
                         c = cin.get();
+                        return INC;
                     }
-                    return OPERATOR;
+                    return ADD;
                 // handle - and -- and -> operators
                 case '-':
                     c = cin.get();
-                    if (c == '-' || c == '>') {
+                    if (c == '-') {
                         lexbuf += c;
                         c = cin.get();
+                        return DEC;
+                    } else if (c == '>') {
+                        lexbuf += c;
+                        c = cin.get();
+                        return PTR;
                     }
-                    
-                    return OPERATOR;
+                    return SUB;
                 // handle * operator
                 case '*':
                     c = cin.get();
-                    return OPERATOR;
+                    return MUL; // what about PTR?
                 // handle % operator
                 case '%':
                     c = cin.get();
-                    return OPERATOR;
+                    return REM;
                 // handle . operator
                 case '.':
                     c = cin.get();
-                    return OPERATOR;
+                    return DOT;
                 // handle ( operator
                 case '(':
                     c = cin.get();
-                    return OPERATOR;
+                    return LPAREN;
                 // handle ) operator
                 case ')':
                     c = cin.get();
-                    return OPERATOR;
+                    return RPAREN;
                 // handle [ operator
                 case '[':
                     c = cin.get();
-                    return OPERATOR;
+                    return LBRACKET;
                 // handle ] operator
                 case ']':
                     c = cin.get();
-                    return OPERATOR;
+                    return RBRACKET;
                 // handle { operator
                 case '{':
                     c = cin.get();
-                    return OPERATOR;
+                    return LBRACE;
                 // handle } operator
                 case '}':
                     c = cin.get();
-                    return OPERATOR;
+                    return RBRACE;
                 // handle ; operator
                 case ';':
                     c = cin.get();
-                    return OPERATOR;
+                    return SEMICOLON;
                 // handle : operator
                 case ':':
                     c = cin.get();
-                    return OPERATOR;
+                    return COLON;
                 // handle , operator
                 case ',':
                     c = cin.get();
-                    return OPERATOR;
+                    return COMMA;
                 // handle illegal tokens
                 default:
                     c = cin.get();
@@ -258,7 +298,131 @@ int main() {
                 type = "identifier";
                 break;
                 
-            case KEYWORD:
+            case AUTO:
+                type = "keyword";
+                break;
+                
+            case BREAK:
+                type = "keyword";
+                break;
+                
+            case CASE:
+                type = "keyword";
+                break;
+                
+            case CHAR:
+                type = "keyword";
+                break;
+                
+            case CONST:
+                type = "keyword";
+                break;
+                
+            case CONTINUE:
+                type = "keyword";
+                break;
+                
+            case DEFAULT:
+                type = "keyword";
+                break;
+                
+            case DO:
+                type = "keyword";
+                break;
+                
+            case DOUBLE:
+                type = "keyword";
+                break;
+                
+            case ELSE:
+                type = "keyword";
+                break;
+                
+            case ENUM:
+                type = "keyword";
+                break;
+                
+            case EXTERN:
+                type = "keyword";
+                break;
+                
+            case FLOAT:
+                type = "keyword";
+                break;
+                
+            case FOR:
+                type = "keyword";
+                break;
+                
+            case GOTO:
+                type = "keyword";
+                break;
+                
+            case IF:
+                type = "keyword";
+                break;
+                
+            case INT:
+                type = "keyword";
+                break;
+                
+            case LONG:
+                type = "keyword";
+                break;
+                
+            case REGISTER:
+                type = "keyword";
+                break;
+                
+            case RETURN:
+                type = "keyword";
+                break;
+                
+            case SHORT:
+                type = "keyword";
+                break;
+                
+            case SIGNED:
+                type = "keyword";
+                break;
+                
+            case SIZEOF:
+                type = "keyword";
+                break;
+                
+            case STATIC:
+                type = "keyword";
+                break;
+                
+            case STRUCT:
+                type = "keyword";
+                break;
+                
+            case SWITCH:
+                type = "keyword";
+                break;
+                
+            case TYPEDEF:
+                type = "keyword";
+                break;
+                
+            case UNION:
+                type = "keyword";
+                break;
+                
+            case UNSIGNED:
+                type = "keyword";
+                break;
+                
+            case VOID:
+                type = "keyword";
+                break;
+                
+            case VOLATILE:
+                type = "keyword";
+                break;
+                
+            case WHILE:
                 type = "keyword";
                 break;
                 
@@ -273,8 +437,128 @@ int main() {
             case STRING:
                 type = "string";
                 break;
+
+            case ASSIGN:
+                type = "operator";
+                break;
+
+            case LBRACKET:
+                type = "operator";
+                break;
                 
-            case OPERATOR:
+            case RBRACKET:
+                type = "operator";
+                break;
+                
+            case LPAREN:
+                type = "operator";
+                break;
+                
+            case RPAREN:
+                type = "operator";
+                break;
+    
+            case LBRACE:
+                type = "operator";
+                break;
+                
+            case RBRACE:
+                type = "operator";
+                break;
+                
+            case ADDR:
+                type = "operator";
+                break;
+                
+            case NOT:
+                type = "operator";
+                break;
+                
+            case MUL:
+                type = "operator";
+                break;
+                
+            case DIV:
+                type = "operator";
+                break;
+                
+            case REM:
+                type = "operator";
+                break;
+                
+            case ADD:
+                type = "operator";
+                break;
+                
+            case SUB:
+                type = "operator";
+                break;
+                
+            case DOT:
+                type = "operator";
+                break;
+                
+            case SEMICOLON:
+                type = "operator";
+                break;
+                
+            case COLON:
+                type = "operator";
+                break;
+                
+            case COMMA:
+                type = "operator";
+                break;
+                
+            case LTN:
+                type = "operator";
+                break;
+                
+            case GTN:
+                type = "operator";
+                break;
+                
+            case LEQ:
+                type = "operator";
+                break;
+                
+            case GEQ:
+                type = "operator";
+                break;
+                
+            case EQL:
+                type = "operator";
+                break;
+                
+            case NEQ:
+                type = "operator";
+                break;
+                
+            case AND:
+                type = "operator";
+                break;
+                
+            case OR:
+                type = "operator";
+                break;
+                
+            case DEC:
+                type = "operator";
+                break;
+                
+            case INC:
+                type = "operator";
+                break;
+                
+            case PTR:
+                type = "operator";
+                break;
+                
+            case DEREF:
+                type = "operator";
+                break;
+                
+            case NEG:
                 type = "operator";
                 break;
         }

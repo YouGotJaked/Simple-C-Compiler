@@ -1,0 +1,45 @@
+exprOR		-> exprOR || exprAND
+		 | exprAND
+
+exprAND		-> exprAND && exprEQ
+		 | exprEQ
+
+exprEQL		-> exprEQL == exprCOMP
+		 | exprEQL != exprCOMP
+		 | exprCOMP
+
+exprCOMP	-> exprCOMP < exprT
+		 | exprCOMP > exprT
+		 | exprCOMP <= exprT
+		 | exprCOMP >= exprT
+		 | exprT
+
+exprT		-> exprT + exprF
+		 | exprT - exprF
+		 | exprF
+
+exprF		-> exprF * exprP
+		 | exprF / exprP
+		 | exprF % exprP
+		 | exprP
+
+exprP		-> & exprP
+		 | * exprP
+		 | ! exprP
+		 | - exprP
+		 | sizeof exprP
+		 | exprIDX
+
+exprIDX		-> [ exprOR ]
+		 | exprID
+
+exprID		-> ID ( exprList )
+		 | ID ( )
+		 | ID	
+		 | REAL
+		 | INT
+		 | STRING
+		 | ( exprOR )
+
+exprList	-> exprOR
+		 | exprOR , exprList
