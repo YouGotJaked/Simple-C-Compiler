@@ -8,9 +8,12 @@
 
 using std::string;
 using std::cin;
+using std::cerr;
 using std::cout;
 using std::endl;
 using std::unordered_map;
+
+int numerrors, lineno = 1;
 
 // keywords that may not be used as identifiers
 static unordered_map<string, int> keywords = {
@@ -58,7 +61,6 @@ static unordered_map<string, int> keywords = {
  *        You just can't beat C for doing things down and dirty.
  */
 
-/*
 void report(const string &str, const string &arg)
 {
     char buf[1000];
@@ -67,7 +69,7 @@ void report(const string &str, const string &arg)
     cerr << "line " << lineno << ": " << buf << endl;
     numerrors++;
 }
-*/
+
 
 /*
  * Function:    lexan
@@ -76,8 +78,8 @@ void report(const string &str, const string &arg)
  */
 int lexan(string &lexbuf) {
     static int c = cin.get();
-    
-    while (!cin.eof()) {
+   
+    while (!cin.eof()) {     // 10 = line feed
         // clear buffer
         lexbuf.clear();
         
@@ -108,16 +110,35 @@ int lexan(string &lexbuf) {
             do {
                 lexbuf += c;
                 c = cin.get();
-            } while (isdigit(c) || c == 'e' || c == 'E' || c == '+');
+            } while (isdigit(c));
             
             // decimal half
-            if (c != '.' && c != '-') {
+            if (c != '.') {
                 return INTEGER;
-            } else {
+            }
+            
+            if (isdigit(c)) {
                 do {
                     lexbuf += c;
                     c = cin.get();
-                } while (isdigit(c) || c == 'e' || c == 'E' || c == '-' || c == '+');
+                } while (isdigit(c));
+            
+                if (c == 'e' || c == 'E') {
+                    lexbuf += c;
+                    c = cin.get();
+                    
+                    if (c == '-' || c == '+') {
+                        lexbuf += c;
+                        c = cin.get();
+                    }
+                    
+                    if (isdigit(c)) {
+                        do {
+                            lexbuf += c;
+                            c = cin.get();
+                        } while (isdigit(c));
+                    }
+                }
             }
             return REAL;
         } else {
@@ -225,11 +246,11 @@ int lexan(string &lexbuf) {
                         c = cin.get();
                         return PTR;
                     }
-                    return SUB;
+                    return DASH;
                 // handle * operator
                 case '*':
                     c = cin.get();
-                    return MUL; // what about PTR?
+                    return STAR;
                 // handle % operator
                 case '%':
                     c = cin.get();
@@ -274,6 +295,9 @@ int lexan(string &lexbuf) {
                 case ',':
                     c = cin.get();
                     return COMMA;
+                // handle EOF
+                case EOF:
+                    return DONE;
                 // handle illegal tokens
                 default:
                     c = cin.get();
@@ -471,7 +495,7 @@ int main() {
                 type = "operator";
                 break;
                 
-            case MUL:
+            case STAR:
                 type = "operator";
                 break;
                 
@@ -487,7 +511,7 @@ int main() {
                 type = "operator";
                 break;
                 
-            case SUB:
+            case DASH:
                 type = "operator";
                 break;
                 
@@ -548,10 +572,6 @@ int main() {
                 break;
                 
             case PTR:
-                type = "operator";
-                break;
-                
-            case DEREF:
                 type = "operator";
                 break;
                 

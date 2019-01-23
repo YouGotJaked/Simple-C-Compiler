@@ -279,6 +279,9 @@ int lexan(string &lexbuf) {
                     c = cin.get();
                     return COMMA;
                 // handle illegal tokens
+                // handle EOF
+                case EOF:
+                    return DONE;
                 default:
                     c = cin.get();
                     break;

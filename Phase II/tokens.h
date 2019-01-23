@@ -1,75 +1,72 @@
 # ifndef TOKENS_H
 # define TOKENS_H
 
-enum types {
-    ASSIGN = '=',
-    LBRACKET = '[',
-    RBRACKET = ']',
-    LPAREN = '(',
-    RPAREN = ')',
-    LBRACE = '{',
-    RBRACE = '}',
-    ADDR = '&',
-    //DEREF = '*',
-    NOT = '!',
-    //NEG = '-',
-    MUL = '*',          // conflict
-    DIV = '/',
-    REM = '%',
-    ADD = '+',
-    SUB = '-',          // conflict
-    DOT = '.',
-    SEMICOLON = ';',
-    COLON = ':',
-    COMMA = ',',
-    LTN = '<',
-    GTN = '>',
-    LEQ = 256,
+enum {
+    NOT = '!',          // 33
+    REM = '%',          // 37
+    ADDR = '&',         // 38
+    LPAREN = '(',       // 40
+    RPAREN = ')',       // 41
+    STAR = '*',         // 42
+    ADD = '+',          // 43
+    COMMA = ',',        // 44
+    DASH = '-',         // 45
+    DOT = '.',          // 46
+    DIV = '/',          // 47
+    COLON = ':',        // 58
+    SEMICOLON = ';',    // 59
+    LTN = '<',          // 60
+    ASSIGN = '=',       // 61
+    GTN = '>',          // 62
+    LBRACKET = '[',     // 91
+    RBRACKET = ']',     // 93
+    LBRACE = '{',       // 123
+    RBRACE = '}',       // 125
+    LEQ = 256,          // ASCII runs from 0-255
     GEQ,
     EQL,
     NEQ,
-    AND,
+    AND,                // 260
     OR,
     DEC,
     INC,
-    PTR,
-    DEREF,
     NEG,
-    ID,
-    INTEGER,
-    REAL,
-    STRING,
-    DONE,
     AUTO,
     BREAK,
     CASE,
     CHAR,
     CONST,
-    CONTINUE,
+    CONTINUE,           // 270
     DEFAULT,
     DO,
+    DONE,               // 273
     DOUBLE,
-    ELSE,
+    ELSE,               // 275
     ENUM,
     EXTERN,
     FLOAT,
     FOR,
-    GOTO,
+    GOTO,               // 280
+    ID,
     IF,
     INT,
-    LONG,
+    INTEGER,
+    LONG,               // 285
+    PTR,
+    REAL,
     REGISTER,
     RETURN,
-    SHORT,
+    SHORT,              // 290
     SIGNED,
     SIZEOF,
     STATIC,
-    STRUCT,
+    STRING,
+    STRUCT,             // 295
     SWITCH,
     TYPEDEF,
     UNION,
     UNSIGNED,
-    VOID,
+    VOID,               // 300
     VOLATILE,
     WHILE
 };
