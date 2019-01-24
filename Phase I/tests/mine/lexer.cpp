@@ -4,7 +4,7 @@
 #include <iostream>
 #include <unordered_map>
 #include "lexer.h"
-#include "tokens.h"
+#include "../Phase II/tokens.h"
 
 using std::string;
 using std::cin;
@@ -66,7 +66,7 @@ void report(const string &str, const string &arg)
     char buf[1000];
     
     snprintf(buf, sizeof(buf), str.c_str(), arg.c_str());
-    cerr << "\tline " << lineno << ": " << buf << endl;
+    cerr << "line " << lineno << ": " << buf << endl;
     numerrors++;
 }
 
@@ -85,9 +85,6 @@ int lexan(string &lexbuf) {
         
         // handle comments
         while (isspace(c)) {
-            if (c == '\n') {
-                lineno++;
-            }
             c = cin.get();
         }
     
@@ -100,10 +97,11 @@ int lexan(string &lexbuf) {
             
             auto iter = keywords.find(lexbuf.c_str());
             int KEYWORD = keywords[lexbuf.c_str()];
-            //cerr << lexbuf << endl;
-            if (iter != keywords.end() && KEYWORD != 0) {
+            
+            if (iter != keywords.end()) {
                 return KEYWORD;
             } else {
+                cout << "ID:\t\t\t\t\t\t" << lexbuf << endl;
                 return ID;
             }
         }
@@ -119,9 +117,6 @@ int lexan(string &lexbuf) {
             if (c != '.') {
                 return INTEGER;
             }
-            
-            lexbuf += c;
-            c = cin.get();
             
             if (isdigit(c)) {
                 do {
@@ -143,12 +138,8 @@ int lexan(string &lexbuf) {
                             lexbuf += c;
                             c = cin.get();
                         } while (isdigit(c));
-                    } else {
-                        report("Missing exponent of floating-point constant");
                     }
                 }
-            } else {
-                report("Missing fractional component of floating-point constant");
             }
             return REAL;
         } else {
@@ -189,7 +180,7 @@ int lexan(string &lexbuf) {
                         c = cin.get();
                         return OR;
                     }
-                    return ERROR;
+                    break; // return ERROR?
                 // handle = and == operators
                 case '=':
                     c = cin.get();
@@ -295,7 +286,6 @@ int lexan(string &lexbuf) {
                     return RBRACE;
                 // handle ; operator
                 case ';':
-                    c = cin.get();
                     return SEMICOLON;
                 // handle : operator
                 case ':':

@@ -43,30 +43,31 @@ enum {
     DOUBLE,
     ELSE,               // 275
     ENUM,
+    ERROR,
     EXTERN,
     FLOAT,
-    FOR,
-    GOTO,               // 280
+    FOR,                // 280
+    GOTO,
     ID,
     IF,
     INT,
-    INTEGER,
-    LONG,               // 285
+    INTEGER,            // 285
+    LONG,
     PTR,
     REAL,
     REGISTER,
-    RETURN,
-    SHORT,              // 290
+    RETURN,             // 290
+    SHORT,
     SIGNED,
     SIZEOF,
     STATIC,
-    STRING,
-    STRUCT,             // 295
+    STRING,             // 295
+    STRUCT,
     SWITCH,
     TYPEDEF,
     UNION,
-    UNSIGNED,
-    VOID,               // 300
+    UNSIGNED,           // 300
+    VOID,
     VOLATILE,
     WHILE
 };

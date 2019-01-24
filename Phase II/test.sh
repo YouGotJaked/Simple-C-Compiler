@@ -1,33 +1,37 @@
 #!/bin/bash
 
-echo "Compiling lexical and syntax analyzer..."
+echo
+echo "Cleaning object files..."
 make clean
+echo "DONE"
+
+echo
+echo "Compiling lexical and syntax analyzer..."
 make
 echo "DONE"
 
-DIRECTORY="$PWD/results/"
-if [ ! -d "$DIRECTORY" ]; then
-	echo "$DIRECTORY does not exist. Creating directory..."
-	mkdir "$DIRECTORY"
+echo
+RESULTS="$PWD/results/"
+if [ ! -d "$RESULTS" ]; then
+	echo "$RESULTS does not exist. Creating directory..."
+	mkdir "$RESULTS"
 fi
 
-echo "Analyzing test C programs..."
-./scc < examples/fib.c > results/fib.out
-./scc < examples/hello.c > results/hello.out
-./scc < examples/malloc.c > results/malloc.out
-./scc < examples/real.c > results/real.out
-./scc < examples/sum.c > results/sum.out
-echo "DONE"
+echo
+echo "Analyzing examples..."
+search="examples"
+for f in "$PWD/examples"/*.c; do
+    filename=${f##*/}
+    echo $filename
+    filename=${filename%??}
+    ./scc < "$f" > "$PWD/results/$filename.out"
+done
 
-echo "Testing difference..."
-echo "FIB"
-diff examples/fib.out results/fib.out
-echo "HELLO"
-diff examples/hello.out results/hello.out
-echo "MALLOC"
-diff examples/malloc.out results/malloc.out
-echo "REAL"
-diff examples/real.out results/real.out
-echo "SUM"
-diff examples/sum.out results/sum.out
-echo "DONE"
+echo
+echo "Analyzing test cases..."
+for f in "$PWD/tests"/*.c; do
+    filename=${f##*/}
+    echo $filename
+    filename=${filename%??}
+    ./scc < "$f" > "$PWD/results/$filename.out"
+done

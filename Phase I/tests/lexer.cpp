@@ -4,7 +4,7 @@
 #include <iostream>
 #include <unordered_map>
 #include "lexer.h"
-#include "tokens.h"
+#include "../../Phase II/tokens.h"
 
 using std::string;
 using std::cin;
@@ -66,7 +66,7 @@ void report(const string &str, const string &arg)
     char buf[1000];
     
     snprintf(buf, sizeof(buf), str.c_str(), arg.c_str());
-    cerr << "\tline " << lineno << ": " << buf << endl;
+    cerr << "line " << lineno << ": " << buf << endl;
     numerrors++;
 }
 
@@ -100,7 +100,7 @@ int lexan(string &lexbuf) {
             
             auto iter = keywords.find(lexbuf.c_str());
             int KEYWORD = keywords[lexbuf.c_str()];
-            //cerr << lexbuf << endl;
+            
             if (iter != keywords.end() && KEYWORD != 0) {
                 return KEYWORD;
             } else {
@@ -119,9 +119,6 @@ int lexan(string &lexbuf) {
             if (c != '.') {
                 return INTEGER;
             }
-            
-            lexbuf += c;
-            c = cin.get();
             
             if (isdigit(c)) {
                 do {
@@ -318,7 +315,6 @@ int lexan(string &lexbuf) {
     return DONE;
 }
 
-/*
 int main() {
     int token;
     string lexbuf, type;
@@ -595,4 +591,3 @@ int main() {
     
     return 0;
 }
-*/

@@ -8,6 +8,7 @@
 
 using std::string;
 using std::cout;
+using std::cerr;
 using std::endl;
 
 static int lookahead;
@@ -15,31 +16,59 @@ static string lexbuf;
 static int count = 0;
 
 static void error(int token) {
-    cout << "ERROR in token " << count << ": " << token << "\t LOOKAHEAD=" << lookahead << endl;
+    cout << "ERROR #" << count << "=" << token << "\t LOOKAHEAD=" << lookahead << endl;
     exit(EXIT_FAILURE);
 }
 
 static void match(int token) {
-    count++;
     if (lookahead == token) {
-        cout << "TOKEN #" << ++count << "=" << token << endl;
+        //cerr << "TOKEN #" << ++count << "=" << token << endl;
+        //cout << "LOOKAHEAD #" << count << "=" << lookahead << endl;
         lookahead = lexan(lexbuf);
         //cout << "lookahead is now " << lookahead << endl;
     } else {
-        //report("Lookahead did not match token...");
+        cerr << "\tLookahead=" << lookahead << "\ttoken=" << token << endl;
+        report("Lookahead did not match token...");
         error(token);
     }
 }
 
 /*
- * pointers     ->  ε
- *              |   * pointers
+ * functionOrGlobal     ->  specifier pointers id functionOrGlobal_p
+ * functionOrGlobal_p   ->  ( parameters ) { declarations statements }
+ *                      |   [ integer ] remainingDeclarators
+ *                      |   remainingDeclarators
  */
-static void pointers() {
-    //cout << "pointers()" << endl;
-    while (lookahead == STAR) {
-        match(STAR);
-        //cout << "PTR" << endl;
+static void functionOrGlobal() {
+    //cout << "functionOrGlobal()" << endl;
+    specifier();
+    pointers();
+    if (lookahead == ID) {
+        match(ID);
+    }
+    if (lookahead == LPAREN) {
+        match(LPAREN);
+        parameters();
+        match(RPAREN);
+        if (lookahead == LBRACE) {
+            match(LBRACE);
+            while (lookahead != RBRACE) {
+                declarations();
+                statements();
+            }
+            if (lookahead == RBRACE) {
+                match(RBRACE);
+            }
+        } else {
+            remainingDeclarators();
+        }
+    } else if (lookahead == LBRACKET) {
+        match(LBRACKET);
+        match(INTEGER);
+        match(RBRACKET);
+        remainingDeclarators();
+    } else {
+        remainingDeclarators();
     }
 }
 
@@ -53,7 +82,7 @@ static bool isSpecifier(int token) {
  *              |   double
  */
 static void specifier() {
-    //cout << "specifier()" << endl;
+    //cerr << "specifier(): "  << lookahead << endl;
     if (isSpecifier(lookahead)) {
         switch (lookahead) {
             case CHAR:
@@ -75,36 +104,29 @@ static void specifier() {
 }
 
 /*
- * functionOrGlobal     ->  specifier pointers id functionOrGlobal_p
- * functionOrGlobal_p   ->  ( parameters ) { declarations statements }
- *                      |   [ integer ] remainingDeclarators
- *                      |   remainingDeclarators
+ * pointers     ->  ε
+ *              |   * pointers
  */
-static void functionOrGlobal() {
-    //cout << "functionOrGlobal()" << endl;
-    specifier();
-    pointers();
-    match(ID);
-    if (lookahead == LPAREN) {
-        match(LPAREN);
-        parameters();
-        match(RPAREN);
-        if (lookahead == LBRACE) {
-            match(LBRACE);
-            declarations();
-            statements();
-            match(RBRACE);
-        } else {
-            remainingDeclarators();
-        }
-    } else if (lookahead == LBRACKET) {
-        match(LBRACKET);
-        match(INTEGER);
-        match(RBRACKET);
-        remainingDeclarators();
-    } else {
-        remainingDeclarators();
+static void pointers() {
+    //cout << "pointers()" << endl;
+    while (lookahead == STAR) {
+        match(STAR);
+        //cout << "PTR" << endl;
     }
+}
+
+/*
+ * remainingDeclarators -> ;
+ *                      |  , globalDeclarator remainingDeclarators
+ */
+static void remainingDeclarators() {
+    //cout << "remainingDeclarators()" << endl;
+    while (lookahead != SEMICOLON) {
+        match(COMMA);
+        globalDeclarator();
+        //remainingDeclarators();
+    }
+    match(SEMICOLON);
 }
 
 /*
@@ -135,21 +157,6 @@ static void globalDeclarator() {
 }
 
 /*
- * remainingDeclarators -> ;
- *                      |  , globalDeclarator remainingDeclarators
- */
-static void remainingDeclarators() {
-    //cout << "remainingDeclarators()" << endl;
-    if (lookahead == SEMICOLON) {
-        match(SEMICOLON);
-    } else if (lookahead == COMMA) {
-        match(COMMA);
-        globalDeclarator();
-        remainingDeclarators();
-    }
-}
-
-/*
  *  parameters  ->  void
  *              |   parameter-list
  */
@@ -172,7 +179,7 @@ static void parameters() {
  * parameter-list_p ->  , parameter-list
  */
 static void parameterList() {
-    //cout << "parameterList()" << endl;
+    //cout << "parameterList(): la=" << lookahead << endl;
     parameter();
     while (lookahead == COMMA) {
         match(COMMA);
@@ -184,7 +191,7 @@ static void parameterList() {
  *  parameter   ->  specifier pointers id
  */
 static void parameter() {
-    //cout << "parameter()" << endl;
+    //cout << "parameter(): la=" << lookahead << endl;
     specifier();
     pointers();
     if (lookahead == ID) {
@@ -197,9 +204,8 @@ static void parameter() {
  *              |   declaration declarations
  */
 static void declarations() {
-    //cout << "declarations()" << endl;
+    //cout << "declarations(): la=" << lookahead << endl;
     while (isSpecifier(lookahead)) {
-        cout << "lookahead is spec" << endl;
         declaration();
     }
 }
@@ -208,7 +214,7 @@ static void declarations() {
  * declaration  ->  specifier declarator-list ;
  */
 static void declaration() {
-    //cout << "declaration()" << endl;
+    //cout << "declaration(): la=" << lookahead << endl;
     specifier();
     declaratorList();
     match(SEMICOLON);
@@ -224,7 +230,7 @@ static void declaration() {
  * declarator-list_p ->  , declarator-list
  */
 static void declaratorList() {
-    //cout << "declarationList()" << endl;
+    //cout << "declarationList(): la=" << lookahead << endl;
     declarator();
     while (lookahead == COMMA) {
         match(COMMA);
@@ -251,6 +257,8 @@ static void declarator() {
         match(INTEGER);
         match(RBRACKET);
     }
+    //cout << "LOOKAHEAD_3=" << lookahead << endl;
+
 }
  
 /*
@@ -270,26 +278,37 @@ static void statements() {
  *              |   while ( expression ) statement
  *              |   if ( expression ) statement
  *              |   if ( expression ) statement else statement
- *              |   expression = expression ;
- *              |   expression ;
+ *              |   assignment ;
  */
 static void statement() {
     //cout << "statement(): lookahead=" << lookahead << endl;
     if (lookahead == LBRACE) {
         match(LBRACE);
-        declarations();
-        statement();
+        while (lookahead != RBRACE) {
+            declarations();
+            statement();
+        }
         match(RBRACE);
+    } else if (lookahead == RETURN) {
+        match(RETURN);
+        while (lookahead != SEMICOLON) {
+            expr();
+        }
+        match(SEMICOLON);
     } else if (lookahead == WHILE) {
         match(WHILE);
         match(LPAREN);
-        expr();
+        while (lookahead != RPAREN) {
+            expr();
+        }
         match(RPAREN);
         statement();
     } else if (lookahead == IF) {
         match(IF);
         match(LPAREN);
-        expr();
+        while (lookahead != RPAREN) {
+            expr();
+        }
         match(RPAREN);
         statement();
         if (lookahead == ELSE) {
@@ -297,21 +316,33 @@ static void statement() {
             statement();
         }
     } else {
-        assignment();
+        while (lookahead != SEMICOLON) {
+            assignment();
+        }
+        //cout << "assignment exited" << endl;
         match(SEMICOLON);
+        //cout << "matched ;" << endl;
     }
 }
 
 /*
+ * assignment   ->  expr = expr
+ *              |   expr
  *
+ * After left-factoring:
+ * assignment   ->  expr assignment_p
+ * assignment_p ->  = expr
  */
 static void assignment() {
     //cout << "assignment(): lookahead=" << lookahead << endl;
     expr();
-    if (lookahead == ASSIGN) {
+    //cout << "matched assign, la=" << lookahead << endl;
+    while (lookahead == ASSIGN) {
         match(ASSIGN);
+        expr();
+        //cout << "matched assign, la=" << lookahead << endl;
     }
-    expr();
+    //cout << "matched assign, la=" << lookahead << endl;
 }
 
 /*
@@ -527,7 +558,7 @@ static bool isPREFIX(int token) {
  *              |   * exprPREFIX
  *              |   ! exprPREFIX
  *              |   - exprPREFIX
- *              |   sizeof ( specifier pointers )
+ *              |   sizeof ( exprPREFIXcd  )
  *              |   exprPOSTFIX
  *
  */
@@ -553,12 +584,7 @@ static void exprPREFIX() {
                 break;
             case SIZEOF:
                 match(SIZEOF);
-                if (lookahead == LPAREN) {
-                    match(LPAREN);
-                    specifier();
-                    pointers();
-                    match(RPAREN);
-                }
+                exprPREFIX();
                 cout << "sizeof" << endl;
                 break;
             default:
@@ -648,6 +674,7 @@ static void exprPRIMARY(bool lp) {
         }
         match(RPAREN);
     }
+    //cout << "ended primary" << endl;
 }
 
 /*
