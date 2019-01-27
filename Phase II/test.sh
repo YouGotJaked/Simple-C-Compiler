@@ -25,6 +25,7 @@ for f in "$PWD/examples"/*.c; do
     echo $filename
     filename=${filename%??}
     ./scc < "$f" > "$PWD/results/$filename.out"
+    diff "$PWD/examples/$filename.out" "$PWD/results/$filename.out"
 done
 
 echo
@@ -34,4 +35,5 @@ for f in "$PWD/tests"/*.c; do
     echo $filename
     filename=${filename%??}
     ./scc < "$f" > "$PWD/results/$filename.out"
+    diff "$PWD/tests/$filename.out" "$PWD/results/$filename.out"
 done

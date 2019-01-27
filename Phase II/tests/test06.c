@@ -12,6 +12,6 @@ int main(void)
 	i = i + 1;
     }
 
-    printf("%d\n", sizeof(sizeof(int)));
+    printf("%d\n", sizeof(int));
     printf("%d\n", sizeof(int));
 }
