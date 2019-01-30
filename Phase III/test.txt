@@ -1,0 +1,12 @@
+OPEN GLOBAL SCOPE
+(ARRAY: int [10] )
+OPEN FUNCTION SCOPE
+(FUNCTION: int  1 parameters )
+(SCALAR: char ** )
+semicolon matched
+OPEN BLOCK SCOPE
+(SCALAR: double  )
+semicolon matched
+CLOSE BLOCK SCOPE
+CLOSE FUNCTION SCOPE
+CLOSE GLOBAL SCOPE

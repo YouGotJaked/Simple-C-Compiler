@@ -31,30 +31,38 @@ void match(int token) {
  *                      |   remainingDeclarators
  */
 void functionOrGlobal() {
-    specifier();
-    pointers();
+    int typespec = specifier();
+    unsigned indirection = pointers();
     match(ID);
     if (lookahead == LPAREN) {
+        cout << "OPEN FUNCTION SCOPE" << endl;
         match(LPAREN);
-        parameters();
+        Parameters *p = new Parameters;
+        parameters(p);
         match(RPAREN);
         if (lookahead == LBRACE) {
             match(LBRACE);
+            cout << Type(typespec, indirection, p);
             while (lookahead != RBRACE) {
                 declarations();
                 statements();
             }
+            cout << "CLOSE FUNCTION SCOPE" << endl;
             match(RBRACE);
         } else {
-            remainingDeclarators();
+            cout << "CLOSE FUNCTION SCOPE" << endl;
+            remainingDeclarators(typespec);
         }
     } else if (lookahead == LBRACKET) {
         match(LBRACKET);
+        unsigned length = atoi(lexbuf.c_str());
         match(INTEGER);
         match(RBRACKET);
-        remainingDeclarators();
+        cout << Type(typespec, indirection, length);
+        remainingDeclarators(typespec);
     } else {
-        remainingDeclarators();
+        cout << "CLOSE FUNCTION SCOPE" << endl;
+        remainingDeclarators(typespec);
     }
 }
 
@@ -67,7 +75,8 @@ bool isSpecifier(int token) {
  *              |   int
  *              |   double
  */
-void specifier() {
+int specifier() {
+    int typespec = lookahead;
     if (isSpecifier(lookahead)) {
         switch (lookahead) {
             case CHAR:
@@ -83,26 +92,30 @@ void specifier() {
                 break;
         }
     }
+    return typespec;
 }
 
 /*
  * pointers     ->  ε
  *              |   * pointers
  */
- void pointers() {
+unsigned pointers() {
+    unsigned count = 0;
     while (lookahead == STAR) {
         match(STAR);
+        count++;
     }
+    return count;
 }
 
 /*
  * remainingDeclarators -> ;
  *                      |  , globalDeclarator remainingDeclarators
  */
-void remainingDeclarators() {
+void remainingDeclarators(int typespec) {
     while (lookahead != SEMICOLON) {
         match(COMMA);
-        globalDeclarator();
+        globalDeclarator(typespec);
     }
     match(SEMICOLON);
 }
@@ -119,29 +132,33 @@ void remainingDeclarators() {
  *                      |   id ( parameters )
  *                      |   id [ integer ]
  */
-void globalDeclarator() {
-    pointers();
+void globalDeclarator(int typespec) {
+    unsigned indirection = pointers();
     match(ID);
     if (lookahead == LPAREN) {
         match(LPAREN);
-        parameters();
+        Parameters *p = new Parameters;
+        parameters(p);
         match(RPAREN);
     } else if (lookahead == LBRACKET) {
         match(LBRACKET);
+        unsigned length = atoi(lexbuf.c_str());
         match(INTEGER);
         match(RBRACKET);
+        cout << Type(typespec, indirection, length);
     }
+    //cout << Type(typespec, indirection);
 }
 
 /*
  *  parameters  ->  void
  *              |   parameter-list
  */
-void parameters() {
+void parameters(Parameters *p) {
     if (lookahead == VOID) {
         match(VOID);
     } else {
-        parameterList();
+        parameterList(p);
     }
 }
 
@@ -154,23 +171,25 @@ void parameters() {
  * parameter-list   ->  parameter parameter-list_p
  * parameter-list_p ->  , parameter-list
  */
-void parameterList() {
-    parameter();
+void parameterList(Parameters *p) {
+    parameter(p);
     while (lookahead == COMMA) {
         match(COMMA);
-        parameter();
+        parameter(p);
     }
 }
 
 /*
  *  parameter   ->  specifier pointers id
  */
-void parameter() {
-    specifier();
-    pointers();
+void parameter(Parameters *p) {
+    int typespec = specifier();
+    unsigned indirection = pointers();
     if (lookahead == ID) {
         match(ID);
     }
+    Type t(typespec, indirection, p);
+    p->push_back(t);
 }
 
 /*
@@ -187,8 +206,8 @@ void declarations() {
  * declaration  ->  specifier declarator-list ;
  */
 void declaration() {
-    specifier();
-    declaratorList();
+    int typespec = specifier();
+    declaratorList(typespec);
     match(SEMICOLON);
 }
 
@@ -201,11 +220,11 @@ void declaration() {
  * declarator-list   ->  declarator declarator-list_p
  * declarator-list_p ->  , declarator-list
  */
-void declaratorList() {
-    declarator();
+void declaratorList(int typespec) {
+    declarator(typespec);
     while (lookahead == COMMA) {
         match(COMMA);
-        declarator();
+        declarator(typespec);
     }
 }
 
@@ -219,13 +238,17 @@ void declaratorList() {
  * declarator_p ->  id
  *              |   id [ integer ]
  */
-void declarator() {
-    pointers();
+void declarator(int typespec) {
+    unsigned indirection = pointers();
     match(ID);
     if (lookahead == LBRACKET) {
         match(LBRACKET);
+        unsigned length = atoi(lexbuf.c_str());
         match(INTEGER);
         match(RBRACKET);
+        cout << Type(typespec, indirection, length);
+    } else {
+        cout << Type(typespec, indirection);
     }
 }
  
@@ -250,11 +273,11 @@ void statements() {
  */
 void statement() {
     if (lookahead == LBRACE) {
+        cout << "OPEN BLOCK SCOPE" << endl;
         match(LBRACE);
-        while (lookahead != RBRACE) {
-            declarations();
-            statement();
-        }
+        declarations();
+        statements();
+        cout << "CLOSE BLOCK SCOPE" << endl;
         match(RBRACE);
     } else if (lookahead == RETURN) {
         match(RETURN);
@@ -277,14 +300,13 @@ void statement() {
             statement();
         }
     } else {
-        while (lookahead != SEMICOLON) {
+        expr();
+        if (lookahead == ASSIGN) {
+            match(ASSIGN);
             expr();
-            while (lookahead == ASSIGN) {
-                match(ASSIGN);
-                expr();
-            }
         }
         match(SEMICOLON);
+        cout << "matched semi" << endl;
     }
 }
 
@@ -622,10 +644,12 @@ void exprList() {
 }
 
 int main() {
+    cout << "OPEN GLOBAL SCOPE" << endl;
     lookahead = lexan(lexbuf);
     while (lookahead != DONE) {
         functionOrGlobal();
     }
+    cout << "CLOSE GLOBAL SCOPE" << endl;
     return 0;
 }
 

@@ -31,42 +31,42 @@ enum {
     DEC,
     INC,
     AUTO,
-    BREAK,
+    BREAK,              // 265
     CASE,
     CHAR,
     CONST,
-    CONTINUE,           // 270
-    DEFAULT,
+    CONTINUE,
+    DEFAULT,            // 270
     DO,
-    DONE,               // 273
+    DONE,
     DOUBLE,
-    ELSE,               // 275
-    ENUM,
+    ELSE,
+    ENUM,               // 275
     ERROR,
     EXTERN,
     FLOAT,
-    FOR,                // 280
-    GOTO,
+    FOR,
+    GOTO,               // 280
     ID,
     IF,
     INT,
-    INTEGER,            // 285
-    LONG,
+    INTEGER,
+    LONG,               // 285
     PTR,
     REAL,
     REGISTER,
-    RETURN,             // 290
-    SHORT,
+    RETURN,
+    SHORT,              // 290
     SIGNED,
     SIZEOF,
     STATIC,
-    STRING,             // 295
-    STRUCT,
+    STRING,
+    STRUCT,             // 295
     SWITCH,
     TYPEDEF,
     UNION,
-    UNSIGNED,           // 300
-    VOID,
+    UNSIGNED,
+    VOID,               // 300
     VOLATILE,
     WHILE
 };

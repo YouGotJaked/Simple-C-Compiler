@@ -1,19 +1,21 @@
 #ifndef PARSER_H
 #define PARSER_H
 
+#include "type.h"
+
 void match(int token);
 void functionOrGlobal();
-void globalDeclarator();
-void pointers();
-void specifier();
-void parameters();
-void parameter();
-void parameterList();
+void globalDeclarator(int typespec);
+unsigned pointers();
+int specifier();
+void parameters(Parameters *p);
+void parameter(Parameters *p);
+void parameterList(Parameters *p);
 void declarations();
 void declaration();
-void declarator();
-void declaratorList();
-void remainingDeclarators();
+void declaratorList(int typespec);
+void declarator(int typespec);
+void remainingDeclarators(int typespec);
 void statements();
 void statement();
 void expr();
