@@ -2,13 +2,14 @@
 #define SYMBOL_H
 
 #include <string>
+#include <ostream>
 #include "type.h"
 
 class Symbol {
 	std::string _name;
 	Type _type;
-
-	public:
+    
+public:
 	// CONSTRUCTORS
 	Symbol();
 	Symbol(std::string name, Type type);
@@ -18,5 +19,8 @@ class Symbol {
 	Type type() const { return _type; }
 	
 };
+
+// NON_MEMBER OUTPUT FUNCTION
+std::ostream &operator<<(std::ostream &out, const Type &type);
 
 #endif /* SYMBOL_H */

@@ -1,12 +1,16 @@
 #ifndef CHECKER_H
 #define CHECKER_H
 
-void openScope();
-void closeScope();
-void declareFunction();
-void defineFunction();
-void declareVariable();
-void checkIdentifier();
-void checkFunction();
+#include <string>
+#include "scope.h"
+#include "symbol.h"
+
+void openScope(std::string curS="");
+void closeScope(std::string curS="");
+void declareFunction(Symbol *s);
+void defineFunction(Symbol *s);
+void declareVariable(Symbol *s);
+void checkIdentifier(const std::string &name);
+void checkFunction(const std::string &name);
 
 #endif /* CHECKER_H */

@@ -80,6 +80,7 @@ ostream &operator<<(ostream &out, const Type &type) {
             break;
         case DOUBLE:
             spec = "double";
+            break;
         default:
             break;
     }

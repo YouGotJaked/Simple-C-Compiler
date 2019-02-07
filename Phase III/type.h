@@ -25,10 +25,10 @@ class Type {
 	unsigned _length;
 	Parameters *_parameters;
 
-	public:
+public:
     // DEFAULT CONSTRUCTOR
     Type();
-    // SCALAR CONSTRUCTOR
+    // SCALAR CONSTRUCTOR 
     Type(int specifier, unsigned indirection=0);
     // ARRAY CONSTRUCTOR
     Type(int specifier, unsigned indirection, unsigned length);

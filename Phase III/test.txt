@@ -1,12 +1,10 @@
-OPEN GLOBAL SCOPE
+OPEN SCOPE
 (ARRAY: int [10] )
-OPEN FUNCTION SCOPE
-(FUNCTION: int  1 parameters )
-(SCALAR: char ** )
-semicolon matched
-OPEN BLOCK SCOPE
-(SCALAR: double  )
-semicolon matched
-CLOSE BLOCK SCOPE
-CLOSE FUNCTION SCOPE
-CLOSE GLOBAL SCOPE
+OPEN SCOPE
+Declare function func with type (FUNCTION: int  1 parameters )
+Declare variable b with type (SCALAR: char ** )
+OPEN SCOPE
+Declare variable c with type (SCALAR: double  )
+CLOSE SCOPE
+CLOSE SCOPE
+CLOSE SCOPE

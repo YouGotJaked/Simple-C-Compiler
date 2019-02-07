@@ -1,9 +1,11 @@
 #ifndef PARSER_H
 #define PARSER_H
 
+#include <string>
 #include "type.h"
 
 void match(int token);
+std::string expect(int token);
 void functionOrGlobal();
 void globalDeclarator(int typespec);
 unsigned pointers();
