@@ -34,6 +34,7 @@ string expect(int token) {
 /*
  * functionOrGlobal     ->  specifier pointers id functionOrGlobal_p
  * functionOrGlobal_p   ->  ( parameters ) { declarations statements }
+ *                      |   ( parameters ) remainingDeclarators
  *                      |   [ integer ] remainingDeclarators
  *                      |   remainingDeclarators
  */
@@ -43,27 +44,28 @@ void functionOrGlobal() {
     string name = expect(ID);
     if (lookahead == LPAREN) {
         //cout << "OPEN FUNCTION SCOPE" << endl;
-        openScope("FUNCTION");
+        //openScope("FUNCTION");
         match(LPAREN);
         Parameters *p = new Parameters;
         parameters(p);
         match(RPAREN);
+        Type t(typespec, indirection, p);
         if (lookahead == LBRACE) {
-            match(LBRACE);
             //cout << Type(typespec, indirection, p);
-            Type t(typespec, indirection, p);
-            Symbol s(name, t);
-            declareFunction(&s);
-            while (lookahead != RBRACE) {
+            //Symbol s(name, t);
+            defineFunction(name, t);
+                        match(LBRACE);
+            //while (lookahead != RBRACE) {
                 declarations();
                 statements();
-            }
+            //}
             //cout << "CLOSE FUNCTION SCOPE" << endl;
             closeScope("FUNCTION");
             match(RBRACE);
         } else {
             //cout << "CLOSE FUNCTION SCOPE" << endl;
             closeScope("FUNCTION");
+            declareFunction(name, t);
             remainingDeclarators(typespec);
         }
     } else if (lookahead == LBRACKET) {                 // ARRAY
@@ -72,13 +74,13 @@ void functionOrGlobal() {
         match(INTEGER);
         match(RBRACKET);
         Type t(typespec, indirection, length);
-        Symbol s(name, t);
-        declareVariable(&s);
+        //Symbol s(name, t);
+        declareVariable(name, t);
         remainingDeclarators(typespec);
     } else {
         Type t(typespec, indirection);
-        Symbol s(name, t);
-        declareVariable(&s);
+        //Symbol s(name, t);
+        declareVariable(name, t);
         remainingDeclarators(typespec);
     }
 }
@@ -156,10 +158,13 @@ void globalDeclarator(int typespec) {
     if (lookahead == LPAREN) {
         match(LPAREN);
         Parameters *p = new Parameters;
+        cout << "calling parameters(p)" << endl;
         parameters(p);
         Type t(typespec, indirection, p);
-        Symbol s(name, t);
-        declareFunction(&s);
+        //Symbol s(name, t);
+        cout << "declaring function..." << endl;
+        declareFunction(name, t);
+        closeScope("PARAMETER");
         match(RPAREN);
     } else if (lookahead == LBRACKET) {             // ARRAY
         match(LBRACKET);
@@ -167,12 +172,12 @@ void globalDeclarator(int typespec) {
         match(INTEGER);
         match(RBRACKET);
         Type t(typespec, indirection, length);
-        Symbol s(name, t);
-        declareVariable(&s);
+        //Symbol s(name, t);
+        declareVariable(name, t);
     } else {
         Type t(typespec, indirection);
-        Symbol s(name, t);
-        declareVariable(&s);
+        //Symbol s(name, t);
+        declareVariable(name, t);
     }
     //cout << Type(typespec, indirection);
 }
@@ -182,8 +187,10 @@ void globalDeclarator(int typespec) {
  *              |   parameter-list
  */
 void parameters(Parameters *p) {
+    openScope("PARAMETER");
     if (lookahead == VOID) {
         match(VOID);
+        cout << "matched void" << endl;
     } else {
         parameterList(p);
     }
@@ -213,8 +220,8 @@ void parameter(Parameters *p) {
     int typespec = specifier();
     unsigned indirection = pointers();
     string name = expect(ID);
-    Type t(typespec, indirection, p);
-    //declareFunction(Symbol(name, t));
+    Type t(typespec, indirection);
+    declareVariable(name, t);
     p->push_back(t);
 }
 
@@ -273,12 +280,12 @@ void declarator(int typespec) {
         match(INTEGER);
         match(RBRACKET);
         Type t(typespec, indirection, length); // DECLARE ARRAY
-        Symbol s(name, t);
-        declareVariable(&s);
+        //Symbol s(name, t);
+        declareVariable(name, t);
     } else {
         Type t(typespec, indirection);
-        Symbol s(name, t);
-        declareVariable(&s);
+        //Symbol s(name, t);
+        declareVariable(name, t);
     }
 }
  
@@ -620,15 +627,16 @@ bool isPRIMARY(int token) {
 }
 
 /*
- * exprPRIMARY  ->  ID
+ * exprPRIMARY  ->  ( expr )
+ *              |   ID
  *              |   ID ( )
  *              |   ID ( exprList )
  *              |   REAL
  *              |   INTEGER
  *              |   STRING
- *              |   ( expr )
  */
 void exprPRIMARY(bool lp) {
+    // cast
     if (lp) {
         expr();
         match(RPAREN);
@@ -636,11 +644,13 @@ void exprPRIMARY(bool lp) {
         string name = expect(ID);
         if (lookahead == LPAREN) {
             match(LPAREN);
-            while (lookahead != RPAREN) {
+            if (lookahead != RPAREN) {
                 exprList();
             }
             match(RPAREN);
+            cout << "checking function" << endl;
             checkFunction(name);
+            cout << "function is #checked" << endl;
         } else {
             checkIdentifier(name);
         }

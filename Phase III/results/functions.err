@@ -1,1 +1,2 @@
-(282, 3, 3)
+line 9: conflicting types for 'foo'
+line 16: conflicting types for 'foobar'

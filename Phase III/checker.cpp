@@ -9,8 +9,10 @@ using std::string;
 using std::cout;
 using std::endl;
 
-Scope *globalScope, *currentScope;
+static Scope *globalScope, *currentScope;
 // Scopes *ss;
+
+bool FLAG = true;
 
 // Error messages
 static string E1 = "redefinition of '%s'";
@@ -35,47 +37,47 @@ void closeScope(string curS) {
     //close(*ss);
 }
 
-void declareFunction(Symbol *s) {
+Symbol *declareFunction(const string &name, const Type &type) {
     // add to global scope
-    Symbol *s2 = globalScope->find(s->name());
-    
-    cout << s;
-    
-    // not found
+    Symbol *s2 = globalScope->find(name);
+
     if (s2 == nullptr) {
-        globalScope->insert(s);
-        cout << "Declare function " << s->name() << " with type " << s->type();
-    } else if (currentScope != globalScope) {
-        report(E2, s->name());
-    } else if (s2->type() != s->type()) {
-        report(E3, s->name());
+        s2 = new Symbol(name, type);
+        globalScope->insert(s2);
+        //cout << "&type in declareFunction=" << &type << endl;
+        //cout << "Declare function " << name << " with type " << type;
+    } else if (s2->type() != type) {
+        report(E3, name);   // conflicting type
+        delete type.parameters();
+    } else {
+        delete type.parameters();
     }
+    return s2;
 }
 
-void defineFunction(Symbol *s) {
-    Symbol *s2;
-    s2 = globalScope->lookup(s->name());
+void defineFunction(const string &name, const Type &type) {
+    Symbol *s2 = declareFunction(name, type);
     
-    if (s2 == nullptr) {
-        cout << "Define function " << s->name() << " with type " << s->type();
+    if (s2->defined() & FLAG) {
+        report(E1, name);   // redefinition
+    } else {
+        cout << "Define function " << name << " with type " << type;
     }
+    s2->define(FLAG);
 }
 
-void declareVariable(Symbol *s) {
+void declareVariable(const string &name, const Type &type) {
     // add to current scope
-    Symbol *s2 = currentScope->find(s->name());
+    Symbol *s2 = currentScope->find(name);
     // new var in current scope
     if (s2 == nullptr) {
-        //Symbol *s3 = currentScope->lookup(s->name());
-        // new var in other scope
-        //if (s3 == nullptr) {
-            currentScope->insert(s);
-            cout << "Declare variable " << s->name() << " with type " << s->type();
-        //}
+        s2 = new Symbol(name, type);
+        currentScope->insert(s2);
+        cout << "Declare variable " << name << " with type " << type;
     } else if (currentScope != globalScope) {
-        report(E2, s->name());
-    } else if (s2->type() != s->type()) {
-        report(E3, s->name());
+        report(E2, name);   // redeclared
+    } else if (s2->type() != type) {
+        report(E3, name);  // conflicting type
     }
 
 }
@@ -92,11 +94,10 @@ void checkIdentifier(const string &name) {
 
 void checkFunction(const string &name) {
     Symbol *s2 = currentScope->lookup(name);
-    
     // implicitly return int
     if (s2 == nullptr) {
-        Type t(INT, 0, nullptr);
-        Symbol s(name, t);
-        declareFunction(&s);
+        Type *t = new Type(INT, 0, nullptr);
+        //cout << "&type in checkFunction=" << &t << endl;
+        declareFunction(name, *t);
     }
 }

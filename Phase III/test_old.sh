@@ -24,15 +24,16 @@ for f in "$PWD/examples"/*.c; do
     filename=${f##*/}
     echo $filename
     filename=${filename%??}
-    ./scc < "$f" > /dev/null 2> "$PWD/results/$filename.err"
+    ./scc < "$f" > "$PWD/results/$filename.err"
     diff "$PWD/examples/$filename.err" "$PWD/results/$filename.err"
 done
 
-#echo
-#echo "Analyzing test cases..."
-#for f in "$PWD/tests"/*.c; do
-#    filename=${f##*/}
-#    echo $filename
-#    filename=${filename%??}
-#    ./scc < "$f" 2>&1 >/dev/null
-#done
+echo
+echo "Analyzing test cases..."
+for f in "$PWD/tests"/*.c; do
+    filename=${f##*/}
+    echo $filename
+    filename=${filename%??}
+    ./scc < "$f" > "$PWD/results/$filename.err"
+    diff "$PWD/tests/$filename.out" "$PWD/results/$filename.err"
+done

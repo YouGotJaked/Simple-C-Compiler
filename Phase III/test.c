@@ -1,6 +1,8 @@
 int x;
 int x;
 
+int qqq, qq, q;
+
 int arr[10];
 int arr[5];
 
