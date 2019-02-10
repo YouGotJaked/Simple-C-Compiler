@@ -1,5 +1,5 @@
 int a, b(void), c(void);
-void b(void), d(void);		/* conflicting types for 'b' */
+char b(void), d(void);		/* conflicting types for 'b' */
 int c(void), d(void), e(void);	/* conflicting types for 'd' */
 
 int y[10];
@@ -17,7 +17,7 @@ int foo(void)
 int foo(void);
 int *e(void);			/* conflicting types for 'e' */
 
-void foo(int x);		/* conflicting types for 'foo' */
+char foo(int x);		/* conflicting types for 'foo' */
 
 int foo(void) {			/* redefinition of 'foo' */
 }

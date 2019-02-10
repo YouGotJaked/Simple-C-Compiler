@@ -42,6 +42,7 @@ void functionOrGlobal() {
     int typespec = specifier();
     unsigned indirection = pointers();
     string name = expect(ID);
+    
     if (lookahead == LPAREN) {
         //cout << "OPEN FUNCTION SCOPE" << endl;
         //openScope("FUNCTION");
@@ -50,6 +51,7 @@ void functionOrGlobal() {
         parameters(p);
         match(RPAREN);
         Type t(typespec, indirection, p);
+        
         if (lookahead == LBRACE) {
             //cout << Type(typespec, indirection, p);
             //Symbol s(name, t);
@@ -96,6 +98,7 @@ bool isSpecifier(int token) {
  */
 int specifier() {
     int typespec = lookahead;
+    
     if (isSpecifier(lookahead)) {
         switch (lookahead) {
             case CHAR:
@@ -220,6 +223,7 @@ void parameter(Parameters *p) {
     int typespec = specifier();
     unsigned indirection = pointers();
     string name = expect(ID);
+    
     Type t(typespec, indirection);
     declareVariable(name, t);
     p->push_back(t);
@@ -255,6 +259,7 @@ void declaration() {
  */
 void declaratorList(int typespec) {
     declarator(typespec);
+    
     while (lookahead == COMMA) {
         match(COMMA);
         declarator(typespec);
@@ -274,6 +279,7 @@ void declaratorList(int typespec) {
 void declarator(int typespec) {
     unsigned indirection = pointers();
     string name = expect(ID);
+    
     if (lookahead == LBRACKET) {
         match(LBRACKET);
         unsigned length = atoi(lexbuf.c_str());

@@ -1,6 +1,6 @@
 int a[10], b[10], c[10];
 
-void foo(void)
+int foo(void)
 {
     int a, b;
 

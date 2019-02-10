@@ -10,9 +10,7 @@ using std::cout;
 using std::endl;
 
 static Scope *globalScope, *currentScope;
-// Scopes *ss;
-
-bool FLAG = true;
+static Scopes *ss;
 
 // Error messages
 static string E1 = "redefinition of '%s'";
@@ -23,12 +21,13 @@ static string E4 = "'%s' undeclared";
 
 void openScope(string curS) {
     cout << "OPEN " << curS << " SCOPE" << endl;
+    //currentScope = ss.top();
     currentScope = new Scope(currentScope);
-    
+        //open(*ss);
     if (globalScope == nullptr) {
         globalScope = currentScope;
     }
-    //open(*ss);
+
 }
 
 void closeScope(string curS) {
@@ -45,7 +44,7 @@ Symbol *declareFunction(const string &name, const Type &type) {
         s2 = new Symbol(name, type);
         globalScope->insert(s2);
         //cout << "&type in declareFunction=" << &type << endl;
-        //cout << "Declare function " << name << " with type " << type;
+        //cout << "Declare function " << name << " with type " << type;     // seg fault
     } else if (s2->type() != type) {
         report(E3, name);   // conflicting type
         delete type.parameters();
@@ -58,12 +57,12 @@ Symbol *declareFunction(const string &name, const Type &type) {
 void defineFunction(const string &name, const Type &type) {
     Symbol *s2 = declareFunction(name, type);
     
-    if (s2->defined() & FLAG) {
+    if (s2->defined()) {
         report(E1, name);   // redefinition
     } else {
         cout << "Define function " << name << " with type " << type;
     }
-    s2->define(FLAG);
+    s2->define(true);
 }
 
 void declareVariable(const string &name, const Type &type) {
@@ -86,7 +85,7 @@ void checkIdentifier(const string &name) {
     Symbol *s2 = currentScope->lookup(name);
     
     if (s2 == nullptr) {
-        report(E4, name);
+        report(E4, name);   // undeclared
         s2 = new Symbol(name, ERROR);
         currentScope->insert(s2);
     }
@@ -97,7 +96,6 @@ void checkFunction(const string &name) {
     // implicitly return int
     if (s2 == nullptr) {
         Type *t = new Type(INT, 0, nullptr);
-        //cout << "&type in checkFunction=" << &t << endl;
         declareFunction(name, *t);
     }
 }
