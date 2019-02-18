@@ -5,11 +5,11 @@
 #include "scope.h"
 #include "symbol.h"
 
-void openScope(std::string curS="");
-void closeScope(std::string curS="");
-Symbol *declareFunction(const std::string &name, const Type &type);
-void defineFunction(const std::string &name, const Type &type);
-void declareVariable(const std::string &name, const Type &type);
+void openScope(const std::string scopeType=" ");
+void closeScope(const std::string scopeType=" ");
+Symbol *declareFunction(const Symbol &symbol);
+void defineFunction(const Symbol &s);
+void declareVariable(const Symbol &s);
 void checkIdentifier(const std::string &name);
 void checkFunction(const std::string &name);
 

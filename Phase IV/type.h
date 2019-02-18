@@ -7,14 +7,14 @@
 
 typedef std::vector<class Type> Parameters;
 
-enum { ARRAY, FUNCTION, SCALAR };
-
 class Type {
     int _kind;
 	int _specifier;
 	unsigned _indirection;
 	unsigned _length;
 	Parameters *_parameters;
+    
+    enum { ARRAY, FUNCTION, SCALAR, ERROR };
 
 public:
     // DEFAULT CONSTRUCTOR
@@ -31,9 +31,14 @@ public:
     bool operator!=(const Type &rhs) const { return !operator==(rhs); }
     
     // HELPER FUNCTIONS
+    Type promote() const;
     bool isArray() const { return _kind == ARRAY; }
     bool isFunction() const { return _kind == FUNCTION; }
     bool isScalar() const { return _kind == SCALAR; }
+    bool isNumeric() const;
+    bool isPointer() const;
+    bool isPredicate() const { return _kind != FUNCTION; }
+    bool isCompatibleWith(const Type &that) const;
 
     // ACCESSORS
     int kind() const { return _kind; }

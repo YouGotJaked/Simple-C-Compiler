@@ -6,7 +6,7 @@ make clean
 echo "DONE"
 
 echo
-echo "Compiling lexical and syntax analyzer..."
+echo "Compiling..."
 make
 echo "DONE"
 
@@ -24,9 +24,10 @@ for f in "$PWD/examples"/*.c; do
     filename=${f##*/}
     echo $filename
     filename=${filename%??}
-    ./scc < "$f" > "$PWD/results/$filename.err"
+    ./scc < "$f" > /dev/null 2> "$PWD/results/$filename.err"
     diff "$PWD/examples/$filename.err" "$PWD/results/$filename.err"
 done
+echo "DONE"
 
 echo
 echo "Analyzing test cases..."
@@ -34,6 +35,7 @@ for f in "$PWD/tests"/*.c; do
     filename=${f##*/}
     echo $filename
     filename=${filename%??}
-    ./scc < "$f" > "$PWD/results/$filename.err"
-    diff "$PWD/tests/$filename.out" "$PWD/results/$filename.err"
+    ./scc < "$f" > /dev/null 2> "$PWD/results/$filename.err"
+    diff "$PWD/tests/$filename.err" "$PWD/results/$filename.err"
 done
+echo "DONE"

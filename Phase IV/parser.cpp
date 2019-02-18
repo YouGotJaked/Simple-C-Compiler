@@ -1,4 +1,4 @@
-#include <cstdio>
+ #include <cstdio>
 #include <cstdlib>
 #include <iostream>
 #include <string>
@@ -6,6 +6,7 @@
 #include "tokens.h"
 #include "parser.h"
 #include "checker.h"
+#include "type.h"
 
 using std::string;
 using std::cout;
@@ -54,7 +55,7 @@ void functionOrGlobal() {
             defineFunction(symbol);
             match(LBRACE);
             declarations();
-            statements();
+            statements(symbol.type());
             closeScope("FUNCTION");
             match(RBRACE);
         } else {
@@ -296,9 +297,9 @@ void declarator(int typespec) {
  * statements   ->  ε
  *              |   statement statements
  */
-void statements() {
-    while(lookahead != RBRACE) {
-        statement();
+void statements(const Type &type) {
+    while (lookahead != RBRACE) {
+        statement(type);
     }
 }
 
@@ -311,39 +312,48 @@ void statements() {
  *              |   expr = expr ;
  *              |   expr ;
  */
-void statement() {
+void statement(const Type &type) {
+    Type left, right, exprType;
+    bool lvalue = false;
+    bool rvalue = false;
+    
     if (lookahead == LBRACE) {
         openScope("BLOCK");
         match(LBRACE);
         declarations();
-        statements();
+        statements(type);
         closeScope("BLOCK");
         match(RBRACE);
     } else if (lookahead == RETURN) {
         match(RETURN);
-        expr();
+        exprType = expr(lvalue);
+        checkReturn(exprType, type);
         match(SEMICOLON);
     } else if (lookahead == WHILE) {
         match(WHILE);
         match(LPAREN);
-        expr();
+        exprType = expr(lvalue);
+        checkWhileIf(exprType);
         match(RPAREN);
-        statement();
+        statement(exprType);
     } else if (lookahead == IF) {
         match(IF);
         match(LPAREN);
-        expr();
+        exprType = expr(lvalue);
+        checkWhileIf(exprType);
         match(RPAREN);
-        statement();
+        statement(exprType);
         if (lookahead == ELSE) {
             match(ELSE);
-            statement();
+            statement(exprType);
         }
     } else {
-        expr();
+        left = expr(lvalue);
         if (lookahead == ASSIGN) {
             match(ASSIGN);
-            expr();
+            right = expr(rvalue);
+            //out << "expr(lvalue): " << light << endl;
+            checkAssign(left, right, lvalue);
         }
         match(SEMICOLON);
     }
@@ -352,8 +362,9 @@ void statement() {
 /*
  * expr         ->  exprOR
  */
-void expr() {
-    exprOR();
+Type expr(bool &lvalue) {
+    //cout << "expr lvalue=" << lvalue << endl;
+    return exprOR(lvalue);
 }
 
 /*
@@ -365,14 +376,20 @@ void expr() {
  * exprOR_p     ->  || exprAND exprOR_p
  *              |   ε
  */
-void exprOR() {
-    exprAND();
+Type exprOR(bool &lvalue) {
+    //cout << "exprOR lvalue=" << lvalue << endl;
+    Type left, right;
+    left = exprAND(lvalue);
     
     while (lookahead == OR) {
         match(OR);
-        exprAND();
+        right = exprAND(lvalue);
+        left = checkOR(left, right);
+        lvalue = false;
         cout << "or" << endl;
     }
+    
+    return left;
 }
 
 /*
@@ -384,14 +401,20 @@ void exprOR() {
  * exprAND_p    ->  && exprEQL exprAND_p
  *              |   ε
  */
-void exprAND() {
-    exprEQL();
+Type exprAND(bool &lvalue) {
+    //cout << "exprAND lvalue=" << lvalue << endl;
+    Type left, right;
+    left = exprEQL(lvalue);
     
     while (lookahead == AND) {
         match(AND);
-        exprEQL();
+        right = exprEQL(lvalue);
+        left = checkAND(left, right);
+        lvalue = false;
         cout << "and" << endl;
     }
+    
+    return left;
 }
 
 /*
@@ -405,25 +428,32 @@ void exprAND() {
  *              |   != exprCOMP exprEQL_p
  *              |   ε
  */
-void exprEQL() {
-    exprCOMP();
+Type exprEQL(bool &lvalue) {
+    //cout << "exprEQL lvalue=" << lvalue << endl;
+    Type left, right;
+    left = exprCOMP(lvalue);
     
     while (lookahead == EQL || lookahead == NEQ) {
         switch (lookahead) {
             case EQL:
                 match(EQL);
-                exprCOMP();
+                right = exprCOMP(lvalue);
+                left = checkEQL(left, right);
                 cout << "eql" << endl;
                 break;
             case NEQ:
                 match(NEQ);
-                exprCOMP();
+                right = exprCOMP(lvalue);
+                left = checkNEQ(left, right);
                 cout << "neq" << endl;
                 break;
             default:
                 break;
         }
+        lvalue = false;
     }
+    
+    return left;
 }
 
 bool isCOMP(int token) {
@@ -445,35 +475,44 @@ bool isCOMP(int token) {
  *              |   >= exprADDSUB exprCOMP_p
  *              |   ε
  */
-void exprCOMP() {
-    exprADDSUB();
+Type exprCOMP(bool &lvalue) {
+    //cout << "exprCOMP lvalue=" << lvalue << endl;
+    Type left, right;
+    left = exprADDSUB(lvalue);
     
     while (isCOMP(lookahead)) {
         switch (lookahead) {
             case LTN:
                 match(LTN);
-                exprADDSUB();
+                right = exprADDSUB(lvalue);
+                left = checkLTN(left, right);
                 cout << "ltn" << endl;
                 break;
             case GTN:
                 match(GTN);
-                exprADDSUB();
+                right = exprADDSUB(lvalue);
+                left = checkGTN(left, right);
                 cout << "gtn" << endl;
                 break;
             case LEQ:
                 match(LEQ);
-                exprADDSUB();
+                right = exprADDSUB(lvalue);
+                left = checkLEQ(left, right);
                 cout << "leq" << endl;
                 break;
             case GEQ:
                 match(GEQ);
-                exprADDSUB();
+                right = exprADDSUB(lvalue);
+                left = checkGEQ(left, right);
                 cout << "geq" << endl;
                 break;
             default:
                 break;
         }
+        lvalue = false;
     }
+    
+    return left;
 }
 
 /*
@@ -488,24 +527,31 @@ void exprCOMP() {
  *              |   exprMULDIV
  *              |   ε
  */
-void exprADDSUB() {
-    exprMULDIV();
+Type exprADDSUB(bool &lvalue) {
+    //cout << "exprADDSUB lvalue=" << lvalue << endl;
+    Type left, right;
+    left = exprMULDIV(lvalue);
     
     while (lookahead == ADD || lookahead == DASH) {
         switch (lookahead) {
             case ADD:
                 match(ADD);
-                exprMULDIV();
+                right = exprMULDIV(lvalue);
+                left = checkADD(left, right);
                 cout << "add" << endl;
                 break;
             case DASH:
                 match(DASH);
-                exprMULDIV();
+                right = exprMULDIV(lvalue);
+                left = checkSUB(left, right);
                 cout << "sub" << endl;
             default:
                 break;
         }
+        lvalue = false;
     }
+    
+    return left;
 }
 
 bool isMULDIV(int token) {
@@ -526,30 +572,38 @@ bool isMULDIV(int token) {
  *              |   exprPREFIX
  *              |   ε
  */
-void exprMULDIV() {
-    exprPREFIX();
+Type exprMULDIV(bool &lvalue) {
+    //cout << "exprMULDIV lvalue=" << lvalue << endl;
+    Type left, right;
+    left = exprPREFIX(lvalue);
     
     while (isMULDIV(lookahead)) {
         switch (lookahead) {
             case STAR:
                 match(STAR);
-                exprPREFIX();
+                right = exprPREFIX(lvalue);
+                left = checkMUL(left, right);
                 cout << "mul" << endl;
                 break;
             case DIV:
                 match(DIV);
-                exprPREFIX();
+                right = exprPREFIX(lvalue);
+                left = checkDIV(left, right);
                 cout << "div" << endl;
                 break;
             case REM:
                 match(REM);
-                exprPREFIX();
+                right = exprPREFIX(lvalue);
+                left = checkREM(left, right);
                 cout << "rem" << endl;
                 break;
             default:
                 break;
         }
+        lvalue = false;
     }
+    
+    return left;
 }
 
 bool isPREFIX(int token) {
@@ -566,69 +620,99 @@ bool isPREFIX(int token) {
  *              |   exprPOSTFIX
  *
  */
-void exprPREFIX() {
-    if (lookahead == LPAREN) {
+Type exprPREFIX(bool &lvalue) {
+    //cout << "exprPREFIX lvalue=" << lvalue << endl;
+    Type left;
+    int typespec;
+    unsigned indirection;
+    
+    if (lookahead == LPAREN) {  // CAST
         match(LPAREN);
         if (isSpecifier(lookahead)) {
-            specifier();
-            pointers();
+            typespec = specifier();
+            indirection = pointers();
             match(RPAREN);
-            exprPREFIX();
+            left = exprPREFIX(lvalue);
+            left = checkCAST(left, typespec, indirection);
+            cout << left << endl;
+            lvalue = false;
             cout << "cast" << endl;
         } else {
-            exprPOSTFIX(true);
+            exprPOSTFIX(true, lvalue);
         }
     } else if (isPREFIX(lookahead)) {
         switch (lookahead) {
             case ADDR:
                 match(ADDR);
-                exprPREFIX();
+                //cout << "ADDR lvalue =" << lvalue << endl;
+                left = exprPREFIX(lvalue);
+                //cout << "ADDR lvalue =" << lvalue << endl;
+                //cout << left.specifier() << endl;
+                left = checkADDR(left, lvalue);
                 cout << "addr" << endl;
+                lvalue = false;
                 break;
             case STAR:
                 match(STAR);
-                exprPREFIX();
+                left = exprPREFIX(lvalue);
+                left = checkDEREF(left);
                 cout << "deref" << endl;
+                lvalue = true;
                 break;
             case NOT:
                 match(NOT);
-                exprPREFIX();
+                left = exprPREFIX(lvalue);
+                left = checkNOT(left);
                 cout << "not" << endl;
+                lvalue = false;
                 break;
             case DASH:
                 match(DASH);
-                exprPREFIX();
+                left = exprPREFIX(lvalue);
+                left = checkNEG(left);
                 cout << "neg" << endl;
+                lvalue = false;
                 break;
             case SIZEOF:
                 match(SIZEOF);
                 match(LPAREN);
-                specifier();
-                pointers();
+                typespec = specifier();
+                indirection = pointers();
+                left = Type(typespec, indirection);
+                left = checkSIZEOF(left);
                 match(RPAREN);
                 cout << "sizeof" << endl;
+                lvalue = false;
                 break;
             default:
                 break;
         }
     } else {
-        exprPOSTFIX(false);
+        left = exprPOSTFIX(false, lvalue);
     }
+    return left;
 }
 
 /*
  * exprPOSTFIX      ->  exprPRIMARY exprPOSTFIX_p
  * exprPOSTFIX_p    ->  [ expr ] exprPOSTFIX_p
  */
- void exprPOSTFIX(bool lp) {
-    exprPRIMARY(lp);
-     
+Type exprPOSTFIX(bool lp, bool &lvalue) {
+    //cout << "exprPOSTFIX lvalue=" << lvalue << endl;
+    Type left, expression;
+    left = exprPRIMARY(lp, lvalue);
+    //cout << "left after postfix=" << left << endl;
+    
     while (lookahead == LBRACKET) {
         match(LBRACKET);
-        expr();
+        expression = expr(lvalue);
         match(RBRACKET);
+        left = checkPOSTFIX(left, expression);
+        lvalue = true;
         cout << "index" << endl;
     }
+    
+    return left;
 }
 
 bool isPRIMARY(int token) {
@@ -644,54 +728,83 @@ bool isPRIMARY(int token) {
  *              |   INTEGER
  *              |   STRING
  */
-void exprPRIMARY(bool lp) {
-    if (lp) {       // CAST
-        expr();
+Type exprPRIMARY(bool lp, bool &lvalue) {
+    //cout << "exprPRIMARY lvalue=" << lvalue << endl;
+    Type left;
+    string str = lexbuf;
+    unsigned length = str.length() - 2; // don't account for quotation marks
+    
+    if (lp) {
+        left = expr(lvalue);
         match(RPAREN);
     } else if (lookahead == ID) {
         string name = expect(ID);
+        Parameters *p = new Parameters;
+        
         if (lookahead == LPAREN) {
             match(LPAREN);
             if (lookahead != RPAREN) {
-                exprList();
+                left = exprList(*p, lvalue);
             }
             match(RPAREN);
-            checkFunction(name);
+            Symbol *checkFunc = checkFunction(name);
+            Type fType = checkFunc->type();
+            left = checkFunctionCall(fType, *p);
+            lvalue = false;
         } else {
-            checkIdentifier(name);
+            Symbol *checkID = checkIdentifier(name);
+            left = checkID->type();
+            lvalue = left.isScalar() ? true : false;
+            //cout << "final lvalue=" << lvalue << endl;
         }
     } else if (isPRIMARY(lookahead)) {
         switch (lookahead) {
             case REAL:
                 match(REAL);
+                left = Type(DOUBLE, 0);
+                lvalue = false;
                 break;
             case INTEGER:
                 match(INTEGER);
+                left = Type(INT, 0);
+                lvalue = false;
                 break;
             case STRING:
+                //cout << str << endl;
+                //cout << length << endl;
                 match(STRING);
+                left = Type(CHAR, 0, length);
+                lvalue = false;
                 break;
             default:
                 break;
         }
     } else if (lookahead == LPAREN) {
         match(LPAREN);
-        expr();
+        left = expr(lvalue);
         match(RPAREN);
     }
+    //cout << "lvalue at end of primary=" << lvalue << endl;
+    //cout << "left at end of primary=" << left << endl;
+    return left;
 }
 
 /*
  * exprList     ->  expr
  *              |   expr , exprList
  */
-void exprList() {
-    expr();
+Type exprList(Parameters &p, bool &lvalue) {
+    Type left;
+    left = expr(lvalue);
+    p.push_back(left);
     
     while (lookahead == COMMA) {
         match(COMMA);
-        expr();
+        left = expr(lvalue);
+        p.push_back(left);
     }
+    
+    return left;
 }
 
 int main() {

@@ -6,7 +6,7 @@ make clean
 echo "DONE"
 
 echo
-echo "Compiling lexical and syntax analyzer..."
+echo "Compiling..."
 make
 echo "DONE"
 

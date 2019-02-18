@@ -8,6 +8,11 @@ using std::ostream;
 using std::cout;
 using std::endl;
 
+Type::Type()
+    : _kind(ERROR)
+{
+}
+
 Type::Type(int specifier, unsigned indirection)
     : _kind(SCALAR), _specifier(specifier), _indirection(indirection)
 {
@@ -21,6 +26,48 @@ Type::Type(int specifier, unsigned indirection, unsigned length)
 Type::Type(int specifier, unsigned indirection, Parameters *parameters)
 	:  _kind(FUNCTION), _specifier(specifier), _indirection(indirection), _parameters(parameters)
 {
+}
+
+/*
+ *  A value of type CHAR may be promoted to type INT, and a value of type “array of T” may be promoted to type “pointer to T.”
+ */
+Type Type::promote() const {
+    // CHAR to INT
+    if (_specifier == CHAR && _indirection == 0 && _kind == SCALAR) {
+        return Type(INT);
+    }
+    // ARRAY to POINTER
+    if (_kind == ARRAY) {
+        return Type(_specifier, _indirection + 1);
+    }
+    return *this;
+}
+
+/*
+ *  A type is numeric if, after any promotion, it is either INT or DOUBLE.
+ */
+bool Type::isNumeric() const {
+    //return this->promote()._specifier == INT || this->promote()._specifier == DOUBLE ;
+    return this->promote() == Type(INT) || this->promote() == Type(DOUBLE);
+}
+
+bool Type::isPointer() const {
+    return this->promote()._kind == SCALAR && this->promote()._indirection > 0;
+}
+
+/*
+ *  Two types are compatible if, after any promotion, they either are both numeric or are identical predicate types.
+ */
+bool Type::isCompatibleWith(const Type &that) const {
+    Type pThis = this->promote();
+    Type pThat = that.promote();
+    
+    if (pThis.isNumeric() && pThat.isNumeric()) {
+        //cout << pThis << " and " << pThat << " numeric " << endl;
+        return true;
+    }
+
+    return pThis.isPredicate() && pThis == pThat;
 }
 
 unsigned Type::length() const {
