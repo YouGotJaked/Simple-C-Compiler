@@ -36,9 +36,6 @@ Type checkDEREF(const Type &left);
 Type checkSIZEOF(const Type &left);
 Type checkCAST(const Type &left, const int &specifier, const unsigned &indirection);
 Type checkPOSTFIX(const Type &left, const Type &expr);
-Type checkParenthesized(const Type &left, const Type &expr, bool &lvalue);
 Type checkFunctionCall(const Type &left, Parameters &p);
-bool checkError(const Type &left);
-bool checkError(const Type &left, const Type &right);
 
 #endif /* CHECKER_H */

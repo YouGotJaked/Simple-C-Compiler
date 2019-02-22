@@ -91,9 +91,10 @@ bool isSpecifier(int token) {
  *              |   double
  */
 int specifier() {
-    int typespec = lookahead;
+    int typespec = ERROR;
     
     if (isSpecifier(lookahead)) {
+        typespec = lookahead;
         switch (lookahead) {
             case CHAR:
                 match(CHAR);
@@ -349,10 +350,10 @@ void statement(const Type &type) {
         }
     } else {
         left = expr(lvalue);
+        
         if (lookahead == ASSIGN) {
             match(ASSIGN);
             right = expr(rvalue);
-            //out << "expr(lvalue): " << light << endl;
             checkAssign(left, right, lvalue);
         }
         match(SEMICOLON);
@@ -363,7 +364,6 @@ void statement(const Type &type) {
  * expr         ->  exprOR
  */
 Type expr(bool &lvalue) {
-    //cout << "expr lvalue=" << lvalue << endl;
     return exprOR(lvalue);
 }
 
@@ -377,7 +377,6 @@ Type expr(bool &lvalue) {
  *              |   ε
  */
 Type exprOR(bool &lvalue) {
-    //cout << "exprOR lvalue=" << lvalue << endl;
     Type left, right;
     left = exprAND(lvalue);
     
@@ -402,7 +401,6 @@ Type exprOR(bool &lvalue) {
  *              |   ε
  */
 Type exprAND(bool &lvalue) {
-    //cout << "exprAND lvalue=" << lvalue << endl;
     Type left, right;
     left = exprEQL(lvalue);
     
@@ -429,7 +427,6 @@ Type exprAND(bool &lvalue) {
  *              |   ε
  */
 Type exprEQL(bool &lvalue) {
-    //cout << "exprEQL lvalue=" << lvalue << endl;
     Type left, right;
     left = exprCOMP(lvalue);
     
@@ -476,7 +473,6 @@ bool isCOMP(int token) {
  *              |   ε
  */
 Type exprCOMP(bool &lvalue) {
-    //cout << "exprCOMP lvalue=" << lvalue << endl;
     Type left, right;
     left = exprADDSUB(lvalue);
     
@@ -528,7 +524,6 @@ Type exprCOMP(bool &lvalue) {
  *              |   ε
  */
 Type exprADDSUB(bool &lvalue) {
-    //cout << "exprADDSUB lvalue=" << lvalue << endl;
     Type left, right;
     left = exprMULDIV(lvalue);
     
@@ -573,7 +568,6 @@ bool isMULDIV(int token) {
  *              |   ε
  */
 Type exprMULDIV(bool &lvalue) {
-    //cout << "exprMULDIV lvalue=" << lvalue << endl;
     Type left, right;
     left = exprPREFIX(lvalue);
     
@@ -644,10 +638,7 @@ Type exprPREFIX(bool &lvalue) {
         switch (lookahead) {
             case ADDR:
                 match(ADDR);
-                //cout << "ADDR lvalue =" << lvalue << endl;
                 left = exprPREFIX(lvalue);
-                //cout << "ADDR lvalue =" << lvalue << endl;
-                //cout << left.specifier() << endl;
                 left = checkADDR(left, lvalue);
                 cout << "addr" << endl;
                 lvalue = false;
@@ -698,10 +689,8 @@ Type exprPREFIX(bool &lvalue) {
  * exprPOSTFIX_p    ->  [ expr ] exprPOSTFIX_p
  */
 Type exprPOSTFIX(bool lp, bool &lvalue) {
-    //cout << "exprPOSTFIX lvalue=" << lvalue << endl;
     Type left, expression;
     left = exprPRIMARY(lp, lvalue);
-    //cout << "left after postfix=" << left << endl;
     
     while (lookahead == LBRACKET) {
         match(LBRACKET);
@@ -729,7 +718,6 @@ bool isPRIMARY(int token) {
  *              |   STRING
  */
 Type exprPRIMARY(bool lp, bool &lvalue) {
-    //cout << "exprPRIMARY lvalue=" << lvalue << endl;
     Type left;
     string str = lexbuf;
     unsigned length = str.length() - 2; // don't account for quotation marks
@@ -754,8 +742,7 @@ Type exprPRIMARY(bool lp, bool &lvalue) {
         } else {
             Symbol *checkID = checkIdentifier(name);
             left = checkID->type();
-            lvalue = left.isScalar() ? true : false;
-            //cout << "final lvalue=" << lvalue << endl;
+            lvalue = left.isScalar();
         }
     } else if (isPRIMARY(lookahead)) {
         switch (lookahead) {
@@ -770,8 +757,6 @@ Type exprPRIMARY(bool lp, bool &lvalue) {
                 lvalue = false;
                 break;
             case STRING:
-                //cout << str << endl;
-                //cout << length << endl;
                 match(STRING);
                 left = Type(CHAR, 0, length);
                 lvalue = false;
@@ -784,8 +769,7 @@ Type exprPRIMARY(bool lp, bool &lvalue) {
         left = expr(lvalue);
         match(RPAREN);
     }
-    //cout << "lvalue at end of primary=" << lvalue << endl;
-    //cout << "left at end of primary=" << left << endl;
+
     return left;
 }
 

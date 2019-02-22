@@ -122,12 +122,10 @@ Symbol *checkFunction(const string &name) {
 
 void checkReturn(const Type &exprType, const Type &returnType) {
     Type t = Type(returnType.specifier(), returnType.indirection());
+    
     if (!exprType.isCompatibleWith(t)) {
         report(E5);     // "invalid return type"
-    } else {
-        //cout << "exprType " << exprType << " is compatible with returnType " << returnType << endl;
     }
-}
 
 void checkWhileIf(const Type &exprType) {
     if (exprType == error) {
@@ -139,7 +137,6 @@ void checkWhileIf(const Type &exprType) {
 }
 
 void checkAssign(const Type &left, const Type &right, bool &lvalue) {
-    //cout << "checkAssign(" << left << ", " << right << ", " << lvalue << ")" << endl;
     if (left == error || right == error) {
         return;
     }
@@ -320,8 +317,6 @@ Type checkADD(const Type &left, const Type &right) {
     Type pLeft = left.promote();
     Type pRight = right.promote();
     
-    //cout << "checkADD: pLeft = " << pLeft << " and pRight = " << pRight << endl;
-    
     if (pLeft.isNumeric() && pRight.isNumeric()) {
         return (pLeft == Type(DOUBLE) || pRight == Type(DOUBLE)) ? DOUBLE : INT;
     }
@@ -455,9 +450,7 @@ Type checkNOT(const Type &left) {
 }
 
 Type checkADDR(const Type &left, bool &lvalue) {
-    //cout << "checkADDR" << endl;
     if (left == error) {
-        //cout << "return error" << endl;
         return error;
     }
     
@@ -465,7 +458,6 @@ Type checkADDR(const Type &left, bool &lvalue) {
         report(E7);     // lvalue required
         return error;
     } else {
-        //cout << "returning pointer to T" << endl;
         return Type(left.specifier(), left.indirection() + 1);
     }
 }
@@ -499,7 +491,6 @@ Type checkCAST(const Type &left, const int &specifier, const unsigned &indirecti
     }
     
     Type pLeft = left.promote();
-    //cout << "pLeft: " << pLeft << endl;
     Type result = Type(specifier, indirection);
     
     if ((pLeft.isNumeric() && result.isNumeric()) ||
@@ -547,18 +538,6 @@ Type checkPOSTFIX(const Type &left, const Type &expr) {
  *      The result is not an lvalue.
  */
 
-Type checkParenthesized(const Type &left, const Type &expr, bool &lvalue) {
-    if (left == error || expr == error) {
-        return error;
-    }
-    
-    if (left == expr) {
-        return left;
-    }
-    
-    return error;
-}
-
 Type checkFunctionCall(const Type &left, Parameters &p) {
     Type result = error;
     
@@ -578,28 +557,18 @@ Type checkFunctionCall(const Type &left, Parameters &p) {
         if (args->size() == p.size()) {
             int i = 0;
             for (auto const &arg: *args) {
-                
                 if (arg.isPredicate() && arg.isCompatibleWith(p[i])) {
                     result = Type(left.specifier(), left.indirection());
                 } else {
-                    cout << "ERROR: argument " << arg << " is not compatible with " << p[i] << endl;
                     report(E12);    // invalid args
+                    return result;
                 }
                 i++;
             }
         } else {
-            cout << "ERROR: argument sizes don't match" << endl;
             report(E12);    // invalid args
         }
     }
     
     return result;
-}
-
-bool checkError(const Type &left) {
-    return left == error;
-}
-
-bool checkError(const Type &left, const Type &right) {
-    return left == error || right == error;
 }
