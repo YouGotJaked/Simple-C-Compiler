@@ -126,6 +126,7 @@ void checkReturn(const Type &exprType, const Type &returnType) {
     if (!exprType.isCompatibleWith(t)) {
         report(E5);     // "invalid return type"
     }
+}
 
 void checkWhileIf(const Type &exprType) {
     if (exprType == error) {
