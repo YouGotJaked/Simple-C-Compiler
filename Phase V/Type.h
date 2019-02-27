@@ -67,6 +67,7 @@ public:
     Type deref() const;
 
     unsigned size() const;
+    unsigned alignment() const;
 };
 
 std::ostream &operator <<(std::ostream &ostr, const Type &type);

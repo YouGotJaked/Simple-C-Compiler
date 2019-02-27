@@ -12,6 +12,7 @@
 # include "tokens.h"
 # include "lexer.h"
 # include "Tree.h"
+# include "generate.h"
 
 using namespace std;
 

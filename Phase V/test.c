@@ -1,6 +1,9 @@
 #include <stdio.h>
 
 int global;
+int arr[10];
+char **pp;
+double d[2];
 
 int main(void)
 {

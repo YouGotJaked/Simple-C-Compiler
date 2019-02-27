@@ -1,4 +1,9 @@
+#include <iostream>
 #include "Tree.h"
+#include "arc.h"
+
+using std::cout;
+using std::endl;
 
 /*
  * Function:	generateGlobals
@@ -10,8 +15,11 @@ void generateGlobals(const Symbols &globals) {
 		cout << "\t.data" << endl;
 	}
 
+	//	.comm	name,size,alignment
 	for (auto const &var: globals) {
-		cout << "\t.comm\t" << 
+		cout << "\t.comm\t" << "_" << var->name();
+		cout << ", " << var->type().size();
+		cout << ", " << var->type().size() << endl;
 	}
 }
 
@@ -19,12 +27,32 @@ void generateGlobals(const Symbols &globals) {
  * Function:	Function::generate
  *
  * Description: Generate code for statements.
+ *
+ * Format: 
+ * 	1. Assign offsets
+ * 	2. Prologue
+ * 		pushl	%ebp
+ * 		movl	%esp, %ebp
+ * 		subl	$n, %esp
+ * 	3. Body (block)
+ * 	4. Epilogue
+ * 		movl	%ebp, %esp
+ * 		popl	%ebp
+ * 		ret
  */
 void Function::generate() {
 	// assign offsets
 	// prologue
+	cout << "_" << _id->name() << ":" << endl;
+	cout << "\tpush\t%ebp" << endl;
+	cout << "\tmovl\t%esp, %ebp" << endl;
+	cout << "\tsubl\t$" << _id->name() << ".size, %esp" << endl;
+	// body
+	
 	// epilogue
-	// gen code
+	cout << "\tmovl\t%ebp, %esp" << endl;
+	cout << "\tpopl\t%ebp" << endl;
+	cout << "\tret" << endl;
 }
 
 /*
