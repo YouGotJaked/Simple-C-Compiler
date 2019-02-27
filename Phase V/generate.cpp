@@ -4,6 +4,7 @@
 
 using std::cout;
 using std::endl;
+using std::stringstream;
 
 /*
  * Function:	generateGlobals
@@ -111,7 +112,9 @@ void Call::generate() {
  * Description: Set _operand field.
  */
 void Integer::generate() {
-
+    stringstream ss;
+    ss << "$" << _value;
+    _operand = ss.str();
 }
 
 /*
@@ -120,7 +123,15 @@ void Integer::generate() {
  * Description: Set _operand field.
  */
 void Identifier::generate() {
-    if (_symbol->offset() != 0) {
-        
+    stringstream ss;
+    int offset = _symbol->offset();
+    
+    if (offset) {
+        ss << offset << "(%ebp)";
+    } else {
+        ss << _symbol->name();
     }
+    
+    _operand = ss.str();
+    
 }
