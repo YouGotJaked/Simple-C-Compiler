@@ -79,6 +79,7 @@ void Block::generate() {
  * Description: Generate code for simple assignments.
  */
 void Assignment::generate() {
+    cout << "#ASSIGNMENT" << endl;
     _left->generate();
     _right->generate();
     
@@ -92,6 +93,7 @@ void Assignment::generate() {
  * Description: Generate code for a function call.
  */
 void Call::generate() {
+    cout << "#CALL" << endl;
     unsigned bytes = 0;
     
     int i = 0;
@@ -115,6 +117,7 @@ void Call::generate() {
  * Description: Set _operand field.
  */
 void Integer::generate() {
+    cout << "#INT" << endl;
     stringstream ss;
     ss << "$" << _value;
     _operand = ss.str();
@@ -126,6 +129,7 @@ void Integer::generate() {
  * Description: Set _operand field.
  */
 void Identifier::generate() {
+    cout << "#ID" << endl;
     stringstream ss;
     int offset = _symbol->offset();
     
