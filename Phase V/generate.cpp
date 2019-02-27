@@ -12,6 +12,7 @@ using std::stringstream;
  * Description: Given a scope, define all global variables (ignore functions).
  */
 void generateGlobals(const Symbols &globals) {
+    cout << "#GLOBALS" << endl;
 	if (globals.size() > 0) {
 		cout << "\t.data" << endl;
 	}
@@ -42,6 +43,7 @@ void generateGlobals(const Symbols &globals) {
  * 		ret
  */
 void Function::generate() {
+    cout << "#FUNCTION" << endl;
 	// assign offsets
     int offset = 0;
     allocate(offset);
@@ -65,6 +67,7 @@ void Function::generate() {
  * Description: Generate code for statements within block.
  */
 void Block::generate() {
+    cout << "#BLOCK" << endl;
 	for (auto const &stmt: _stmts) {
 		stmt->generate();
 	}
