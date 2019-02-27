@@ -24,11 +24,11 @@ for f in "$PWD/examples"/*.c; do
     filename=${f##*/}
     echo $filename
     filename=${filename%??}
-    ./scc < "$f" > "$filename.s"
+    ./scc < "$f" > "$PWD/results/$filename.s"
     if [ ! -d "$filename-lib.c" ]; then
-        gcc -m32 "$filename.s"
+        gcc -m32 "$PWD/results/$filename.s"
     else
-        gcc -m32 "$filename.s" "$PWD/examples/$filename-lib.c"
+        gcc -m32 "$PWD/results/$filename.s" "$PWD/examples/$filename-lib.c"
     fi
     ./a.out
 done
