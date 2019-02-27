@@ -390,7 +390,7 @@ class Function : public Node {
 public:
     Function(const Symbol *id, Block *body);
     virtual void write(ostream &ostr) const;
-    virtual void allocate(const int &offset);
+    virtual void allocate(int &offset);
     virtual void generate();
 };
 
