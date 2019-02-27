@@ -9,7 +9,7 @@ void Function::allocate(int &offset) {
 	int pSize = _id->type().parameters()->size();
 	
 	for (int i = 0; i < pSize; i++) {
-		_body->declarations()->symbols()[i]->offset() = offset;
+		_body->declarations()->symbols()[i]->setOffset(offset);
 		offset += 4;
 	}
 	
@@ -20,10 +20,10 @@ void Function::allocate(int &offset) {
 		if (_body->declarations()->symbols()[i]->type().isArray()) {
 			int length = _body->declarations()->symbols()[i]->type().length();
 			offset -= length * 4;
-			_body->declarations()->symbols()[i]->offset() = offset;
+            _body->declarations()->symbols()[i]->setOffset(offset);
 		} else if (_body->declarations()->symbols()[i]->type().isScalar()) {
 			offset -= 4;
-			_body->declarations()->symbols()[i]->offset() = offset;
+            _body->declarations()->symbols()[i]->setOffset(offset);
 		}
 	}
 }

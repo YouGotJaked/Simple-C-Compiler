@@ -21,7 +21,8 @@ public:
     Symbol(const string &name, const Type &type);
     const string &name() const;
     const Type &type() const;
-    int &offset() { return _offset; }
+    const int &offset() const { return _offset; }
+    void setOffset(const int &offset) { _offset = offset; }
 };
 
 # endif /* SYMBOL_H */
