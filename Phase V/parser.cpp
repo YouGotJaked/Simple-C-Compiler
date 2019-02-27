@@ -917,8 +917,7 @@ static void globalOrFunction()
 	    function = new Function(symbol, new Block(decls, stmts));
 
 	    if (numerrors == 0) {
-		function->write(cout);
-		cout << endl;
+		function->generate();
 	    }
 
 	} else {
@@ -928,7 +927,9 @@ static void globalOrFunction()
 	}
 
     } else {
-	declareVariable(name, Type(typespec, indirection));
+	symbol = declareVariable(name, Type(typespec, indirection));
+	symbol->setOffset(0);
+	generateGlobals(globals);
 	remainingDeclarators(typespec);
     }
 }
@@ -947,10 +948,6 @@ int main()
 
     while (lookahead != DONE)
 	globalOrFunction();
-
-    if (numerrors == 0) {
-        generateGlobals(globals);
-    }
 
     closeScope();
     exit(EXIT_SUCCESS);
