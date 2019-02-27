@@ -18,4 +18,4 @@ int bar(int a, int b, int c)
 
 int c, b, a, bar(int a, int b, int c);
 
-char bar(int a, int b, int c);		/* conflicting types for 'bar' */
+double bar(int a, int b, int c);		/* conflicting types for 'bar' */

@@ -615,6 +615,7 @@ bool isPREFIX(int token) {
  *
  */
 Type exprPREFIX(bool &lvalue) {
+    //cout << "exprPREFIX lvalue=" << lvalue << endl;
     Type left;
     int typespec;
     unsigned indirection;
@@ -627,7 +628,6 @@ Type exprPREFIX(bool &lvalue) {
             match(RPAREN);
             left = exprPREFIX(lvalue);
             left = checkCAST(left, typespec, indirection);
-            cout << left << endl;
             lvalue = false;
             cout << "cast" << endl;
         } else {

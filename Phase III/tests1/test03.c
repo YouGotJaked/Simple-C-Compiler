@@ -7,7 +7,7 @@ int foo(void)
     c;
 
     {
-	double a, b, c;
+	int a, b, c;
 
 	{
 	    char x, y, z;
@@ -18,5 +18,4 @@ int foo(void)
     }
 
     y;					/* 'y' undeclared */
-    b;
 }

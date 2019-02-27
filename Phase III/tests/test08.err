@@ -1,2 +1,2 @@
-line 6: 'x' undeclared
-line 10: conflicting types for 'bar'
+line 4: 'x' undeclared
+line 14: conflicting types for 'foobar'
