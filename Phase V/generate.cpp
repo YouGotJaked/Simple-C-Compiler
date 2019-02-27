@@ -1,6 +1,6 @@
+#include <sstream>
 #include <iostream>
 #include "Tree.h"
-#include "arc.h"
 
 using std::cout;
 using std::endl;
@@ -17,7 +17,7 @@ void generateGlobals(const Symbols &globals) {
 
 	//	.comm	name,size,alignment
 	for (auto const &var: globals) {
-		cout << "\t.comm\t" << "_" << var->name();
+		cout << "\t.comm\t" << var->name();
 		cout << ", " << var->type().size();
 		cout << ", " << var->type().size() << endl;
 	}
@@ -42,13 +42,16 @@ void generateGlobals(const Symbols &globals) {
  */
 void Function::generate() {
 	// assign offsets
+    int offset = 0;
+    allocate(offset);
+    cout << ".globl " << _id->name() << endl;
 	// prologue
-	cout << "_" << _id->name() << ":" << endl;
+	cout << _id->name() << ":" << endl;
 	cout << "\tpush\t%ebp" << endl;
 	cout << "\tmovl\t%esp, %ebp" << endl;
-	cout << "\tsubl\t$" << _id->name() << ".size, %esp" << endl;
+    cout << "\tsubl\t$" << ((offset >= 0) ? offset : -offset) << ", %esp" << endl;
 	// body
-	
+    _body->generate();
 	// epilogue
 	cout << "\tmovl\t%ebp, %esp" << endl;
 	cout << "\tpopl\t%ebp" << endl;
@@ -72,7 +75,11 @@ void Block::generate() {
  * Description: Generate code for simple assignments.
  */
 void Assignment::generate() {
-
+    _left->generate();
+    _right->generate();
+    
+    cout << "\tmovl\t" << _right << ", %esp" << endl;
+    cout << "\tmovl\t" << "%eax, " << _left << endl;
 }
 
 /*
@@ -81,7 +88,21 @@ void Assignment::generate() {
  * Description: Generate code for a function call.
  */
 void Call::generate() {
-	
+    unsigned bytes = 0;
+    
+    int i = 0;
+    
+    while (--i >= 0) {
+        _args[i]->generate();
+        cout << "\tpushl\t" << _args[i] << endl;
+        bytes += _args[i]->type().size();
+    }
+    
+    cout << "\tcall\t" << _id->name() << endl;
+    
+    if (bytes > 0) {
+        cout << "\taddl\t" << bytes << ", %esp" << endl;
+    }
 }
 
 /*
@@ -99,5 +120,7 @@ void Integer::generate() {
  * Description: Set _operand field.
  */
 void Identifier::generate() {
-
+    if (_symbol->offset() != 0) {
+        
+    }
 }
