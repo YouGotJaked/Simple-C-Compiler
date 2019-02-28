@@ -834,11 +834,15 @@ static void globalDeclarator(int typespec)
 	match('[');
 	symbol = declareVariable(name, Type(typespec, indirection, integer()));
 	globals.push_back(symbol);
+	cout << "#globDec[]: adding " << name << endl;
+	//generateGlobals(globals);
 	match(']');
 
     } else
 	symbol = declareVariable(name, Type(typespec, indirection));
 	globals.push_back(symbol);
+	cout << "#globDec: adding " << name << endl;
+	//generateGlobals(globals);
 }
 
 
@@ -858,7 +862,6 @@ static void remainingDeclarators(int typespec)
 	match(',');
 	globalDeclarator(typespec);
     }
-
     match(';');
 }
 
@@ -891,6 +894,7 @@ static void globalOrFunction()
     if (lookahead == '[') {
 	match('[');
 	symbol = declareVariable(name, Type(typespec, indirection, integer()));
+	cout << "#gOF top: adding " << name<< endl;
 	globals.push_back(symbol);
 	generateGlobals(globals);
 	match(']');
@@ -914,12 +918,11 @@ static void globalOrFunction()
 	    stmts = statements();
 	    decls = closeScope();
 	    match('}');
-
+	    cout << "#here1" << endl;
+	//    generateGlobals(globals);
+	    cout << "#here" << endl;
 	    function = new Function(symbol, new Block(decls, stmts));
-
-	    if (numerrors == 0) {
-		function->generate();
-	    }
+	    function->generate();
 
 	} else {
 	    closeScope();
@@ -929,7 +932,9 @@ static void globalOrFunction()
 
     } else {
 	symbol = declareVariable(name, Type(typespec, indirection));
-	symbol->setOffset(0);
+	symbol->offset = 0;	
+	cout << "#gOF bot: adding " << name << endl;
+	globals.push_back(symbol);
 	generateGlobals(globals);
 	remainingDeclarators(typespec);
     }

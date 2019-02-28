@@ -16,13 +16,15 @@ void generateGlobals(const Symbols &globals) {
 	//if (globals.size() > 0) {
 	//	cout << "\t.data" << endl;
 	//}
-
+	cout << "#glob size:" << globals.size() << endl;
 	//	.comm	name,size,alignment
-	for (auto const &var: globals) {
-		cout << "\t.comm\t" << var->name();
-		cout << ", " << var->type().size();
-		cout << ", " << var->type().size() << endl;
+	for (unsigned i = 0; i < globals.size(); i++) {
+		cout << "#" << i << endl;
+		cout << "\t.comm\t" << globals[i]->name();
+		cout << ", " << globals[i]->type().size();
+		cout << ", " << globals[i]->type().size() << endl;
 	}
+	cout << "#we out" << endl;
 }
 
 /*
@@ -52,7 +54,7 @@ void Function::generate() {
 	cout << _id->name() << ":" << endl;
 	cout << "\tpushl\t%ebp" << endl;
 	cout << "\tmovl\t%esp, %ebp" << endl;
-    cout << "\tsubl\t$" << -offset << ", %esp" << endl;
+    	cout << "\tsubl\t$" << -offset << ", %esp" << endl;
 	// body
     _body->generate();
 	// epilogue
