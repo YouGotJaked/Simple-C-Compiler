@@ -13,9 +13,9 @@ using std::stringstream;
  */
 void generateGlobals(const Symbols &globals) {
     cout << "#GLOBALS" << endl;
-	if (globals.size() > 0) {
-		cout << "\t.data" << endl;
-	}
+	//if (globals.size() > 0) {
+	//	cout << "\t.data" << endl;
+	//}
 
 	//	.comm	name,size,alignment
 	for (auto const &var: globals) {
@@ -96,7 +96,7 @@ void Call::generate() {
     cout << "#CALL" << endl;
     unsigned bytes = 0;
     
-    int i = 0;
+    int i = _args.size();
     
     while (--i >= 0) {
         _args[i]->generate();

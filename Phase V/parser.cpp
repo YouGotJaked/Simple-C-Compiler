@@ -892,6 +892,7 @@ static void globalOrFunction()
 	match('[');
 	symbol = declareVariable(name, Type(typespec, indirection, integer()));
 	globals.push_back(symbol);
+	generateGlobals(globals);
 	match(']');
 	remainingDeclarators(typespec);
 
