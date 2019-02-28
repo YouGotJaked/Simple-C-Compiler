@@ -15,9 +15,9 @@ void generateGlobals(const Symbols &globals) {
     cout << "#GLOBALS" << endl;
     //	.comm	name,size,alignment
     for (auto const &arg: globals) {
-	cout << "\t.comm\t" << arg->name();
-	cout << ", " << arg->type().size();
-	cout << ", " << arg->type().size() << endl;
+        cout << "\t.comm\t" << arg->name();
+        cout << ", " << arg->type().size();
+        cout << ", " << arg->type().size() << endl;
    }
 }
 
@@ -45,13 +45,16 @@ void Function::generate() {
     allocate(offset);
     cout << ".globl " << _id->name() << endl;
 	// prologue
+    cout << "\t#PROLOGUE" << endl;
 	cout << _id->name() << ":" << endl;
 	cout << "\tpushl\t%ebp" << endl;
 	cout << "\tmovl\t%esp, %ebp" << endl;
     	cout << "\tsubl\t$" << -offset << ", %esp" << endl;
 	// body
+    cout << "\t#BODY" << endl;
     _body->generate();
 	// epilogue
+    cout << "\t#EPILOGUE" << endl;
 	cout << "\tmovl\t%ebp, %esp" << endl;
 	cout << "\tpopl\t%ebp" << endl;
 	cout << "\tret" << endl;
@@ -63,7 +66,7 @@ void Function::generate() {
  * Description: Generate code for statements within block.
  */
 void Block::generate() {
-    cout << "#BLOCK" << endl;
+    cout << "\t#BLOCK" << endl;
 	for (auto const &stmt: _stmts) {
 		stmt->generate();
 	}
@@ -75,11 +78,12 @@ void Block::generate() {
  * Description: Generate code for simple assignments.
  */
 void Assignment::generate() {
-    cout << "#ASSIGNMENT" << endl;
+    cout << "\t#ASSIGNMENT" << endl;
     _right->generate();
     _left->generate();
     
-    cout << "\tmovl\t" << _right->_operand << ", " << _left->_operand << endl;
+    cout << "\tmovl\t" << _right->_operand << ", %eax"; << end;
+    cout << "\tmovl\t%eax, " << _left->_operand << endl;
 }
 
 /*

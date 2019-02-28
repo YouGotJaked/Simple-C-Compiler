@@ -17,7 +17,6 @@ if [ ! -d "$RESULTS" ]; then
 	mkdir "$RESULTS"
 fi
 
-echo
 echo "Analyzing examples..."
 echo ---------array.c------------
 ./scc < examples/array.c > results/array.s
@@ -25,7 +24,7 @@ gcc -m32 results/array.s examples/array-lib.c
 ./a.out > results/array.out
 diff results/array.out examples/array.out
 
-echo ---------global.c------------
+echo ---------global.c-----------
 ./scc < examples/global.c > global.s
 gcc -m32 global.s examples/global-lib.c
 ./a.out > results/global.out
@@ -37,16 +36,15 @@ gcc -m32 local.s examples/local-lib.c
 ./a.out > results/local.out
 diff results/local.out examples/local.out
 
-echo ---------putchar.c------------
+echo ---------putchar.c----------
 ./scc < examples/putchar.c > putchar.s
 gcc -m32 putchar.s
 ./a.out > results/putchar.out
 diff results/putchar.out examples/putchar.out
 
-echo ---------towers.c------------
+echo ---------towers.c-----------
 ./scc < examples/towers.c > towers.s
 gcc -m32 towers.s examples/towers-lib.c
 ./a.out > results/towers.out
 diff results/towers.out examples/towers.out
-
-echo ---------------finished-----------------
+echo "DONE"
