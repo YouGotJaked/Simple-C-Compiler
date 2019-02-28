@@ -28,16 +28,16 @@ for f in "$PWD/examples"/*.c; do
     # compile and assemble code
     if [[ ! $f =~ .*-lib.* ]]; then
         filename=${f##*/}
-        echo $filename
+        echo -e "\t" $filename
         filename=${filename%??}
-        assembly="$PWD/results/$filename.s"
-       ./scc < "$f" > "$assembly"
+        assembly="results/$filename.s"
+        echo -e "\t\t./scc <" "$filename.c" "> $assembly"
         # check if lib file defined
         if [ ! -z "$lib" ]; then
-	    gcc -m32 "$assembly" "$PWD/examples/$lib"
+	        echo -e "\t\tgcc -m32" "$assembly" "examples/$lib"
             lib=""
         else
-            gcc -m32 "$assembly"
+            echo -e "\t\tgcc -m32" "$assembly"
         fi
     fi
     #./a.out
