@@ -824,6 +824,8 @@ static void globalDeclarator(int typespec)
 
     Symbol *symbol;
 
+    cout << "#symbol=" << symbol << ",lexbuf=" << lexbuf << endl;
+
     if (lookahead == '(') {
 	match('(');
 	declareFunction(name, Type(typespec, indirection, parameters()));
@@ -918,9 +920,7 @@ static void globalOrFunction()
 	    stmts = statements();
 	    decls = closeScope();
 	    match('}');
-	    cout << "#here1" << endl;
-	//    generateGlobals(globals);
-	    cout << "#here" << endl;
+	    
 	    function = new Function(symbol, new Block(decls, stmts));
 	    function->generate();
 
@@ -935,8 +935,10 @@ static void globalOrFunction()
 	symbol->offset = 0;	
 	cout << "#gOF bot: adding " << name << endl;
 	globals.push_back(symbol);
-	generateGlobals(globals);
+	//generateGlobals(globals);
 	remainingDeclarators(typespec);
+	generateGlobals(globals);
+	cout << "#globals done" << endl;
     }
 }
 

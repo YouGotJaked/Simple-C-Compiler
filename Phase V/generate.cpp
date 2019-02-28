@@ -13,18 +13,12 @@ using std::stringstream;
  */
 void generateGlobals(const Symbols &globals) {
     cout << "#GLOBALS" << endl;
-	//if (globals.size() > 0) {
-	//	cout << "\t.data" << endl;
-	//}
-	cout << "#glob size:" << globals.size() << endl;
-	//	.comm	name,size,alignment
-	for (unsigned i = 0; i < globals.size(); i++) {
-		cout << "#" << i << endl;
-		cout << "\t.comm\t" << globals[i]->name();
-		cout << ", " << globals[i]->type().size();
-		cout << ", " << globals[i]->type().size() << endl;
-	}
-	cout << "#we out" << endl;
+    //	.comm	name,size,alignment
+    for (auto const &arg: globals) {
+	cout << "\t.comm\t" << arg->name();
+	cout << ", " << arg->type().size();
+	cout << ", " << arg->type().size() << endl;
+   }
 }
 
 /*
