@@ -50,9 +50,9 @@ void Function::generate() {
     cout << ".globl " << _id->name() << endl;
 	// prologue
 	cout << _id->name() << ":" << endl;
-	cout << "\tpush\t%ebp" << endl;
+	cout << "\tpushl\t%ebp" << endl;
 	cout << "\tmovl\t%esp, %ebp" << endl;
-    cout << "\tsubl\t$" << ((offset >= 0) ? offset : -offset) << ", %esp" << endl;
+    cout << "\tsubl\t$" << -offset << ", %esp" << endl;
 	// body
     _body->generate();
 	// epilogue
@@ -80,11 +80,10 @@ void Block::generate() {
  */
 void Assignment::generate() {
     cout << "#ASSIGNMENT" << endl;
-    _left->generate();
     _right->generate();
+    _left->generate();
     
-    cout << "\tmovl\t" << _right << ", %esp" << endl;
-    cout << "\tmovl\t" << "%eax, " << _left << endl;
+    cout << "\tmovl\t" << _right->operand << ", " << _left->operand << endl;
 }
 
 /*
@@ -94,21 +93,18 @@ void Assignment::generate() {
  */
 void Call::generate() {
     cout << "#CALL" << endl;
-    unsigned bytes = 0;
-    
-    int i = _args.size();
-    
-    while (--i >= 0) {
-        _args[i]->generate();
-        cout << "\tpushl\t" << _args[i] << endl;
-        bytes += _args[i]->type().size();
+    //unsigned bytes = 0;
+    for (int i = _args.size()-1; i >= 0; i--) {
+    	_args[i]->generate();
+        cout << "\tpushl\t" << _args[i]->operand << endl;
+      //  bytes += _args[i]->type().size();
     }
     
     cout << "\tcall\t" << _id->name() << endl;
     
-    if (bytes > 0) {
-        cout << "\taddl\t" << bytes << ", %esp" << endl;
-    }
+    //if (bytes > 0) {
+      //  cout << "\taddl\t" << bytes << ", %esp" << endl;
+    //}
 }
 
 /*
@@ -118,9 +114,7 @@ void Call::generate() {
  */
 void Integer::generate() {
     cout << "#INT" << endl;
-    stringstream ss;
-    ss << "$" << _value;
-    _operand = ss.str();
+    operand = "$" + value();
 }
 
 /*
@@ -131,14 +125,11 @@ void Integer::generate() {
 void Identifier::generate() {
     cout << "#ID" << endl;
     stringstream ss;
-    int offset = _symbol->offset();
-    
-    if (offset) {
-        ss << offset << "(%ebp)";
+    ss << symbol()->offset;
+    string sOff = ss.str();
+    if (_symbol->offset == 0) {
+        operand = _symbol->name();
     } else {
-        ss << _symbol->name();
+    	operand = sOff + "(%ebp)";	
     }
-    
-    _operand = ss.str();
-    
 }

@@ -2,12 +2,12 @@
 
 echo
 echo "Cleaning object files..."
-make clean
+#make clean
 echo "DONE"
 
 echo
 echo "Compiling..."
-make
+#make
 echo "DONE"
 
 echo
@@ -31,10 +31,10 @@ for f in "$PWD/examples"/*.c; do
         echo $filename
         filename=${filename%??}
         assembly="$PWD/results/$filename.s"
-        ./scc < "$f" > "$assembly"
+       ./scc < "$f" > "$assembly"
         # check if lib file defined
-        if [ -n "${lib+1}" ]; then
-            gcc -m32 "$assembly" "$PWD/examples/$lib"
+        if [ ! -z "$lib" ]; then
+	    gcc -m32 "$assembly" "$PWD/examples/$lib"
             lib=""
         else
             gcc -m32 "$assembly"

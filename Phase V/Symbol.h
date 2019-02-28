@@ -15,14 +15,12 @@ class Symbol {
     typedef std::string string;
     string _name;
     Type _type;
-    int _offset;
 
 public:
     Symbol(const string &name, const Type &type);
     const string &name() const;
     const Type &type() const;
-    const int &offset() const { return _offset; }
-    void setOffset(const int &offset) { _offset = offset; }
+    int offset;
 };
 
 # endif /* SYMBOL_H */

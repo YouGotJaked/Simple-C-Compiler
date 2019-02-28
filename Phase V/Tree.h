@@ -65,15 +65,13 @@ protected:
     typedef std::string string;
     Type _type;
     bool _lvalue;
-    string _operand;
     Expression(const Type &type);
 
 public:
     const Type &type() const;
     bool lvalue() const;
-    const string &operand() const;
+    string operand;
 };
-
 
 /* A binary operator */
 
