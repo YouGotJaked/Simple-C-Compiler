@@ -66,7 +66,7 @@ void Function::generate() {
  * Description: Generate code for statements within block.
  */
 void Block::generate() {
-    cout << "\t#BLOCK" << endl;
+    cout << "\t #BLOCK" << endl;
 	for (auto const &stmt: _stmts) {
 		stmt->generate();
 	}
@@ -78,11 +78,11 @@ void Block::generate() {
  * Description: Generate code for simple assignments.
  */
 void Assignment::generate() {
-    cout << "\t#ASSIGNMENT" << endl;
+    cout << "\t  #ASSIGNMENT" << endl;
     _right->generate();
     _left->generate();
     
-    cout << "\tmovl\t" << _right->_operand << ", %eax"; << end;
+    cout << "\tmovl\t" << _right->_operand << ", %eax" << endl;
     cout << "\tmovl\t%eax, " << _left->_operand << endl;
 }
 
@@ -92,7 +92,7 @@ void Assignment::generate() {
  * Description: Generate code for a function call.
  */
 void Call::generate() {
-    cout << "#CALL" << endl;
+    cout << "\t#CALL" << endl;
     //unsigned bytes = 0;
     for (int i = _args.size()-1; i >= 0; i--) {
     	_args[i]->generate();
@@ -113,7 +113,7 @@ void Call::generate() {
  * Description: Set _operand field.
  */
 void Integer::generate() {
-    cout << "#INT" << endl;
+    cout << "\t   #INT" << endl;
     _operand = "$" + value();
 }
 
@@ -123,13 +123,14 @@ void Integer::generate() {
  * Description: Set _operand field.
  */
 void Identifier::generate() {
-    cout << "#ID" << endl;
+    cout << "\t    #ID" << endl;
     stringstream ss;
-    ss << symbol()->offset;
+    ss << symbol()->_offset;
     string sOff = ss.str();
-    if (_symbol->offset == 0) {
+    if (_symbol->_offset == 0) {
         _operand = _symbol->name();
     } else {
     	_operand = sOff + "(%ebp)";
     }
 }
+
