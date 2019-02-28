@@ -19,16 +19,28 @@ fi
 
 echo
 echo "Analyzing examples..."
-search="examples"
+lib=""
 for f in "$PWD/examples"/*.c; do
-    filename=${f##*/}
-    echo $filename
-    filename=${filename%??}
-    if  [[ ! $f =~ .*-lib.* ]]; then
-   	./scc < "$f" > "$PWD/results/$filename.s"
-        gcc -m32 "$PWD/results/$filename.s" "$PWD/examples/$filename-lib.c"
+    # assign library file
+    if [[ $f =~ .*-lib.* ]]; then
+        lib=${f##*/}
     fi
-    ./a.out
+    # compile and assemble code
+    if [[ ! $f =~ .*-lib.* ]]; then
+        filename=${f##*/}
+        echo $filename
+        filename=${filename%??}
+        assembly="$PWD/results/$filename.s"
+        ./scc < "$f" > "$assembly"
+        # check if lib file defined
+        if [ -n "${lib+1}" ]; then
+            gcc -m32 "$assembly" "$PWD/examples/$lib"
+            lib=""
+        else
+            gcc -m32 "$assembly"
+        fi
+    fi
+    #./a.out
 done
 echo "DONE"
 

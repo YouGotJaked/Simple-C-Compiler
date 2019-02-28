@@ -1,2 +1,5 @@
 *.o
 .nfs*
+*.s
+scc
+results/
