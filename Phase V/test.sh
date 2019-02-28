@@ -19,40 +19,34 @@ fi
 
 echo
 echo "Analyzing examples..."
-lib=""
-for f in "$PWD/examples"/*.c; do
-    echo $f
-    # assign library file
-    if [[ $f =~ .*-lib.* ]]; then
-        lib=${f##*/}
-    	echo $lib
-    fi
-    # compile and assemble code
-    if [[ ! $f =~ .*-lib.* ]]; then
-        filename=${f##*/}
-        echo -e "\t" $filename
-        filename=${filename%??}
-        assembly="results/$filename.s"
-        echo "./scc <" "examples/$filename.c" ">" "$assembly"
-        # check if lib file defined
-        if [ ! -z "$lib" ]; then
-	   echo gcc -m32 "$assembly" "examples/$lib"
-           lib=""
-        else
-           echo gcc -m32 "$assembly"
-        fi
-    fi
-    #./a.out
-done
-echo "DONE"
+echo ---------array.c------------
+./scc < examples/array.c > results/array.s
+gcc -m32 results/array.s examples/array-lib.c
+./a.out > results/array.out
+diff results/array.out examples/array.out
 
-echo
-echo "Analyzing test cases..."
-for f in "$PWD/tests"/*.c; do
-    filename=${f##*/}
-    echo $filename
-    filename=${filename%??}
-    ./scc < "$f" > /dev/null 2> "$PWD/results/$filename.err"
-    diff "$PWD/tests/$filename.err" "$PWD/results/$filename.err"
-done
-echo "DONE"
+echo ---------global.c------------
+./scc < examples/global.c > global.s
+gcc -m32 global.s examples/global-lib.c
+./a.out > results/global.out
+diff results/global.out examples/global.out
+
+echo ---------local.c------------
+./scc < examples/local.c > local.s
+gcc -m32 local.s examples/local-lib.c
+./a.out > results/local.out
+diff results/local.out examples/local.out
+
+echo ---------putchar.c------------
+./scc < examples/putchar.c > putchar.s
+gcc -m32 putchar.s
+./a.out > results/putchar.out
+diff results/putchar.out examples/putchar.out
+
+echo ---------towers.c------------
+./scc < examples/towers.c > towers.s
+gcc -m32 towers.s examples/towers-lib.c
+./a.out > results/towers.out
+diff results/towers.out examples/towers.out
+
+echo ---------------finished-----------------

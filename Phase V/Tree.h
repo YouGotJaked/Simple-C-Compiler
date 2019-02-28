@@ -70,7 +70,7 @@ protected:
 public:
     const Type &type() const;
     bool lvalue() const;
-    string operand;
+    string _operand;
 };
 
 /* A binary operator */

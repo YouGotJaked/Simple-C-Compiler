@@ -79,7 +79,7 @@ void Assignment::generate() {
     _right->generate();
     _left->generate();
     
-    cout << "\tmovl\t" << _right->operand << ", " << _left->operand << endl;
+    cout << "\tmovl\t" << _right->_operand << ", " << _left->_operand << endl;
 }
 
 /*
@@ -92,7 +92,7 @@ void Call::generate() {
     //unsigned bytes = 0;
     for (int i = _args.size()-1; i >= 0; i--) {
     	_args[i]->generate();
-        cout << "\tpushl\t" << _args[i]->operand << endl;
+        cout << "\tpushl\t" << _args[i]->_operand << endl;
       //  bytes += _args[i]->type().size();
     }
     
@@ -110,7 +110,7 @@ void Call::generate() {
  */
 void Integer::generate() {
     cout << "#INT" << endl;
-    operand = "$" + value();
+    _operand = "$" + value();
 }
 
 /*
@@ -124,8 +124,8 @@ void Identifier::generate() {
     ss << symbol()->offset;
     string sOff = ss.str();
     if (_symbol->offset == 0) {
-        operand = _symbol->name();
+        _operand = _symbol->name();
     } else {
-    	operand = sOff + "(%ebp)";	
+    	_operand = sOff + "(%ebp)";
     }
 }

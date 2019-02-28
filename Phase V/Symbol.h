@@ -20,7 +20,7 @@ public:
     Symbol(const string &name, const Type &type);
     const string &name() const;
     const Type &type() const;
-    int offset;
+    int _offset;
 };
 
 # endif /* SYMBOL_H */

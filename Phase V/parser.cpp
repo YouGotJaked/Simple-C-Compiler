@@ -898,7 +898,7 @@ static void globalOrFunction()
 	symbol = declareVariable(name, Type(typespec, indirection, integer()));
 	cout << "#gOF top: adding " << name<< endl;
 	globals.push_back(symbol);
-	generateGlobals(globals);
+	//generateGlobals(globals);
 	match(']');
 	remainingDeclarators(typespec);
 
@@ -932,7 +932,7 @@ static void globalOrFunction()
 
     } else {
 	symbol = declareVariable(name, Type(typespec, indirection));
-	symbol->offset = 0;	
+	symbol->_offset = 0;
 	cout << "#gOF bot: adding " << name << endl;
 	globals.push_back(symbol);
 	//generateGlobals(globals);

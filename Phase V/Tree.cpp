@@ -64,15 +64,6 @@ bool Expression::lvalue() const
 }
 
 /*
- * Function:    Expression::operand (accessor)
- *
- * Description: Return the location where the value of expression is stored.
- */
-const string &Expression::operand() const {
-    return _operand;
-}
-
-/*
  * Function:	Binary::Binary (constructor)
  *
  * Description:	Initialize this expression as a binary operator with the
