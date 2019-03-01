@@ -5,6 +5,7 @@ using std::cout;
 using std::endl;
 
 void Function::allocate(int &offset) {
+	// parameter offset is always 8
 	offset = 8;
 	int pSize = _id->type().parameters()->size();
 	

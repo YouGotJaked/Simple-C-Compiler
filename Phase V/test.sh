@@ -2,12 +2,12 @@
 
 echo
 echo "Cleaning object files..."
-#make clean
+make clean
 echo "DONE"
 
 echo
 echo "Compiling..."
-#make
+make
 echo "DONE"
 
 echo

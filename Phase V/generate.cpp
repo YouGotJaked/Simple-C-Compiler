@@ -1,19 +1,20 @@
-#include <sstream>
 #include <iostream>
 #include "Tree.h"
 
 using std::cout;
 using std::endl;
-using std::stringstream;
+using std::to_string;
 
 /*
  * Function:	generateGlobals
  * 
  * Description: Given a scope, define all global variables (ignore functions).
+ *
+ * Format:
+ * 	.comm	name, size, alignment
  */
 void generateGlobals(const Symbols &globals) {
     cout << "#GLOBALS" << endl;
-    //	.comm	name,size,alignment
     for (auto const &arg: globals) {
         cout << "\t.comm\t" << arg->name();
         cout << ", " << arg->type().size();
@@ -75,7 +76,7 @@ void Block::generate() {
 /*
  * Function:	Assignment::generate
  *
- * Description: Generate code for simple assignments.
+ * Description: Generate code for simple assignments. Right hand side of assignment is always generated first.
  */
 void Assignment::generate() {
     cout << "\t  #ASSIGNMENT" << endl;
@@ -93,18 +94,13 @@ void Assignment::generate() {
  */
 void Call::generate() {
     cout << "\t#CALL" << endl;
-    //unsigned bytes = 0;
+    
     for (int i = _args.size()-1; i >= 0; i--) {
     	_args[i]->generate();
         cout << "\tpushl\t" << _args[i]->_operand << endl;
-      //  bytes += _args[i]->type().size();
     }
     
-    cout << "\tcall\t" << _id->name() << endl;
-    
-    //if (bytes > 0) {
-      //  cout << "\taddl\t" << bytes << ", %esp" << endl;
-    //}
+    cout << "\tcall\t" << _id->name() << endl;    
 }
 
 /*
@@ -120,17 +116,12 @@ void Integer::generate() {
 /*
  * Function:	Identifier::generate
  *
- * Description: Set _operand field.
+ * Description: Set _operand field. If offset is nonzero, operand is offset from frame pointer. Otherwise, operand is the variable name.
  */
 void Identifier::generate() {
     cout << "\t    #ID" << endl;
-    stringstream ss;
-    ss << symbol()->_offset;
-    string sOff = ss.str();
-    if (_symbol->_offset == 0) {
-        _operand = _symbol->name();
-    } else {
-    	_operand = sOff + "(%ebp)";
-    }
+    int offset = _symbol->_offset;
+    cout << "#ID::gen() offset=" << offset << endl;
+    _operand = offset ? to_string(offset) + "(%ebp)" : _symbol->name();
 }
 
