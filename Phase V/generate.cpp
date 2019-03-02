@@ -15,10 +15,10 @@ using std::to_string;
  */
 void generateGlobals(const Symbols &globals) {
     cout << "#GLOBALS" << endl;
-    for (auto const &arg: globals) {
-        cout << "\t.comm\t" << arg->name();
-        cout << ", " << arg->type().size();
-        cout << ", " << arg->type().size() << endl;
+    for (auto const &var: globals) {
+        cout << "\t.comm\t" << var->name();
+        cout << ", " << var->type().size();
+        cout << ", " << var->type().size() << endl;
    }
 }
 
@@ -41,24 +41,24 @@ void generateGlobals(const Symbols &globals) {
  */
 void Function::generate() {
     cout << "#FUNCTION" << endl;
-	// assign offsets
+    // assign offsets
     int offset = 0;
     allocate(offset);
     cout << ".globl " << _id->name() << endl;
-	// prologue
+    // prologue
     cout << "\t#PROLOGUE" << endl;
-	cout << _id->name() << ":" << endl;
-	cout << "\tpushl\t%ebp" << endl;
-	cout << "\tmovl\t%esp, %ebp" << endl;
-    	cout << "\tsubl\t$" << -offset << ", %esp" << endl;
-	// body
+    cout << _id->name() << ":" << endl;
+    cout << "\tpushl\t%ebp" << endl;
+    cout << "\tmovl\t%esp, %ebp" << endl;
+    cout << "\tsubl\t$" << -offset << ", %esp" << endl;
+    // body
     cout << "\t#BODY" << endl;
     _body->generate();
-	// epilogue
+    // epilogue
     cout << "\t#EPILOGUE" << endl;
-	cout << "\tmovl\t%ebp, %esp" << endl;
-	cout << "\tpopl\t%ebp" << endl;
-	cout << "\tret" << endl;
+    cout << "\tmovl\t%ebp, %esp" << endl;
+    cout << "\tpopl\t%ebp" << endl;
+    cout << "\tret" << endl;
 }
 
 /*
@@ -68,23 +68,25 @@ void Function::generate() {
  */
 void Block::generate() {
     cout << "\t #BLOCK" << endl;
-	for (auto const &stmt: _stmts) {
-		stmt->generate();
-	}
+    
+    for (auto const &stmt: _stmts) {
+	stmt->generate();
+    }
 }
 
 /*
  * Function:	Assignment::generate
  *
- * Description: Generate code for simple assignments. Right hand side of assignment is always generated first.
+ * Description: Generate code for simple assignments.
+ * 		Right hand side of assignment is always generated first.
  */
 void Assignment::generate() {
     cout << "\t  #ASSIGNMENT" << endl;
+    
     _right->generate();
     _left->generate();
     
-    cout << "\tmovl\t" << _right->_operand << ", %eax" << endl;
-    cout << "\tmovl\t%eax, " << _left->_operand << endl;
+    cout << "\tmovl\t" << _right->_operand << ", " << _left->_operand << endl;
 }
 
 /*
@@ -116,12 +118,13 @@ void Integer::generate() {
 /*
  * Function:	Identifier::generate
  *
- * Description: Set _operand field. If offset is nonzero, operand is offset from frame pointer. Otherwise, operand is the variable name.
+ * Description: Set _operand field. If offset is nonzero, operand is a parameter
+ * 		or local and set to the offset from frame pointer. Otherwise, 
+ * 		operand is global and set to the variable name.
  */
 void Identifier::generate() {
     cout << "\t    #ID" << endl;
     int offset = _symbol->_offset;
-    cout << "#ID::gen() offset=" << offset << endl;
     _operand = offset ? to_string(offset) + "(%ebp)" : _symbol->name();
 }
 
