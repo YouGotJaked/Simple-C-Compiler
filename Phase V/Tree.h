@@ -390,6 +390,8 @@ public:
     virtual void write(ostream &ostr) const;
     virtual void allocate(int &offset);
     virtual void generate();
+    void prologue(const int &offset);
+    void epilogue();
 };
 
 # endif /* TREE_H */

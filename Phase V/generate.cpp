@@ -1,9 +1,14 @@
 #include <iostream>
+#include <iterator>
+#include <algorithm>
 #include "Tree.h"
 
 using std::cout;
 using std::endl;
 using std::to_string;
+using std::reverse;
+using std::begin;
+using std::end;
 
 /*
  * Function:	generateGlobals
@@ -11,13 +16,12 @@ using std::to_string;
  * Description: Given a scope, define all global variables (ignore functions).
  *
  * Format:
- * 	.comm	name, size, alignment
+ * 	.comm	name, size, alignment (not used)
  */
 void generateGlobals(const Symbols &globals) {
     cout << "#GLOBALS" << endl;
     for (auto const &var: globals) {
         cout << "\t.comm\t" << var->name();
-        cout << ", " << var->type().size();
         cout << ", " << var->type().size() << endl;
    }
 }
@@ -30,12 +34,15 @@ void generateGlobals(const Symbols &globals) {
  *              always be a multiple of 4.
  */
 void Function::allocate(int &offset) {
-    // parameter offset is always 8
+    Symbol *param, *local;
+
+    // first parameter offset is always 8
     offset = 8;
     int pSize = _id->type().parameters()->size();
-    
+
     for (int i = 0; i < pSize; i++) {
-        _body->declarations()->symbols()[i]->_offset = offset;
+	param = _body->declarations()->symbols()[i];
+	param->_offset = offset;
         offset += 4;
     }
     
@@ -44,14 +51,37 @@ void Function::allocate(int &offset) {
     
     // local variables referenced via negative offsets from frame pointer
     for (int i = pSize; i < lSize; i++) {
-        int length = 1;
+        local = _body->declarations()->symbols()[i];
         // if array, multiply offset by its length
-        if (_body->declarations()->symbols()[i]->type().isArray()) {
-            length = _body->declarations()->symbols()[i]->type().length();
-        }
+	int length = local->type().isArray() ? local->type().length() : 1;
         offset -= length * 4;
-        _body->declarations()->symbols()[i]->_offset = offset;
+    	local->_offset = offset;
     }
+}
+
+/*
+ * Function:	Function::prologue
+ *
+ * Description:	Generate code for the prologue of a function.
+ */
+void Function::prologue(const int &offset) {
+    cout << "\t#PROLOGUE" << endl;
+    cout << _id->name() << ":" << endl;
+    cout << "\tpushl\t%ebp" << endl;
+    cout << "\tmovl\t%esp, %ebp" << endl;
+    cout << "\tsubl\t$" << -offset << ", %esp" << endl;
+}
+
+/*
+ * Function:	Function::epilogue
+ *
+ * Description:	Generate code for the epilogue of a function.
+ */
+void Function::epilogue() {
+    cout << "\t#EPILOGUE" << endl;
+    cout << "\tmovl\t%ebp, %esp" << endl;
+    cout << "\tpopl\t%ebp" << endl;
+    cout << "\tret" << endl;
 }
 
 /*
@@ -76,21 +106,11 @@ void Function::generate() {
     // assign offsets
     int offset = 0;
     allocate(offset);
-    cout << ".globl " << _id->name() << endl;
-    // prologue
-    cout << "\t#PROLOGUE" << endl;
-    cout << _id->name() << ":" << endl;
-    cout << "\tpushl\t%ebp" << endl;
-    cout << "\tmovl\t%esp, %ebp" << endl;
-    cout << "\tsubl\t$" << -offset << ", %esp" << endl;
-    // body
+    cout << ".globl " << _id->name() << endl; 
+    prologue(offset);
     cout << "\t#BODY" << endl;
     _body->generate();
-    // epilogue
-    cout << "\t#EPILOGUE" << endl;
-    cout << "\tmovl\t%ebp, %esp" << endl;
-    cout << "\tpopl\t%ebp" << endl;
-    cout << "\tret" << endl;
+    epilogue();
 }
 
 /*
@@ -124,14 +144,16 @@ void Assignment::generate() {
 /*
  * Function:	Call::generate
  *
- * Description: Generate code for a function call.
+ * Description: Generate code for a function call. Arguments are pushed in
+ * 		reverse order.
  */
 void Call::generate() {
     cout << "\t#CALL" << endl;
+    reverse(begin(_args), end(_args));
     
-    for (int i = _args.size()-1; i >= 0; i--) {
-    	_args[i]->generate();
-        cout << "\tpushl\t" << _args[i]->_operand << endl;
+    for (auto const &arg: _args) {
+	arg->generate();
+	cout << "\tpushl\t" << arg->_operand << endl;
     }
     
     cout << "\tcall\t" << _id->name() << endl;    
@@ -151,8 +173,8 @@ void Integer::generate() {
  * Function:	Identifier::generate
  *
  * Description: Set _operand field. If offset is nonzero, operand is a parameter
- * 		or local and set to the offset from frame pointer. Otherwise, 
- * 		operand is global and set to the variable name.
+ * 		or local and set to the offset from the frame pointer. 
+ * 		Otherwise, operand is global and set to the variable name.
  */
 void Identifier::generate() {
     cout << "\t    #ID" << endl;
