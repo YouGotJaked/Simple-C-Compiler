@@ -23,6 +23,38 @@ void generateGlobals(const Symbols &globals) {
 }
 
 /*
+ * Function:    Function::allocate
+ *
+ * Description: Allocate storage for a function and its parameters.
+ *              Since all types are INT for this assignment, offset will
+ *              always be a multiple of 4.
+ */
+void Function::allocate(int &offset) {
+    // parameter offset is always 8
+    offset = 8;
+    int pSize = _id->type().parameters()->size();
+    
+    for (int i = 0; i < pSize; i++) {
+        _body->declarations()->symbols()[i]->_offset = offset;
+        offset += 4;
+    }
+    
+    offset = 0;
+    int lSize = _body->declarations()->symbols().size();
+    
+    // local variables referenced via negative offsets from frame pointer
+    for (int i = pSize; i < lSize; i++) {
+        int length = 1;
+        // if array, multiply offset by its length
+        if (_body->declarations()->symbols()[i]->type().isArray()) {
+            length = _body->declarations()->symbols()[i]->type().length();
+        }
+        offset -= length * 4;
+        _body->declarations()->symbols()[i]->_offset = offset;
+    }
+}
+
+/*
  * Function:	Function::generate
  *
  * Description: Generate code for statements.
@@ -70,7 +102,7 @@ void Block::generate() {
     cout << "\t #BLOCK" << endl;
     
     for (auto const &stmt: _stmts) {
-	stmt->generate();
+        stmt->generate();
     }
 }
 
