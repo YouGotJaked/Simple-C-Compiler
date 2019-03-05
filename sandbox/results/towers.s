@@ -10,29 +10,29 @@ towers:
 	 #BLOCK
 	#CALL
 	    #ID
-	pushl	0x7f8536500840
+	pushl	0xfa88c0
 	    #ID
-	pushl	0x7f85365007c0
+	pushl	0xfa8840
 	    #ID
-	pushl	0x7f8536500760
+	pushl	0xfa87f0
 	    #ID
-	pushl	0x7f8536500700
+	pushl	0xfa8550
 	call	call_towers
 	#CALL
 	    #ID
-	pushl	0x7f8536500990
+	pushl	0xfa89d0
 	    #ID
-	pushl	0x7f8536500930
+	pushl	0xfa8980
 	call	print_move
 	#CALL
 	    #ID
-	pushl	0x7f8536500bb0
+	pushl	0xfa8bf0
 	    #ID
-	pushl	0x7f8536500b30
+	pushl	0xfa8b70
 	    #ID
-	pushl	0x7f8536500ad0
+	pushl	0xfa8b00
 	    #ID
-	pushl	0x7f8536500a70
+	pushl	0xfa8ab0
 	call	call_towers
 	#END BODY
 	#EPILOGUE
@@ -55,26 +55,26 @@ main:
 	   #INT
 	  #_right->_register == nullptr
 	#expr != nullptr
-	movl	0x7f8536500e70, %eax
+	movl	0xfa9050, %eax
 	  #done loading
 	  #_left->dereference() == nullptr #2
 	#HERE
-	movl	%eax, 0x7f8536500e10
+	movl	%eax, 0xfa9000
 	#HERE
 	  #ASSIGNMENT DONE
 	#CALL
 	    #ID
-	pushl	0x7f8536500ee0
+	pushl	0xfa9140
 	call	print
 	#CALL
 	   #INT
-	pushl	0x7f8536501140
+	pushl	0xfa9380
 	   #INT
-	pushl	0x7f85365010b0
+	pushl	0xfa9300
 	   #INT
-	pushl	0x7f8536501030
+	pushl	0xfa9290
 	    #ID
-	pushl	0x7f8536500fd0
+	pushl	0xfa9240
 	call	towers
 	#END BODY
 	#EPILOGUE

@@ -14,11 +14,11 @@ main:
 	   #INT
 	  #_right->_register == nullptr
 	#expr != nullptr
-	movl	0x7fa54b500410, %eax
+	movl	0xf67280, %eax
 	  #done loading
 	  #_left->dereference() == nullptr #2
 	#HERE
-	movl	%eax, 0x7fa54b5003b0
+	movl	%eax, 0xf66e30
 	#HERE
 	  #ASSIGNMENT DONE
 	  #ASSIGNMENT
@@ -27,11 +27,11 @@ main:
 	   #INT
 	  #_right->_register == nullptr
 	#expr != nullptr
-	movl	0x7fa54b500500, %ebx
+	movl	0xf67350, %ebx
 	  #done loading
 	  #_left->dereference() == nullptr #2
 	#HERE
-	movl	%ebx, 0x7fa54b5004a0
+	movl	%ebx, 0xf67300
 	#HERE
 	  #ASSIGNMENT DONE
 	  #ASSIGNMENT
@@ -40,20 +40,20 @@ main:
 	   #INT
 	  #_right->_register == nullptr
 	#expr != nullptr
-	movl	0x7fa54b5005f0, %ecx
+	movl	0xf67460, %ecx
 	  #done loading
 	  #_left->dereference() == nullptr #2
 	#HERE
-	movl	%ecx, 0x7fa54b500590
+	movl	%ecx, 0xf67410
 	#HERE
 	  #ASSIGNMENT DONE
 	#CALL
 	    #ID
-	pushl	0x7fa54b500760
+	pushl	0xf67600
 	    #ID
-	pushl	0x7fa54b500700
+	pushl	0xf67590
 	    #ID
-	pushl	0x7fa54b5006a0
+	pushl	0xf67540
 	call	print
 	#END BODY
 	#EPILOGUE

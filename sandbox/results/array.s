@@ -15,20 +15,20 @@ main:
 	   #INT
 	  #_right->_register == nullptr
 	#expr != nullptr
-	movl	0x7f94d8405330, %eax
+	movl	0x14a3240, %eax
 	  #done loading
 	  #_left->dereference() == nullptr #2
 	#HERE
-	movl	%eax, 0x7f94d84052d0
+	movl	%eax, 0x14a31f0
 	#HERE
 	  #ASSIGNMENT DONE
 	#CALL
 	    #ID
-	pushl	0x7f94d84053d0
+	pushl	0x14a3340
 	call	init_array
 	#CALL
 	    #ID
-	pushl	0x7f94d84054c0
+	pushl	0x14a3440
 	call	print_array
 	#END BODY
 	#EPILOGUE

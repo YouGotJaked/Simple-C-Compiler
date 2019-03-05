@@ -16,11 +16,11 @@ foo:
 	    #ID
 	   #INT
 	#expr != nullptr
-	movl	0x7fa4075002a0, %eax
-	addl	0x7fa407500300, 0x7fa4075002a0
+	movl	0xada030, %eax
+	addl	0xada080, 0xada030
 	  #_left->dereference() == nullptr #2
 	#HERE
-	movl	%eax, 0x7fa407500240
+	movl	%eax, 0xad9fe0
 	#HERE
 	  #ASSIGNMENT DONE
 	#RETURN
@@ -28,7 +28,7 @@ foo:
 	    #ID
 	   #INT
 	#expr != nullptr
-	movl	0x7fa4075003f0, %ebx
-	addl	0x7fa407500450, 0x7fa4075003f0
+	movl	0xada180, %ebx
+	addl	0xada1d0, 0xada180
 	#expr != nullptr
-	movl	0x7fa4075004c0, %eax
+	movl	0xada220, %eax

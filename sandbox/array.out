@@ -1,0 +1,5 @@
+/tmp/ccakhHZX.o: In function `main':
+(.text+0x17): undefined reference to `init_array'
+/tmp/ccakhHZX.o: In function `main':
+(.text+0x22): undefined reference to `print_array'
+collect2: error: ld returned 1 exit status

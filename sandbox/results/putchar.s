@@ -10,79 +10,79 @@ main:
 	 #BLOCK
 	#CALL
 	   #INT
-	pushl	0x7f8b995001d0
+	pushl	0x1da0f40
 	call	putchar
 	#CALL
 	   #INT
-	pushl	0x7f8b995002c0
+	pushl	0x1da1050
 	call	putchar
 	#CALL
 	   #INT
-	pushl	0x7f8b995003c0
+	pushl	0x1da1180
 	call	putchar
 	#CALL
 	   #INT
-	pushl	0x7f8b995004d0
+	pushl	0x1da12c0
 	call	putchar
 	#CALL
 	   #INT
-	pushl	0x7f8b995005b0
+	pushl	0x1da13b0
 	call	putchar
 	#CALL
 	   #INT
-	pushl	0x7f8b995006e0
+	pushl	0x1da1510
 	call	putchar
 	#CALL
 	   #INT
-	pushl	0x7f8b995007d0
+	pushl	0x1da15f0
 	call	putchar
 	#CALL
 	   #INT
-	pushl	0x7f8b995008b0
+	pushl	0x1da1700
 	call	putchar
 	#CALL
 	   #INT
-	pushl	0x7f8b99500990
+	pushl	0x1da1810
 	call	putchar
 	#CALL
 	   #INT
-	pushl	0x7f8b99500b00
+	pushl	0x1da14c0
 	call	putchar
 	#CALL
 	   #INT
-	pushl	0x7f8b99500bf0
+	pushl	0x1da1a70
 	call	putchar
 	#CALL
 	   #INT
-	pushl	0x7f8b99500cd0
+	pushl	0x1da1b80
 	call	putchar
 	#CALL
 	   #INT
-	pushl	0x7f8b99500db0
+	pushl	0x1da1c90
 	call	putchar
 	#CALL
 	   #INT
-	pushl	0x7f8b99500e90
+	pushl	0x1da1da0
 	call	putchar
 	#CALL
 	   #INT
-	pushl	0x7f8b99500f70
+	pushl	0x1da1eb0
 	call	putchar
 	#CALL
 	   #INT
-	pushl	0x7f8b99501060
+	pushl	0x1da1fc0
 	call	putchar
 	#CALL
 	   #INT
-	pushl	0x7f8b99501150
+	pushl	0x1da20d0
 	call	putchar
 	#CALL
 	   #INT
-	pushl	0x7f8b99501340
+	pushl	0x1da1920
 	call	putchar
 	#CALL
 	   #INT
-	pushl	0x7f8b99500a80
+	pushl	0x1da23b0
 	call	putchar
 	#END BODY
 	#EPILOGUE
