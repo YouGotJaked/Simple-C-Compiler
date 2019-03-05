@@ -199,30 +199,36 @@ void Assignment::generate() {
     cout << "\t  #ASSIGNMENT" << endl;
    
     if (_left->dereference() == nullptr) {
-	_left->generate();
+        cout << "\t  #_left->dereference() == nullptr" << endl;
+        _left->generate();
     } else {
-	_left->dereference()->generate();
+        _left->dereference()->generate();
     }
     
     _right->generate();
     
     if (_right->_register == nullptr) {
+        cout << "\t  #_right->_register == nullptr" << endl;
         load(_right, getRegister());
+        cout << "\t  #done loading" << endl;
     }
 
     stringstream ss;
 
     if (_left->dereference() == nullptr) {
-	ss << _left;
+        cout << "\t  #_left->dereference() == nullptr #2" << endl;
+        ss << _left;
     } else {
-	if (_left->dereference()->_register == nullptr) {
+        if (_left->dereference()->_register == nullptr) {
+        cout << "\t  #_left->dereference()->_register == nullptr" << endl;
 	    load(_left->dereference(), getRegister());
-	}
-	ss << "(" << _left->dereference() << ")";
+        }
+        ss << "(" << _left->dereference() << ")";
     }
     cout << "\t#HERE" << endl;
-    cout << "\tmov" << suffix(_left) << _right << ", " << ss.str() << endl;
+    cout << "\tmov" << suffix(_left) << _right->_register->name() << ", " << ss.str() << endl;
     cout << "\t#HERE" << endl;
+    cout << "\t  #ASSIGNMENT DONE" << endl;
 }
 
 // ###############
@@ -559,12 +565,10 @@ void release() {
  * Description: Load an expression into a given register.
  */
 void load(Expression *expr, Register *reg) {
-    unsigned size;
-    
     if (reg->_node != expr) {
         if (reg->_node != nullptr) {
-            size = reg->_node->type().size();
-            
+            unsigned size = reg->_node->type().size();
+            cout << "\t#reg->_node != nullptr" << endl;
             assignTemp(reg->_node);
             cout << "\tmov" << suffix(reg->_node) << expr;
             cout << ", " << reg->name(size) << ", ";
@@ -572,7 +576,8 @@ void load(Expression *expr, Register *reg) {
         }
         
         if (expr != nullptr) {
-            size = expr->type().size();
+            cout << "\t#expr != nullptr" << endl;
+            unsigned size = expr->type().size();
             cout << "\tmov" << suffix(expr) << expr;
             cout << ", " << reg->name(size) << endl;
         }

@@ -1,8 +1,6 @@
 #GLOBALS
 	.comm	x, 4
 #FUNCTION
-#here
-#here
 .globl foo
 	#PROLOGUE
 foo:
@@ -12,18 +10,25 @@ foo:
 	#BODY
 	 #BLOCK
 	  #ASSIGNMENT
+	  #_left->dereference() == nullptr
+	    #ID
 	#ADD
 	    #ID
 	   #INT
-	movl	0x7fd3105002a0, %eax
-	addl	0x7fd310500300, 0x7fd3105002a0
-	    #ID
-	movl		0x7fd310500370, 0x7fd310500240
+	#expr != nullptr
+	movl	0x7fa4075002a0, %eax
+	addl	0x7fa407500300, 0x7fa4075002a0
+	  #_left->dereference() == nullptr #2
+	#HERE
+	movl	%eax, 0x7fa407500240
+	#HERE
+	  #ASSIGNMENT DONE
 	#RETURN
 	#ADD
 	    #ID
 	   #INT
-	movl	0x0, %eax, -4(%ebp)
-	movl	0x7fd3105003f0, %eax
-	addl	0x7fd310500450, 0x7fd3105003f0
-	movl	0x7fd3105004c0, %eax
+	#expr != nullptr
+	movl	0x7fa4075003f0, %ebx
+	addl	0x7fa407500450, 0x7fa4075003f0
+	#expr != nullptr
+	movl	0x7fa4075004c0, %eax

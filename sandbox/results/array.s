@@ -1,8 +1,6 @@
 #GLOBALS
 	.comm	a, 40
 #FUNCTION
-#here
-#here
 .globl main
 	#PROLOGUE
 main:
@@ -12,17 +10,27 @@ main:
 	#BODY
 	 #BLOCK
 	  #ASSIGNMENT
-	   #INT
+	  #_left->dereference() == nullptr
 	    #ID
-	movl		0x7fd2115003c0, 0x7fd211500360
+	   #INT
+	  #_right->_register == nullptr
+	#expr != nullptr
+	movl	0x7f94d8405330, %eax
+	  #done loading
+	  #_left->dereference() == nullptr #2
+	#HERE
+	movl	%eax, 0x7f94d84052d0
+	#HERE
+	  #ASSIGNMENT DONE
 	#CALL
 	    #ID
-	pushl	0x7fd211500460
+	pushl	0x7f94d84053d0
 	call	init_array
 	#CALL
 	    #ID
-	pushl	0x7fd211500550
+	pushl	0x7f94d84054c0
 	call	print_array
+	#END BODY
 	#EPILOGUE
 	movl	%ebp, %esp
 	popl	%ebp

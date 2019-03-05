@@ -1,3 +1,4 @@
+#include <iostream>
 #include "Register.h"
 #include "Tree.h"
 #include "generate.h"
@@ -21,7 +22,7 @@ FPRegister::FPRegister(const string &oword)
  * Description: Return the correct register name based on sized needed.
  */
 const string &Register::name(unsigned name) const {
-    return name == 4 ? _lword : _byte;
+    return name == 1 ? _byte : _lword;
 }
 
 /*
@@ -32,7 +33,7 @@ const string &Register::name(unsigned name) const {
  */
 Register *getRegister() {
     for (auto const &reg: registers) {
-        if (reg == nullptr) {
+        if (reg->_node == nullptr) {
             return reg;
         }
     }

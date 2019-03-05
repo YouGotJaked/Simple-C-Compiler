@@ -191,6 +191,7 @@ public:
     Dereference(Expression *expr, const Type &type);
     virtual void write(ostream &ostr) const;
     virtual void generate();
+    virtual Expression *dereference() { return _expr; }
 };
 
 

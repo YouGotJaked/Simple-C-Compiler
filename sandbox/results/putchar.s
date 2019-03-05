@@ -1,7 +1,5 @@
 #GLOBALS
 #FUNCTION
-#here
-#here
 .globl main
 	#PROLOGUE
 main:
@@ -12,80 +10,81 @@ main:
 	 #BLOCK
 	#CALL
 	   #INT
-	pushl	0x7f85165000d0
+	pushl	0x7f8b995001d0
 	call	putchar
 	#CALL
 	   #INT
-	pushl	0x7f85165001d0
+	pushl	0x7f8b995002c0
 	call	putchar
 	#CALL
 	   #INT
-	pushl	0x7f85165002d0
+	pushl	0x7f8b995003c0
 	call	putchar
 	#CALL
 	   #INT
-	pushl	0x7f85165003e0
+	pushl	0x7f8b995004d0
 	call	putchar
 	#CALL
 	   #INT
-	pushl	0x7f85165004c0
+	pushl	0x7f8b995005b0
 	call	putchar
 	#CALL
 	   #INT
-	pushl	0x7f85165005f0
+	pushl	0x7f8b995006e0
 	call	putchar
 	#CALL
 	   #INT
-	pushl	0x7f85165006e0
+	pushl	0x7f8b995007d0
 	call	putchar
 	#CALL
 	   #INT
-	pushl	0x7f85165007c0
+	pushl	0x7f8b995008b0
 	call	putchar
 	#CALL
 	   #INT
-	pushl	0x7f85165008a0
+	pushl	0x7f8b99500990
 	call	putchar
 	#CALL
 	   #INT
-	pushl	0x7f8516500a10
+	pushl	0x7f8b99500b00
 	call	putchar
 	#CALL
 	   #INT
-	pushl	0x7f8516500b00
+	pushl	0x7f8b99500bf0
 	call	putchar
 	#CALL
 	   #INT
-	pushl	0x7f8516500be0
+	pushl	0x7f8b99500cd0
 	call	putchar
 	#CALL
 	   #INT
-	pushl	0x7f8516500cc0
+	pushl	0x7f8b99500db0
 	call	putchar
 	#CALL
 	   #INT
-	pushl	0x7f8516500da0
+	pushl	0x7f8b99500e90
 	call	putchar
 	#CALL
 	   #INT
-	pushl	0x7f8516500e80
+	pushl	0x7f8b99500f70
 	call	putchar
 	#CALL
 	   #INT
-	pushl	0x7f8516500f70
+	pushl	0x7f8b99501060
 	call	putchar
 	#CALL
 	   #INT
-	pushl	0x7f8516501060
+	pushl	0x7f8b99501150
 	call	putchar
 	#CALL
 	   #INT
-	pushl	0x7f8516501250
+	pushl	0x7f8b99501340
 	call	putchar
 	#CALL
 	   #INT
-	pushl	0x7f8516500990
+	pushl	0x7f8b99500a80
 	call	putchar
+	#END BODY
 	#EPILOGUE
 	movl	%ebp, %esp
 	popl	%ebp

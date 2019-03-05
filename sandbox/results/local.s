@@ -1,7 +1,5 @@
 #GLOBALS
 #FUNCTION
-#here
-#here
 .globl main
 	#PROLOGUE
 main:
@@ -11,25 +9,53 @@ main:
 	#BODY
 	 #BLOCK
 	  #ASSIGNMENT
-	   #INT
+	  #_left->dereference() == nullptr
 	    #ID
-	movl		0x7f88a0500410, 0x7f88a05003b0
+	   #INT
+	  #_right->_register == nullptr
+	#expr != nullptr
+	movl	0x7fa54b500410, %eax
+	  #done loading
+	  #_left->dereference() == nullptr #2
+	#HERE
+	movl	%eax, 0x7fa54b5003b0
+	#HERE
+	  #ASSIGNMENT DONE
 	  #ASSIGNMENT
-	   #INT
+	  #_left->dereference() == nullptr
 	    #ID
-	movl		0x7f88a0500500, 0x7f88a05004a0
+	   #INT
+	  #_right->_register == nullptr
+	#expr != nullptr
+	movl	0x7fa54b500500, %ebx
+	  #done loading
+	  #_left->dereference() == nullptr #2
+	#HERE
+	movl	%ebx, 0x7fa54b5004a0
+	#HERE
+	  #ASSIGNMENT DONE
 	  #ASSIGNMENT
-	   #INT
+	  #_left->dereference() == nullptr
 	    #ID
-	movl		0x7f88a05005f0, 0x7f88a0500590
+	   #INT
+	  #_right->_register == nullptr
+	#expr != nullptr
+	movl	0x7fa54b5005f0, %ecx
+	  #done loading
+	  #_left->dereference() == nullptr #2
+	#HERE
+	movl	%ecx, 0x7fa54b500590
+	#HERE
+	  #ASSIGNMENT DONE
 	#CALL
 	    #ID
-	pushl	0x7f88a0500760
+	pushl	0x7fa54b500760
 	    #ID
-	pushl	0x7f88a0500700
+	pushl	0x7fa54b500700
 	    #ID
-	pushl	0x7f88a05006a0
+	pushl	0x7fa54b5006a0
 	call	print
+	#END BODY
 	#EPILOGUE
 	movl	%ebp, %esp
 	popl	%ebp
