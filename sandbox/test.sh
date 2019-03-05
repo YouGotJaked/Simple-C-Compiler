@@ -47,4 +47,7 @@ echo ---------towers.c-----------
 gcc -m32 results/towers.s examples/towers-lib.c
 ./a.out > results/towers.out
 diff results/towers.out examples/towers.out
+
+echo --------double.c------------
+
 echo "DONE"

@@ -23,6 +23,7 @@ class FPRegister: public Register {
 
 public:
 	FPRegister(const string &oword);
+	const string &name(unsigned size = 0) const;
 };
 
 // NON-MEMBER HELPER FUNCTIONS
@@ -30,7 +31,7 @@ Register *getRegister();
 FPRegister *getFPRegister();
 
 // NON-MEMBER OUTPUT FUNCTION
-std::ostream &operator <<(std::ostream &out, const Register &reg);
+std::ostream &operator <<(std::ostream &out, const Register *reg);
 
 static Register *eax = new Register("%eax", "%al");
 static Register *ebx = new Register("%ebx", "%bl");

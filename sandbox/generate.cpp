@@ -127,19 +127,31 @@ void Block::generate() {
  */
 void Call::generate() {
     cout << "\t#CALL" << endl;
-    /*
-    reverse(begin(_args), end(_args));
+    /*reverse(begin(_args), end(_args));
     
     for (auto const &arg: _args) {
 	arg->generate();
 	cout << "\tpushl\t" << arg->_operand << endl;
     }
-    */
-    for (int i = _args.size() - 1; i >= 0; i --) {
-        _args[i]->generate();
-        cout << "\tpushl\t" << _args[i] << endl;
-    }
     cout << "\tcall\t" << _id->name() << endl;    
+    */
+    for (auto const &arg: _args) {
+	arg->generate();
+    }
+
+    for (auto const &reg: registers) {
+	load(nullptr, reg);
+    }
+
+    reverse(begin(_args), end(_args));
+    for (auto const &arg: _args) {
+	if (arg->_register != nullptr) {
+	    cout << "\tpushl\t" << arg->_register << endl;
+	} else {
+	    cout << "\tmov" << suffix(arg) << arg << endl;
+	}
+    }
+    cout << "\tcall\t" << _id->name() << endl;
 }
 
 // ##################
@@ -197,7 +209,9 @@ void If::generate() {
  */
 void Assignment::generate() {
     cout << "\t  #ASSIGNMENT" << endl;
-   
+    _right->generate();
+    _left->generate();
+    /*
     if (_left->dereference() == nullptr) {
         cout << "\t  #_left->dereference() == nullptr" << endl;
         _left->generate();
@@ -225,9 +239,8 @@ void Assignment::generate() {
         }
         ss << "(" << _left->dereference() << ")";
     }
-    cout << "\t#HERE" << endl;
-    cout << "\tmov" << suffix(_left) << _right->_register->name() << ", " << ss.str() << endl;
-    cout << "\t#HERE" << endl;
+    */
+    cout << "\tmov" << suffix(_left) << _right->_operand << ", " << _left->_operand << endl;
     cout << "\t  #ASSIGNMENT DONE" << endl;
 }
 
@@ -402,23 +415,30 @@ void Not::generate() {
     assign(this, _expr->_register);
 }
 
+/*
+ * Function:	Address:generate
+ *
+ * Description:	Generate code for an address expression.
+ * 		If the operand is *, do nothing.
+ * 		If the operand is ID, use LEA instruction to load address.
+ */
 void Address::generate() {
     cout << "\t#ADDRESS" << endl;
- 
-    if (_expr->dereference() != nullptr) {
-        _expr->dereference()->generate();
-        assign(this, _expr->dereference()->_register);
+    // 
+    if (_expr->_operand == "*") {
+	return;
     } else {
-        _expr->generate();
+	_expr->generate();
 
-        if (_expr->_register == nullptr) {
-            assign(_expr, getRegister());
-        }
+	if (_expr->_register != nullptr) {
+	    assign(this, _expr->_register);
+	}
 
+	assign(this, getRegister());
         // address is always 32-bit long
-        assign(this, _expr->_register);
-        cout << "\tleal\t" << _expr << ", %eax" << endl;
+        cout << "\tleal\t" << _expr->_operand << ", %eax" << endl;
     }
+    cout << "\t#ADDRESS DONE" << endl;
 }
 
 void Dereference::generate() {
@@ -430,8 +450,8 @@ void Dereference::generate() {
 	load(_expr, getRegister());
     }
 
-    cout << "\tmov" << suffix(_expr) << "\t(" << _expr << "), ";
-    cout << _expr->_register->name(_type.size()) << endl;
+    cout << "\tmov" << suffix(_expr) << "\t(" << _expr->_register << "), ";
+    cout << _expr->_register << endl;
     assign(this, _expr->_register);
 }
 

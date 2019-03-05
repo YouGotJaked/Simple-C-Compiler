@@ -5,6 +5,8 @@
 
 using std::string;
 using std::ostream;
+using std::cout;
+using std::endl;
 
 Register::Register(const string &lword, const string &byte)
     : _lword(lword), _byte(byte), _node(nullptr)
@@ -25,6 +27,10 @@ const string &Register::name(unsigned name) const {
     return name == 1 ? _byte : _lword;
 }
 
+const string &FPRegister::name(unsigned name) const {
+    return _oword;
+}
+
 /*
  * Function:	getRegister
  *
@@ -34,6 +40,7 @@ const string &Register::name(unsigned name) const {
 Register *getRegister() {
     for (auto const &reg: registers) {
         if (reg->_node == nullptr) {
+	    cout << "\t\t#getreg=" << reg->name() << endl;
             return reg;
         }
     }
@@ -59,9 +66,9 @@ FPRegister *getFPRegister() {
 	return fp_registers[0];
 }
 
-ostream &operator <<(ostream &out, const Register &reg) {
-    if (reg._node != nullptr) {
-        return out << reg.name(reg._node->type().size());
+ostream &operator <<(ostream &out, const Register *reg) {
+    if (reg->_node != nullptr) {
+        return out << reg->name(reg->_node->type().size());
     }
-    return out << reg.name();
+    return out << reg->name();
 }
