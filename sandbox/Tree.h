@@ -79,6 +79,8 @@ public:
     void test(const Label &label, bool ifTrue);
 };
 
+std::ostream &operator <<(std::ostream &out, Expression *expr);
+
 /* A binary operator */
 
 class Binary : public Expression {
@@ -410,6 +412,7 @@ public:
     virtual void write(ostream &ostr) const;
     virtual void generate();
     virtual void allocate(int &offset);
+    //void test(const Label &label, bool ifTrue);
 };
 
 

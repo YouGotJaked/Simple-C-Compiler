@@ -23,7 +23,7 @@
 # include "tokens.h"
 # include <sstream>
 # include <cstdlib>
-
+# include <iostream>
 using namespace std;
 
 
@@ -61,6 +61,23 @@ const Type &Expression::type() const
 bool Expression::lvalue() const
 {
     return _lvalue;
+}
+
+/*
+ * Function:	
+ *
+ * Description:	Overloaded output stream operator.
+ * 		If the expression is in a register, then use it.
+ * 		Otherwise, use its _operand field which references
+ * 		memory.
+ */
+ostream &operator <<(ostream &out, Expression *expr) {
+    if (expr->_register == nullptr) {
+	return out << expr->_operand;
+    }
+   
+    unsigned size = expr->type().size();
+    return out << expr->_register->name(size);
 }
 
 /*

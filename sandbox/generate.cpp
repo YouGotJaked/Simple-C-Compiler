@@ -59,6 +59,8 @@ void generateStrings() {
 void Function::prologue(const int &offset) {
     cout << "\t#PROLOGUE" << endl;
     cout << _id->name() << ":" << endl;
+    returnLabel = new Label();
+    cout << *returnLabel << ":" << endl;
     cout << "\tpushl\t%ebp" << endl;
     cout << "\tmovl\t%esp, %ebp" << endl;
     cout << "\tsubl\t$" << -offset << ", %esp" << endl;
@@ -148,10 +150,12 @@ void Call::generate() {
 	if (arg->_register != nullptr) {
 	    cout << "\tpushl\t" << arg->_register << endl;
 	} else {
-	    cout << "\tmov" << suffix(arg) << arg << endl;
+	    cout << "\tpush" << suffix(arg) << arg->_operand << endl;
 	}
     }
     cout << "\tcall\t" << _id->name() << endl;
+    
+    cout << "\t#END CALL" << endl;
 }
 
 // ##################
@@ -166,9 +170,12 @@ void Call::generate() {
  */
 void Return::generate() {
     cout << "\t#RETURN" << endl;
+
     _expr->generate();
     load(_expr, eax);
-    cout << "\tjmp\t" << *returnLabel << endl;
+    //cout << "\tjmp\t" << *returnLabel << endl;
+
+    cout << "\t#END RETURN" << endl;
 }
 
 /*
@@ -190,6 +197,8 @@ void While::generate() {
     
     cout << "\tjmp\t" << loop << endl;
     cout << exit << ":" << endl;
+
+    cout << "\t#END WHILE" << endl;
 }
 
 /*
@@ -199,6 +208,24 @@ void While::generate() {
  */
 void If::generate() {
     cout << "\t#IF" << endl;
+
+    Label skip, exit;
+    _expr->test(skip, false);
+    //_expr->generate();
+    // if::test???
+    //cout << "\tcmp\t$0, " << _expr << endl;
+    //cout << "\tje\t" << skip << endl;
+    _thenStmt->generate();
+    if (_elseStmt == nullptr) {
+	cout << skip << ":" << endl;
+    } else {
+    	cout << "\tjmp\t" << exit << endl;
+    	cout << skip << ":" << endl;
+	_elseStmt->generate();
+    	cout << exit << ":" << endl;
+    } 
+    
+    cout << "\t#END IF" << endl;
 }
 
 /*
@@ -211,37 +238,9 @@ void Assignment::generate() {
     cout << "\t  #ASSIGNMENT" << endl;
     _right->generate();
     _left->generate();
-    /*
-    if (_left->dereference() == nullptr) {
-        cout << "\t  #_left->dereference() == nullptr" << endl;
-        _left->generate();
-    } else {
-        _left->dereference()->generate();
-    }
     
-    _right->generate();
-    
-    if (_right->_register == nullptr) {
-        cout << "\t  #_right->_register == nullptr" << endl;
-        load(_right, getRegister());
-        cout << "\t  #done loading" << endl;
-    }
-
-    stringstream ss;
-
-    if (_left->dereference() == nullptr) {
-        cout << "\t  #_left->dereference() == nullptr #2" << endl;
-        ss << _left;
-    } else {
-        if (_left->dereference()->_register == nullptr) {
-        cout << "\t  #_left->dereference()->_register == nullptr" << endl;
-	    load(_left->dereference(), getRegister());
-        }
-        ss << "(" << _left->dereference() << ")";
-    }
-    */
     cout << "\tmov" << suffix(_left) << _right->_operand << ", " << _left->_operand << endl;
-    cout << "\t  #ASSIGNMENT DONE" << endl;
+    cout << "\t  #END ASSIGNMENT" << endl;
 }
 
 // ###############
@@ -285,6 +284,7 @@ void GreaterThan::generate() {
  *
  * Description: Generate code for an add expression.
  */
+// DO NOT MODIFY
 void Add::generate() {
     cout << "\t#ADD" << endl;
     
@@ -299,11 +299,13 @@ void Add::generate() {
     
     // perform operation
     cout << "\tadd" << suffix(_left);
-    cout << _right << ", " << _left << endl;
+    cout << _right << ", " << _left->_register << endl;
     
     // if right operand in register, deallocate it
     assign(_right, nullptr);
     assign(this, _left->_register);
+
+    cout << "\t#END ADD" << endl;
 }
 
 void Subtract::generate() {
@@ -321,6 +323,8 @@ void Subtract::generate() {
 
     assign(_right, nullptr);
     assign(this, _left->_register);
+    
+    cout << "\t#END SUBTRACT" << endl;
 }
 
 // ######################
@@ -338,10 +342,12 @@ void Multiply::generate() {
     }
 
     cout << "\timul" << suffix(_left);
-    cout << _right << ", " << _left;
+    cout << _right->_operand << ", " << _left->_operand << endl;;
 
     assign(_right, nullptr);
     assign(this, _left->_register);
+
+    cout << "\t#END MULTIPLY" << endl;
 }
 
 void Divide::generate() {
@@ -351,7 +357,9 @@ void Divide::generate() {
     _right->generate();
 
     load(_left, eax);
-    
+    load(_right, ecx);
+    load(nullptr, edx);   
+ 
     // sign extend
     cout << "\tmovl\t %eax, %edx" << endl;
     cout << "\tsarl\t$31, %edx" << endl;
@@ -371,6 +379,8 @@ void Remainder::generate() {
     _right->generate();
 
     load(_left, eax);
+    load(_right, ecx);
+    load(nullptr, edx);
     
     // sign extend
     cout << "\tmovl\t %eax, %edx" << endl;
@@ -381,6 +391,7 @@ void Remainder::generate() {
     assign(_right, nullptr);
     assign(this, edx);
     assign(nullptr, eax);
+    cout << "\t#END REMAINDER" << endl;
 }
 
 // ##############
@@ -399,6 +410,8 @@ void Negate::generate() {
     cout << "\tneg" << suffix(_expr) << "\t" << _expr << endl;
 
     assign(this, _expr->_register);
+
+    cout << "\t#END NEGATE" << endl;
 }
 
 void Not::generate() {
@@ -413,6 +426,8 @@ void Not::generate() {
     cout << "\tnot" << suffix(_expr) << "\t" << _expr << endl;
 
     assign(this, _expr->_register);
+
+    cout << "\t#END NOT" << endl;
 }
 
 /*
@@ -424,7 +439,7 @@ void Not::generate() {
  */
 void Address::generate() {
     cout << "\t#ADDRESS" << endl;
-    // 
+    
     if (_expr->_operand == "*") {
 	return;
     } else {
@@ -438,7 +453,7 @@ void Address::generate() {
         // address is always 32-bit long
         cout << "\tleal\t" << _expr->_operand << ", %eax" << endl;
     }
-    cout << "\t#ADDRESS DONE" << endl;
+    cout << "\t#END ADDRESS" << endl;
 }
 
 void Dereference::generate() {
@@ -453,6 +468,7 @@ void Dereference::generate() {
     cout << "\tmov" << suffix(_expr) << "\t(" << _expr->_register << "), ";
     cout << _expr->_register << endl;
     assign(this, _expr->_register);
+    cout << "\t#END DEREFERENCE" << endl;
 }
 
 void Cast::generate() {
@@ -470,6 +486,7 @@ void Cast::generate() {
 
 	assign(this, _register);
     }
+    cout << "\t#END CAST" << endl;
 }
 
 // ###############
@@ -487,6 +504,8 @@ void Identifier::generate() {
     cout << "\t    #ID" << endl;
     int offset = _symbol->_offset;
     _operand = offset ? to_string(offset) + "(%ebp)" : _symbol->name();
+    cout << "\t    #_operand = " << _operand << endl;
+    cout << "\t    #END ID" << endl;
 }
 
 /*
@@ -497,6 +516,8 @@ void Identifier::generate() {
 void Integer::generate() {
     cout << "\t   #INT" << endl;
     _operand = "$" + value();
+    cout << "\t   #_operand = " << _operand << endl;
+    cout << "\t   #END INT" << endl;
 }
 
 void Real::generate() {
@@ -560,6 +581,23 @@ void LessThan::test(const Label &label, bool ifTrue) {
     assign(_right, nullptr);
 }
 
+/*
+ * Function:	If::test
+ *
+ * Description: Specialized version of test for If subclass.
+ */
+/*
+void If::test(const Label &label, bool ifTrue) {
+    _left->generate();
+    _right->generate();
+
+    if (_left->_register == nullptr) {
+	load(_left, getRegister());
+    }
+
+    cout << 
+}*/
+
 // ################
 // ##    MISC    ##
 // ################
@@ -585,18 +623,20 @@ void release() {
  * Description: Load an expression into a given register.
  */
 void load(Expression *expr, Register *reg) {
+    //cout << "\t#LOAD" << endl;
     if (reg->_node != expr) {
         if (reg->_node != nullptr) {
-            unsigned size = reg->_node->type().size();
-            cout << "\t#reg->_node != nullptr" << endl;
+            //cout << "\t#reg->_node != expr" << endl;
+	    unsigned size = reg->_node->type().size();
             assignTemp(reg->_node);
-            cout << "\tmov" << suffix(reg->_node) << expr;
-            cout << ", " << reg->name(size) << ", ";
+            cout << "\tmov" << suffix(reg->_node);
+            cout << reg->name(size) << ", ";
             cout << reg->_node->_operand << endl;
         }
         
         if (expr != nullptr) {
-            cout << "\t#expr != nullptr" << endl;
+	    //cout << "\t#expr != nullptr" << endl;
+ 	    //cout << "\t#expr = " << expr << endl;
             unsigned size = expr->type().size();
             cout << "\tmov" << suffix(expr) << expr;
             cout << ", " << reg->name(size) << endl;
@@ -604,6 +644,7 @@ void load(Expression *expr, Register *reg) {
         
         assign(expr, reg);
     }
+    //cout << "\t#END LOAD" << endl;
 }
 
 /*
@@ -616,6 +657,8 @@ void load(Expression *expr, Register *reg) {
  *        	the register is already in use.
  */
 void assign(Expression *expr, Register *reg) {
+    //cout << "\t#ASSIGN" << endl;
+
     if (expr != nullptr) {
         if (expr->_register != nullptr) {
             expr->_register->_node = nullptr;
@@ -629,6 +672,8 @@ void assign(Expression *expr, Register *reg) {
         }
         reg->_node = expr;
     }
+
+    //cout << "\t#END ASSIGN" << endl;
 }
 
 /*

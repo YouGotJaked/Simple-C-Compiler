@@ -9,51 +9,30 @@ main:
 	#BODY
 	 #BLOCK
 	  #ASSIGNMENT
-	  #_left->dereference() == nullptr
-	    #ID
 	   #INT
-	  #_right->_register == nullptr
-	#expr != nullptr
-	movl	0xf67280, %eax
-	  #done loading
-	  #_left->dereference() == nullptr #2
-	#HERE
-	movl	%eax, 0xf66e30
-	#HERE
+	    #ID
+	movl	$1, -4(%ebp)
 	  #ASSIGNMENT DONE
 	  #ASSIGNMENT
-	  #_left->dereference() == nullptr
-	    #ID
 	   #INT
-	  #_right->_register == nullptr
-	#expr != nullptr
-	movl	0xf67350, %ebx
-	  #done loading
-	  #_left->dereference() == nullptr #2
-	#HERE
-	movl	%ebx, 0xf67300
-	#HERE
+	    #ID
+	movl	$2, -8(%ebp)
 	  #ASSIGNMENT DONE
 	  #ASSIGNMENT
-	  #_left->dereference() == nullptr
-	    #ID
 	   #INT
-	  #_right->_register == nullptr
-	#expr != nullptr
-	movl	0xf67460, %ecx
-	  #done loading
-	  #_left->dereference() == nullptr #2
-	#HERE
-	movl	%ecx, 0xf67410
-	#HERE
+	    #ID
+	movl	$3, -12(%ebp)
 	  #ASSIGNMENT DONE
 	#CALL
 	    #ID
-	pushl	0xf67600
 	    #ID
-	pushl	0xf67590
 	    #ID
-	pushl	0xf67540
+	#OK WHAT NOW
+	pushl	-4(%ebp)
+	#OK WHAT NOW
+	pushl	-8(%ebp)
+	#OK WHAT NOW
+	pushl	-12(%ebp)
 	call	print
 	#END BODY
 	#EPILOGUE

@@ -914,8 +914,8 @@ static void globalOrFunction()
 	    stmts = statements();
 	    decls = closeScope();
 	    match('}');
-	    
-	    generateGlobals(globals);
+	   
+	    //generateGlobals(globals);
 	    function = new Function(symbol, new Block(decls, stmts));
 	    function->generate();
 	} else {
@@ -947,6 +947,7 @@ int main()
     while (lookahead != DONE)
 	globalOrFunction();
 
+    generateGlobals(globals);
     generateStrings();    
     closeScope();
     exit(EXIT_SUCCESS);

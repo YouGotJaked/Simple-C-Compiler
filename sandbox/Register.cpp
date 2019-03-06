@@ -40,7 +40,6 @@ const string &FPRegister::name(unsigned name) const {
 Register *getRegister() {
     for (auto const &reg: registers) {
         if (reg->_node == nullptr) {
-	    cout << "\t\t#getreg=" << reg->name() << endl;
             return reg;
         }
     }
@@ -56,14 +55,14 @@ Register *getRegister() {
  *		of this function is the same as that of getRegister.
  */
 FPRegister *getFPRegister() {
-	for (auto const &fp_reg: fp_registers) {
-		if (fp_reg->_node == nullptr) {
-			return fp_reg;
-		}
+    for (auto const &fp_reg: fp_registers) {
+	if (fp_reg->_node == nullptr) {
+	    return fp_reg;
 	}
+    }
 
-	load(nullptr, fp_registers[0]);
-	return fp_registers[0];
+    load(nullptr, fp_registers[0]);
+    return fp_registers[0];
 }
 
 ostream &operator <<(ostream &out, const Register *reg) {
