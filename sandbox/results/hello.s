@@ -1,4 +1,3 @@
-#GLOBALS
 #FUNCTION
 .globl main
 	#PROLOGUE
@@ -12,18 +11,8 @@ main:
 	#CALL
 	#ADDRESS
 	   #STRING
-	#ASSIGN
-	#END ASSIGN
 	leal	.L1, %eax
 	#END ADDRESS
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
 	pushl	%eax
 	call	printf
 	#END CALL
@@ -32,5 +21,6 @@ main:
 	movl	%ebp, %esp
 	popl	%ebp
 	ret
+#GLOBALS
 #STRINGS
 .L1:	.asciz	"hello world\n"

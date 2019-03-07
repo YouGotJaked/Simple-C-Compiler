@@ -1,4 +1,3 @@
-#GLOBALS
 #FUNCTION
 .globl allocate
 	#PROLOGUE
@@ -28,27 +27,9 @@ allocate:
 	   #INT
 	   #_operand = $16
 	   #END INT
-	#LOAD
-	#expr != nullptr
-	#expr = 8(%ebp)
 	movl	8(%ebp), %eax
-	#ASSIGN
-	#END ASSIGN
-	#END LOAD
 	imull	$16, 8(%ebp)
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
 	#END MULTIPLY
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
 	pushl	%eax
 	call	malloc
 	#END CALL
@@ -60,17 +41,9 @@ allocate:
 	  #END ASSIGNMENT
 	#WHILE
 .L1:
-	#LOAD
-	#expr != nullptr
-	#expr = 
 	movl	, %ebx
-	#ASSIGN
-	#END ASSIGN
-	#END LOAD
 	cmpl	$0, %ebx
 	je	.L2
-	#ASSIGN
-	#END ASSIGN
 	 #BLOCK
 	  #ASSIGNMENT
 	#CALL
@@ -81,27 +54,9 @@ allocate:
 	   #INT
 	   #_operand = $4
 	   #END INT
-	#LOAD
-	#expr != nullptr
-	#expr = 8(%ebp)
 	movl	8(%ebp), %ebx
-	#ASSIGN
-	#END ASSIGN
-	#END LOAD
 	imull	$4, 8(%ebp)
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
 	#END MULTIPLY
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
 	pushl	%ebx
 	call	malloc
 	#END CALL
@@ -117,35 +72,13 @@ allocate:
 	   #INT
 	   #_operand = $16
 	   #END INT
-	#LOAD
-	#expr != nullptr
-	#expr = -4(%ebp)
 	movl	-4(%ebp), %ecx
-	#ASSIGN
-	#END ASSIGN
-	#END LOAD
 	imull	$16, -4(%ebp)
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
 	#END MULTIPLY
-	#LOAD
-	#expr != nullptr
-	#expr = -8(%ebp)
 	movl	-8(%ebp), %edx
-	#ASSIGN
-	#END ASSIGN
-	#END LOAD
 	addl	%ecx, %edx
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
 	#END ADD
 	movl		(%edx), %edx
-	#ASSIGN
-	#END ASSIGN
 	#END DEREFERENCE
 	movl	, 
 	  #END ASSIGNMENT
@@ -157,48 +90,14 @@ allocate:
 	   #INT
 	   #_operand = $1
 	   #END INT
-	#LOAD
-	#expr != nullptr
-	#expr = -4(%ebp)
 	movl	-4(%ebp), %ecx
-	#ASSIGN
-	#END ASSIGN
-	#END LOAD
 	addl	$1, %ecx
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
 	#END ADD
 	    #ID
 	    #_operand = -4(%ebp)
 	    #END ID
 	movl	, -4(%ebp)
 	  #END ASSIGNMENT
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
 	jmp	.L1
 .L2:
 	#END WHILE
@@ -206,20 +105,13 @@ allocate:
 	    #ID
 	    #_operand = -8(%ebp)
 	    #END ID
-	#LOAD
-	#expr != nullptr
-	#expr = -8(%ebp)
 	movl	-8(%ebp), %eax
-	#ASSIGN
-	#END ASSIGN
-	#END LOAD
 	#END RETURN
 	#END BODY
 	#EPILOGUE
 	movl	%ebp, %esp
 	popl	%ebp
 	ret
-#GLOBALS
 #FUNCTION
 .globl initialize
 	#PROLOGUE
@@ -241,23 +133,10 @@ initialize:
 	  #END ASSIGNMENT
 	#WHILE
 .L4:
-	#LOAD
-	#reg->_node != expr
 	movl	%eax, -4(%ebp)
-	#ASSIGN
-	#END ASSIGN
-	#END LOAD
-	#LOAD
-	#expr != nullptr
-	#expr = 
 	movl	, %eax
-	#ASSIGN
-	#END ASSIGN
-	#END LOAD
 	cmpl	$0, %eax
 	je	.L5
-	#ASSIGN
-	#END ASSIGN
 	 #BLOCK
 	  #ASSIGNMENT
 	   #INT
@@ -270,17 +149,9 @@ initialize:
 	  #END ASSIGNMENT
 	#WHILE
 .L6:
-	#LOAD
-	#expr != nullptr
-	#expr = 
 	movl	, %eax
-	#ASSIGN
-	#END ASSIGN
-	#END LOAD
 	cmpl	$0, %eax
 	je	.L7
-	#ASSIGN
-	#END ASSIGN
 	 #BLOCK
 	  #ASSIGNMENT
 	#ADD
@@ -290,18 +161,8 @@ initialize:
 	    #ID
 	    #_operand = -8(%ebp)
 	    #END ID
-	#LOAD
-	#expr != nullptr
-	#expr = -4(%ebp)
 	movl	-4(%ebp), %eax
-	#ASSIGN
-	#END ASSIGN
-	#END LOAD
 	addl	-8(%ebp), %eax
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
 	#END ADD
 	#DEREFERENCE
 	#ADD
@@ -317,47 +178,15 @@ initialize:
 	   #INT
 	   #_operand = $16
 	   #END INT
-	#LOAD
-	#reg->_node != expr
 	movl	%eax, -8(%ebp)
-	#ASSIGN
-	#END ASSIGN
-	#END LOAD
-	#LOAD
-	#expr != nullptr
-	#expr = -4(%ebp)
 	movl	-4(%ebp), %eax
-	#ASSIGN
-	#END ASSIGN
-	#END LOAD
 	imull	$16, -4(%ebp)
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
 	#END MULTIPLY
-	#LOAD
-	#reg->_node != expr
 	movl	%eax, -12(%ebp)
-	#ASSIGN
-	#END ASSIGN
-	#END LOAD
-	#LOAD
-	#expr != nullptr
-	#expr = 8(%ebp)
 	movl	8(%ebp), %eax
-	#ASSIGN
-	#END ASSIGN
-	#END LOAD
 	addl	-12(%ebp), %eax
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
 	#END ADD
 	movl		(%eax), %eax
-	#ASSIGN
-	#END ASSIGN
 	#END DEREFERENCE
 	#MULTIPLY
 	    #ID
@@ -366,47 +195,15 @@ initialize:
 	   #INT
 	   #_operand = $4
 	   #END INT
-	#LOAD
-	#reg->_node != expr
 	movl	%eax, -28(%ebp)
-	#ASSIGN
-	#END ASSIGN
-	#END LOAD
-	#LOAD
-	#expr != nullptr
-	#expr = -8(%ebp)
 	movl	-8(%ebp), %eax
-	#ASSIGN
-	#END ASSIGN
-	#END LOAD
 	imull	$4, -8(%ebp)
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
 	#END MULTIPLY
-	#LOAD
-	#reg->_node != expr
 	movl	%eax, -32(%ebp)
-	#ASSIGN
-	#END ASSIGN
-	#END LOAD
-	#LOAD
-	#expr != nullptr
-	#expr = -28(%ebp)
 	movl	-28(%ebp), %eax
-	#ASSIGN
-	#END ASSIGN
-	#END LOAD
 	addl	-32(%ebp), %eax
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
 	#END ADD
 	movl		(%eax), %eax
-	#ASSIGN
-	#END ASSIGN
 	#END DEREFERENCE
 	movl	-8(%ebp), 
 	  #END ASSIGNMENT
@@ -418,54 +215,15 @@ initialize:
 	   #INT
 	   #_operand = $1
 	   #END INT
-	#LOAD
-	#reg->_node != expr
 	movl	%eax, -36(%ebp)
-	#ASSIGN
-	#END ASSIGN
-	#END LOAD
-	#LOAD
-	#expr != nullptr
-	#expr = -8(%ebp)
 	movl	-8(%ebp), %eax
-	#ASSIGN
-	#END ASSIGN
-	#END LOAD
 	addl	$1, %eax
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
 	#END ADD
 	    #ID
 	    #_operand = -8(%ebp)
 	    #END ID
 	movl	, -8(%ebp)
 	  #END ASSIGNMENT
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
 	jmp	.L6
 .L7:
 	#END WHILE
@@ -477,54 +235,15 @@ initialize:
 	   #INT
 	   #_operand = $1
 	   #END INT
-	#LOAD
-	#reg->_node != expr
 	movl	%eax, -40(%ebp)
-	#ASSIGN
-	#END ASSIGN
-	#END LOAD
-	#LOAD
-	#expr != nullptr
-	#expr = -4(%ebp)
 	movl	-4(%ebp), %eax
-	#ASSIGN
-	#END ASSIGN
-	#END LOAD
 	addl	$1, %eax
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
 	#END ADD
 	    #ID
 	    #_operand = -4(%ebp)
 	    #END ID
 	movl	, -4(%ebp)
 	  #END ASSIGNMENT
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
 	jmp	.L4
 .L5:
 	#END WHILE
@@ -533,7 +252,6 @@ initialize:
 	movl	%ebp, %esp
 	popl	%ebp
 	ret
-#GLOBALS
 #FUNCTION
 .globl display
 	#PROLOGUE
@@ -555,23 +273,10 @@ display:
 	  #END ASSIGNMENT
 	#WHILE
 .L9:
-	#LOAD
-	#reg->_node != expr
 	movl	%eax, -44(%ebp)
-	#ASSIGN
-	#END ASSIGN
-	#END LOAD
-	#LOAD
-	#expr != nullptr
-	#expr = 
 	movl	, %eax
-	#ASSIGN
-	#END ASSIGN
-	#END LOAD
 	cmpl	$0, %eax
 	je	.L10
-	#ASSIGN
-	#END ASSIGN
 	 #BLOCK
 	  #ASSIGNMENT
 	   #INT
@@ -584,17 +289,9 @@ display:
 	  #END ASSIGNMENT
 	#WHILE
 .L11:
-	#LOAD
-	#expr != nullptr
-	#expr = 
 	movl	, %eax
-	#ASSIGN
-	#END ASSIGN
-	#END LOAD
 	cmpl	$0, %eax
 	je	.L12
-	#ASSIGN
-	#END ASSIGN
 	 #BLOCK
 	  #ASSIGNMENT
 	#DEREFERENCE
@@ -609,41 +306,14 @@ display:
 	   #INT
 	   #_operand = $16
 	   #END INT
-	#LOAD
-	#expr != nullptr
-	#expr = -4(%ebp)
 	movl	-4(%ebp), %eax
-	#ASSIGN
-	#END ASSIGN
-	#END LOAD
 	imull	$16, -4(%ebp)
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
 	#END MULTIPLY
-	#LOAD
-	#reg->_node != expr
 	movl	%eax, -48(%ebp)
-	#ASSIGN
-	#END ASSIGN
-	#END LOAD
-	#LOAD
-	#expr != nullptr
-	#expr = 8(%ebp)
 	movl	8(%ebp), %eax
-	#ASSIGN
-	#END ASSIGN
-	#END LOAD
 	addl	-48(%ebp), %eax
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
 	#END ADD
 	movl		(%eax), %eax
-	#ASSIGN
-	#END ASSIGN
 	#END DEREFERENCE
 	    #ID
 	    #_operand = -12(%ebp)
@@ -653,14 +323,7 @@ display:
 	#CALL
 	#ADDRESS
 	   #STRING
-	#LOAD
-	#reg->_node != expr
 	movl	%eax, -64(%ebp)
-	#ASSIGN
-	#END ASSIGN
-	#END LOAD
-	#ASSIGN
-	#END ASSIGN
 	leal	.L13, %eax
 	#END ADDRESS
 	#DEREFERENCE
@@ -675,56 +338,16 @@ display:
 	   #INT
 	   #_operand = $4
 	   #END INT
-	#LOAD
-	#reg->_node != expr
 	movl	%eax, -68(%ebp)
-	#ASSIGN
-	#END ASSIGN
-	#END LOAD
-	#LOAD
-	#expr != nullptr
-	#expr = -8(%ebp)
 	movl	-8(%ebp), %eax
-	#ASSIGN
-	#END ASSIGN
-	#END LOAD
 	imull	$4, -8(%ebp)
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
 	#END MULTIPLY
-	#LOAD
-	#reg->_node != expr
 	movl	%eax, -72(%ebp)
-	#ASSIGN
-	#END ASSIGN
-	#END LOAD
-	#LOAD
-	#expr != nullptr
-	#expr = -12(%ebp)
 	movl	-12(%ebp), %eax
-	#ASSIGN
-	#END ASSIGN
-	#END LOAD
 	addl	-72(%ebp), %eax
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
 	#END ADD
 	movl		(%eax), %eax
-	#ASSIGN
-	#END ASSIGN
 	#END DEREFERENCE
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
 	pushl	%eax
 	pushl	-68(%ebp)
 	call	printf
@@ -737,54 +360,15 @@ display:
 	   #INT
 	   #_operand = $1
 	   #END INT
-	#LOAD
-	#reg->_node != expr
 	movl	%eax, -76(%ebp)
-	#ASSIGN
-	#END ASSIGN
-	#END LOAD
-	#LOAD
-	#expr != nullptr
-	#expr = -8(%ebp)
 	movl	-8(%ebp), %eax
-	#ASSIGN
-	#END ASSIGN
-	#END LOAD
 	addl	$1, %eax
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
 	#END ADD
 	    #ID
 	    #_operand = -8(%ebp)
 	    #END ID
 	movl	, -8(%ebp)
 	  #END ASSIGNMENT
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
 	jmp	.L11
 .L12:
 	#END WHILE
@@ -796,24 +380,9 @@ display:
 	   #INT
 	   #_operand = $1
 	   #END INT
-	#LOAD
-	#reg->_node != expr
 	movl	%eax, -80(%ebp)
-	#ASSIGN
-	#END ASSIGN
-	#END LOAD
-	#LOAD
-	#expr != nullptr
-	#expr = -4(%ebp)
 	movl	-4(%ebp), %eax
-	#ASSIGN
-	#END ASSIGN
-	#END LOAD
 	addl	$1, %eax
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
 	#END ADD
 	    #ID
 	    #_operand = -4(%ebp)
@@ -823,51 +392,12 @@ display:
 	#CALL
 	#ADDRESS
 	   #STRING
-	#LOAD
-	#reg->_node != expr
 	movl	%eax, -84(%ebp)
-	#ASSIGN
-	#END ASSIGN
-	#END LOAD
-	#ASSIGN
-	#END ASSIGN
 	leal	.L14, %eax
 	#END ADDRESS
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
 	pushl	%eax
 	call	printf
 	#END CALL
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
 	jmp	.L9
 .L10:
 	#END WHILE
@@ -876,7 +406,6 @@ display:
 	movl	%ebp, %esp
 	popl	%ebp
 	ret
-#GLOBALS
 #FUNCTION
 .globl deallocate
 	#PROLOGUE
@@ -898,23 +427,10 @@ deallocate:
 	  #END ASSIGNMENT
 	#WHILE
 .L16:
-	#LOAD
-	#reg->_node != expr
 	movl	%eax, -88(%ebp)
-	#ASSIGN
-	#END ASSIGN
-	#END LOAD
-	#LOAD
-	#expr != nullptr
-	#expr = 
 	movl	, %eax
-	#ASSIGN
-	#END ASSIGN
-	#END LOAD
 	cmpl	$0, %eax
 	je	.L17
-	#ASSIGN
-	#END ASSIGN
 	 #BLOCK
 	#CALL
 	#DEREFERENCE
@@ -929,50 +445,15 @@ deallocate:
 	   #INT
 	   #_operand = $16
 	   #END INT
-	#LOAD
-	#expr != nullptr
-	#expr = -4(%ebp)
 	movl	-4(%ebp), %eax
-	#ASSIGN
-	#END ASSIGN
-	#END LOAD
 	imull	$16, -4(%ebp)
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
 	#END MULTIPLY
-	#LOAD
-	#reg->_node != expr
 	movl	%eax, -92(%ebp)
-	#ASSIGN
-	#END ASSIGN
-	#END LOAD
-	#LOAD
-	#expr != nullptr
-	#expr = 8(%ebp)
 	movl	8(%ebp), %eax
-	#ASSIGN
-	#END ASSIGN
-	#END LOAD
 	addl	-92(%ebp), %eax
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
 	#END ADD
 	movl		(%eax), %eax
-	#ASSIGN
-	#END ASSIGN
 	#END DEREFERENCE
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
 	pushl	%eax
 	call	free
 	#END CALL
@@ -984,54 +465,15 @@ deallocate:
 	   #INT
 	   #_operand = $1
 	   #END INT
-	#LOAD
-	#reg->_node != expr
 	movl	%eax, -108(%ebp)
-	#ASSIGN
-	#END ASSIGN
-	#END LOAD
-	#LOAD
-	#expr != nullptr
-	#expr = -4(%ebp)
 	movl	-4(%ebp), %eax
-	#ASSIGN
-	#END ASSIGN
-	#END LOAD
 	addl	$1, %eax
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
 	#END ADD
 	    #ID
 	    #_operand = -4(%ebp)
 	    #END ID
 	movl	, -4(%ebp)
 	  #END ASSIGNMENT
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
 	jmp	.L16
 .L17:
 	#END WHILE
@@ -1039,14 +481,6 @@ deallocate:
 	    #ID
 	    #_operand = 8(%ebp)
 	    #END ID
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
 	pushl	8(%ebp)
 	call	free
 	#END CALL
@@ -1055,7 +489,6 @@ deallocate:
 	movl	%ebp, %esp
 	popl	%ebp
 	ret
-#GLOBALS
 #FUNCTION
 .globl main
 	#PROLOGUE
@@ -1069,38 +502,16 @@ main:
 	#CALL
 	#ADDRESS
 	   #STRING
-	#LOAD
-	#reg->_node != expr
 	movl	%eax, -112(%ebp)
-	#ASSIGN
-	#END ASSIGN
-	#END LOAD
-	#ASSIGN
-	#END ASSIGN
 	leal	.L19, %eax
 	#END ADDRESS
 	#ADDRESS
 	    #ID
 	    #_operand = -8(%ebp)
 	    #END ID
-	#LOAD
-	#reg->_node != expr
 	movl	%eax, -116(%ebp)
-	#ASSIGN
-	#END ASSIGN
-	#END LOAD
-	#ASSIGN
-	#END ASSIGN
 	leal	-8(%ebp), %eax
 	#END ADDRESS
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
 	pushl	%eax
 	pushl	-116(%ebp)
 	call	scanf
@@ -1110,14 +521,6 @@ main:
 	    #ID
 	    #_operand = -8(%ebp)
 	    #END ID
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
 	pushl	-8(%ebp)
 	call	allocate
 	#END CALL
@@ -1133,14 +536,6 @@ main:
 	    #ID
 	    #_operand = -8(%ebp)
 	    #END ID
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
 	pushl	-8(%ebp)
 	pushl	-4(%ebp)
 	call	initialize
@@ -1152,14 +547,6 @@ main:
 	    #ID
 	    #_operand = -8(%ebp)
 	    #END ID
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
 	pushl	-8(%ebp)
 	pushl	-4(%ebp)
 	call	display
@@ -1171,14 +558,6 @@ main:
 	    #ID
 	    #_operand = -8(%ebp)
 	    #END ID
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
 	pushl	-8(%ebp)
 	pushl	-4(%ebp)
 	call	deallocate
@@ -1188,6 +567,7 @@ main:
 	movl	%ebp, %esp
 	popl	%ebp
 	ret
+#GLOBALS
 #STRINGS
 .L13:	.asciz	"%d "
 .L14:	.asciz	"\n"

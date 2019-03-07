@@ -210,12 +210,10 @@ void If::generate() {
     cout << "\t#IF" << endl;
 
     Label skip, exit;
+    
     _expr->test(skip, false);
-    //_expr->generate();
-    // if::test???
-    //cout << "\tcmp\t$0, " << _expr << endl;
-    //cout << "\tje\t" << skip << endl;
     _thenStmt->generate();
+    
     if (_elseStmt == nullptr) {
 	cout << skip << ":" << endl;
     } else {
@@ -251,6 +249,14 @@ void LogicalAnd::generate() {
 }
 
 void LogicalOr::generate() {
+    cout << "\t#OR" << endl;
+
+    Label left, right;
+
+    _left->test(left, true);
+    _right->test(right, true);
+
+    cout << "\t#END OR" << endl;
 }
 
 // ###################
@@ -258,9 +264,29 @@ void LogicalOr::generate() {
 // ###################
 
 void Equal::generate() {
+    cout << "\t#EQUAL" << endl;
+
+    Label left, right;
+
+    _left->test(left, true);
+    _right->test(right, true);
+
+    if (_left->_register == nullptr) {
+	load(_left, getRegister());
+    }
+
+    cout << "\t#END EQUAL" << endl;
 }
 
 void NotEqual::generate() {
+    cout << "\t#NOT EQUAL" << endl;
+
+    Label left, right;
+
+    _left->test(left, true);
+    _right->test(right, true);
+
+    cout << "\t#END NOT EQUAL" << endl;
 }
 
 void LessOrEqual::generate() {
@@ -270,9 +296,25 @@ void GreaterOrEqual::generate() {
 }
 
 void LessThan::generate() {
+    cout << "\t#LESS THAN" << endl;
+
+    Label left, right;
+
+    _left->test(left, true);
+    _right->test(right, true);
+
+    cout << "\t#END LESS THAN" << endl;
 }
 
 void GreaterThan::generate() {
+    cout << "\t#GREATER THAN" << endl;
+
+    Label left, right;
+
+    _left->test(left, true);
+    _right->test(right, true);
+
+    cout << "\t#END GREATER THAN" << endl;
 }
 
 // ################
@@ -549,6 +591,7 @@ void String::generate() {
  *        	ifTrue parameter.
  */
 void Expression::test(const Label &label, bool ifTrue) {
+    cout << "\t#EXPRESSION::TEST" << endl;
     generate();
     
     if (_register == nullptr) {
@@ -559,6 +602,82 @@ void Expression::test(const Label &label, bool ifTrue) {
     cout << (ifTrue ? "\tjne\t" : "\tje\t") << label << endl;
     
     assign(this, nullptr);
+}
+
+
+void LogicalAnd::test(const Label &label, bool ifTrue) {
+    _left->generate();
+    _right->generate();
+
+    if (_left->_register == nullptr) {
+        load(_left, getRegister());
+    }
+}
+
+void LogicalOr::test(const Label &label, bool ifTrue) {
+    _left->generate();
+    _right->generate();
+
+    if (_left->_register == nullptr) {
+	load(_left, getRegister());
+    }
+
+    cout << "\torl\t" << _right << ", " << _left << endl;
+    cout << "\tcmpl\t$0, " << _right << endl;
+    cout << (ifTrue ? "\tje\t" : "\tjne\t") << label << endl;
+}
+
+void Equal::test(const Label &label, bool ifTrue) {
+    _left->generate();
+    _right->generate();
+
+    if (_left->_register == nullptr) {
+        load(_left, getRegister());
+    }
+
+    cout << "\tcmpl\t" << _right << ", " << _left << endl;
+    cout << (ifTrue ? "\tje\t" : "\tjne") << label << endl;
+}
+
+void NotEqual::test(const Label &label, bool ifTrue) {
+    _left->generate();
+    _right->generate();
+
+    if (_left->_register == nullptr) {
+        load(_left, getRegister());
+    }
+
+    cout << "\tcmpl\t" << _right << ", " << _left << endl;
+    cout << (ifTrue ? "\tjne\t" : "\tje") << label << endl;
+}
+
+void LessOrEqual::test(const Label &label, bool ifTrue) {
+    _left->generate();
+    _right->generate();
+
+    if (_left->_register == nullptr) {
+        load(_left, getRegister());
+    }
+    
+    cout << "\tcmpl\t" << _right << ", " << _left << endl;
+    cout << (ifTrue ? "\tjle\t" : "\tjg\t") << label << endl;
+
+    assign(_left, nullptr);
+    assign(_right, nullptr);}
+
+void GreaterOrEqual::test(const Label &label, bool ifTrue) {
+    _left->generate();
+    _right->generate();
+
+    if (_left->_register == nullptr) {
+        load(_left, getRegister());
+    }
+
+    cout << "\tcmp\t" << _right << ", " << _left << endl;
+    cout << (ifTrue ? "\tjge\t" : "\tjl\t") << label << endl;
+
+    assign(_left, nullptr);
+    assign(_right, nullptr);
 }
 
 /*
@@ -580,6 +699,27 @@ void LessThan::test(const Label &label, bool ifTrue) {
     assign(_left, nullptr);
     assign(_right, nullptr);
 }
+
+/*
+ * Function:	GreaterThan::test
+ *
+ * Description:	Specialized version of test for GreaterThan subclass.
+ */
+void GreaterThan::test(const Label &label, bool ifTrue) {
+    _left->generate();
+    _right->generate();
+
+    if (_left->_register == nullptr) {
+	load(_left, getRegister());
+    }
+
+    cout << "\tcmp\t" << _right << ", " << _left << endl;
+    cout << (ifTrue ? "\tjg\t" : "\tjle\t") << label << endl;
+
+    assign(_left, nullptr);
+    assign(_right, nullptr);
+}
+
 
 /*
  * Function:	If::test

@@ -1,4 +1,3 @@
-#GLOBALS
 #FUNCTION
 .globl main
 	#PROLOGUE
@@ -45,27 +44,13 @@ main:
 	    #ID
 	    #_operand = -8(%ebp)
 	    #END ID
-	#LOAD
-	#expr != nullptr
-	#expr = -4(%ebp)
 	movl	-4(%ebp), %eax
-	#ASSIGN
-	#END ASSIGN
-	#END LOAD
 	addl	-8(%ebp), %eax
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
 	#END ADD
 	    #ID
 	    #_operand = -12(%ebp)
 	    #END ID
 	addl	-12(%ebp), %eax
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
 	#END ADD
 	    #ID
 	    #_operand = -16(%ebp)
@@ -81,27 +66,13 @@ main:
 	    #ID
 	    #_operand = -8(%ebp)
 	    #END ID
-	#LOAD
-	#expr != nullptr
-	#expr = -4(%ebp)
 	movl	-4(%ebp), %ebx
-	#ASSIGN
-	#END ASSIGN
-	#END LOAD
 	subl	-8(%ebp), %ebx
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
 	#END SUBTRACT
 	    #ID
 	    #_operand = -12(%ebp)
 	    #END ID
 	subl	-12(%ebp), %ebx
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
 	#END SUBTRACT
 	    #ID
 	    #_operand = -20(%ebp)
@@ -117,27 +88,13 @@ main:
 	    #ID
 	    #_operand = -8(%ebp)
 	    #END ID
-	#LOAD
-	#expr != nullptr
-	#expr = -4(%ebp)
 	movl	-4(%ebp), %ecx
-	#ASSIGN
-	#END ASSIGN
-	#END LOAD
 	imull	-8(%ebp), -4(%ebp)
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
 	#END MULTIPLY
 	    #ID
 	    #_operand = -12(%ebp)
 	    #END ID
 	imull	-12(%ebp), 
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
 	#END MULTIPLY
 	    #ID
 	    #_operand = -24(%ebp)
@@ -153,39 +110,15 @@ main:
 	    #ID
 	    #_operand = -8(%ebp)
 	    #END ID
-	#LOAD
-	#expr != nullptr
-	#expr = -4(%ebp)
 	movl	-4(%ebp), %eax
-	#ASSIGN
-	#END ASSIGN
-	#END LOAD
-	#LOAD
-	#expr != nullptr
-	#expr = -8(%ebp)
 	movl	-8(%ebp), %ecx
-	#ASSIGN
-	#END ASSIGN
-	#END LOAD
-	#LOAD
-	#END LOAD
 	movl	 %eax, %edx
 	sarl	$31, %edx
 	idivl	%ecx
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
 	    #ID
 	    #_operand = -12(%ebp)
 	    #END ID
 	addl	-12(%ebp), %eax
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
 	#END ADD
 	    #ID
 	    #_operand = -28(%ebp)
@@ -201,42 +134,17 @@ main:
 	    #ID
 	    #_operand = -8(%ebp)
 	    #END ID
-	#LOAD
-	#reg->_node != expr
 	movl	%eax, -4(%ebp)
-	#expr != nullptr
-	#expr = -4(%ebp)
 	movl	-4(%ebp), %eax
-	#ASSIGN
-	#END ASSIGN
-	#END LOAD
-	#LOAD
-	#expr != nullptr
-	#expr = -8(%ebp)
 	movl	-8(%ebp), %ecx
-	#ASSIGN
-	#END ASSIGN
-	#END LOAD
-	#LOAD
-	#END LOAD
 	movl	 %eax, %edx
 	sarl	$31, %edx
 	idivl	%ecx
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
 	#END REMAINDER
 	    #ID
 	    #_operand = -12(%ebp)
 	    #END ID
 	subl	-12(%ebp), %edx
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
 	#END SUBTRACT
 	    #ID
 	    #_operand = -32(%ebp)
@@ -246,25 +154,12 @@ main:
 	#CALL
 	#ADDRESS
 	   #STRING
-	#ASSIGN
-	#END ASSIGN
 	leal	.L1, %eax
 	#END ADDRESS
 	    #ID
 	    #_operand = -16(%ebp)
 	    #END ID
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#reg->_node != expr
 	movl	%edx, -8(%ebp)
-	#ASSIGN
-	#END ASSIGN
-	#END LOAD
 	pushl	-16(%ebp)
 	pushl	%edx
 	call	printf
@@ -272,29 +167,12 @@ main:
 	#CALL
 	#ADDRESS
 	   #STRING
-	#ASSIGN
-	#END ASSIGN
-	#LOAD
-	#reg->_node != expr
 	movl	%eax, -12(%ebp)
-	#ASSIGN
-	#END ASSIGN
-	#END LOAD
-	#ASSIGN
-	#END ASSIGN
 	leal	.L2, %eax
 	#END ADDRESS
 	    #ID
 	    #_operand = -20(%ebp)
 	    #END ID
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
 	pushl	-20(%ebp)
 	pushl	%eax
 	call	printf
@@ -302,27 +180,12 @@ main:
 	#CALL
 	#ADDRESS
 	   #STRING
-	#LOAD
-	#reg->_node != expr
 	movl	%eax, -16(%ebp)
-	#ASSIGN
-	#END ASSIGN
-	#END LOAD
-	#ASSIGN
-	#END ASSIGN
 	leal	.L3, %eax
 	#END ADDRESS
 	    #ID
 	    #_operand = -24(%ebp)
 	    #END ID
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
 	pushl	-24(%ebp)
 	pushl	%eax
 	call	printf
@@ -330,27 +193,12 @@ main:
 	#CALL
 	#ADDRESS
 	   #STRING
-	#LOAD
-	#reg->_node != expr
 	movl	%eax, -20(%ebp)
-	#ASSIGN
-	#END ASSIGN
-	#END LOAD
-	#ASSIGN
-	#END ASSIGN
 	leal	.L4, %eax
 	#END ADDRESS
 	    #ID
 	    #_operand = -28(%ebp)
 	    #END ID
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
 	pushl	-28(%ebp)
 	pushl	%eax
 	call	printf
@@ -358,27 +206,12 @@ main:
 	#CALL
 	#ADDRESS
 	   #STRING
-	#LOAD
-	#reg->_node != expr
 	movl	%eax, -24(%ebp)
-	#ASSIGN
-	#END ASSIGN
-	#END LOAD
-	#ASSIGN
-	#END ASSIGN
 	leal	.L5, %eax
 	#END ADDRESS
 	    #ID
 	    #_operand = -32(%ebp)
 	    #END ID
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
 	pushl	-32(%ebp)
 	pushl	%eax
 	call	printf
@@ -388,6 +221,7 @@ main:
 	movl	%ebp, %esp
 	popl	%ebp
 	ret
+#GLOBALS
 #STRINGS
 .L1:	.asciz	"%d\n"
 .L2:	.asciz	"%d\n"

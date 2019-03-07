@@ -1,4 +1,3 @@
-#GLOBALS
 #FUNCTION
 .globl main
 	#PROLOGUE
@@ -45,23 +44,7 @@ main:
 	    #ID
 	    #_operand = -20(%ebp)
 	    #END ID
-	#LOAD
-	#expr != nullptr
-	#expr = -16(%ebp)
 	movl	-16(%ebp), %eax
-	#ASSIGN
-	#END ASSIGN
-	#END LOAD
 	addl	-20(%ebp), %eax
-	#ASSIGN
-	#END ASSIGN
-	#ASSIGN
-	#END ASSIGN
 	#END ADD
-	#LOAD
-	#expr != nullptr
-	#expr = %eax
 	movl	%eax, %ebx
-	#ASSIGN
-	#END ASSIGN
-	#END LOAD

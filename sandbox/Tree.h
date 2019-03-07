@@ -49,7 +49,7 @@ public:
     virtual ~Node() {}
     virtual void generate() {}
     virtual void write(ostream &ostr) const = 0;
-    virtual Expression *dereference() { return nullptr; }
+    //virtual Expression *dereference() { return nullptr; }
     virtual void allocate(int &offset) { }
 };
 
@@ -76,7 +76,7 @@ public:
     bool lvalue() const;
     string _operand;
     Register *_register;
-    void test(const Label &label, bool ifTrue);
+    virtual void test(const Label &label, bool ifTrue);
 };
 
 std::ostream &operator <<(std::ostream &out, Expression *expr);
@@ -273,8 +273,8 @@ class LessThan : public Binary {
 public:
     LessThan(Expression *left, Expression *right, const Type &type);
     virtual void write(ostream &ostr) const;
-    virtual void test(const Label &label, bool ifTrue);
     virtual void generate();
+    virtual void test(const Label &label, bool ifTrue);
 };
 
 
@@ -285,6 +285,7 @@ public:
     GreaterThan(Expression *left, Expression *right, const Type &type);
     virtual void write(ostream &ostr) const;
     virtual void generate();
+    virtual void test(const Label &label, bool ifTrue);
 };
 
 
@@ -295,6 +296,7 @@ public:
     LessOrEqual(Expression *left, Expression *right, const Type &type);
     virtual void write(ostream &ostr) const;
     virtual void generate();
+    virtual void test(const Label &label, bool ifTrue);
 };
 
 
@@ -305,6 +307,7 @@ public:
     GreaterOrEqual(Expression *left, Expression *right, const Type &type);
     virtual void write(ostream &ostr) const;
     virtual void generate();
+    virtual void test(const Label &label, bool ifTrue);
 };
 
 
@@ -315,6 +318,7 @@ public:
     Equal(Expression *left, Expression *right, const Type &type);
     virtual void write(ostream &ostr) const;
     virtual void generate();
+    virtual void test(const Label &label, bool ifTrue);
 };
 
 
@@ -325,6 +329,7 @@ public:
     NotEqual(Expression *left, Expression *right, const Type &type);
     virtual void write(ostream &ostr) const;
     virtual void generate();
+    virtual void test(const Label &label, bool ifTrue);
 };
 
 
@@ -335,6 +340,7 @@ public:
     LogicalAnd(Expression *left, Expression *right, const Type &type);
     virtual void write(ostream &ostr) const;
     virtual void generate();
+    virtual void test(const Label &label, bool ifTrue);
 };
 
 
@@ -345,6 +351,7 @@ public:
     LogicalOr(Expression *left, Expression *right, const Type &type);
     virtual void write(ostream &ostr) const;
     virtual void generate();
+    virtual void test(const Label &label, bool ifTrue);
 };
 
 
