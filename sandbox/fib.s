@@ -1,80 +1,153 @@
-	.file	"fib.c"
-	.text
-	.globl	fib
-	.type	fib, @function
+#FUNCTION
+.globl fib
+	#PROLOGUE
 fib:
-.LFB0:
-	.cfi_startproc
-	pushq	%rbp
-	.cfi_def_cfa_offset 16
-	.cfi_offset 6, -16
-	movq	%rsp, %rbp
-	.cfi_def_cfa_register 6
-	pushq	%rbx
-	subq	$24, %rsp
-	.cfi_offset 3, -24
-	movl	%edi, -20(%rbp)
-	cmpl	$0, -20(%rbp)
-	je	.L2
-	cmpl	$1, -20(%rbp)
-	jne	.L3
-.L2:
-	movl	$1, %eax
+.L0:
+	pushl	%ebp
+	movl	%esp, %ebp
+	subl	$0, %esp
+	#BODY
+	 #BLOCK
+	#IF
+	#EXPRESSION::TEST
+	#OR
+	    #ID
+	    #_operand = 8(%ebp)
+	    #END ID
+	   #INT
+	   #_operand = $0
+	   #END INT
+	movl	8(%ebp), %eax
+	cmpl	$0, %eax
+	je	.L3
+	    #ID
+	    #_operand = 8(%ebp)
+	    #END ID
+	   #INT
+	   #_operand = $1
+	   #END INT
+	movl	8(%ebp), %ebx
+	cmpl	$1, %ebx
+	je	.L3
+	mov	 $0, %ecx
 	jmp	.L4
 .L3:
-	movl	-20(%rbp), %eax
-	subl	$1, %eax
-	movl	%eax, %edi
-	call	fib
-	movl	%eax, %ebx
-	movl	-20(%rbp), %eax
-	subl	$2, %eax
-	movl	%eax, %edi
-	call	fib
-	addl	%ebx, %eax
+	mov	 $1, %ecx
 .L4:
-	addq	$24, %rsp
-	popq	%rbx
-	popq	%rbp
-	.cfi_def_cfa 7, 8
+	#END OR
+	cmpl	$0, %ecx
+	je	.L1
+	#RETURN
+	   #INT
+	   #_operand = $1
+	   #END INT
+	movl	$1, %eax
+	#END RETURN
+.L1:
+	#END IF
+	#RETURN
+	#ADD
+	#CALL
+	#SUBTRACT
+	    #ID
+	    #_operand = 8(%ebp)
+	    #END ID
+	   #INT
+	   #_operand = $1
+	   #END INT
+	movl	8(%ebp), %ecx
+	subl	$1, %ecx
+	#END SUBTRACT
+	movl	%eax, -4(%ebp)
+	pushl	%ecx
+	call	fib
+	#END CALL
+	#CALL
+	#SUBTRACT
+	    #ID
+	    #_operand = 8(%ebp)
+	    #END ID
+	   #INT
+	   #_operand = $2
+	   #END INT
+	movl	8(%ebp), %edx
+	subl	$2, %edx
+	#END SUBTRACT
+	movl	%eax, -8(%ebp)
+	pushl	%edx
+	call	fib
+	#END CALL
+	movl	%eax, -12(%ebp)
+	movl	-8(%ebp), %eax
+	addl	%eax, %eax
+	#END ADD
+	movl	%eax, %eax
+	#END RETURN
+	#END BODY
+	#EPILOGUE
+	movl	%ebp, %esp
+	popl	%ebp
 	ret
-	.cfi_endproc
-.LFE0:
-	.size	fib, .-fib
-	.section	.rodata
-.LC0:
-	.string	"%d"
-.LC1:
-	.string	"%d\n"
-	.text
-	.globl	main
-	.type	main, @function
+#FUNCTION
+.globl main
+	#PROLOGUE
 main:
-.LFB1:
-	.cfi_startproc
-	pushq	%rbp
-	.cfi_def_cfa_offset 16
-	.cfi_offset 6, -16
-	movq	%rsp, %rbp
-	.cfi_def_cfa_register 6
-	subq	$16, %rsp
-	leaq	-4(%rbp), %rax
-	movq	%rax, %rsi
-	movl	$.LC0, %edi
+.L5:
+	pushl	%ebp
+	movl	%esp, %ebp
+	subl	$4, %esp
+	#BODY
+	 #BLOCK
+	#CALL
+	#ADDRESS
+	   #STRING
+	leal	.L6, %eax
+	#END ADDRESS
+	#ADDRESS
+	    #ID
+	    #_operand = -4(%ebp)
+	    #END ID
+	movl	%eax, -16(%ebp)
+	leal	-4(%ebp), %eax
+	#END ADDRESS
+	movl	%eax, -20(%ebp)
+	pushl	%eax
+	#IDK IF THIS WORKS
+	movl	-16(%ebp), %eax
+	pushl	%eax
 	movl	$0, %eax
 	call	scanf
-	movl	-4(%rbp), %eax
-	movl	%eax, %edi
+	#END CALL
+	#CALL
+	#ADDRESS
+	   #STRING
+	movl	%eax, -36(%ebp)
+	leal	.L7, %eax
+	#END ADDRESS
+	#CALL
+	    #ID
+	    #_operand = -4(%ebp)
+	    #END ID
+	movl	%eax, -40(%ebp)
+	#IDK IF THIS WORKS
+	movl	-4(%ebp), %eax
+	pushl	%eax
 	call	fib
-	movl	%eax, %esi
-	movl	$.LC1, %edi
+	#END CALL
+	movl	%eax, -44(%ebp)
+	#IDK IF THIS WORKS
+	movl	-44(%ebp), %eax
+	pushl	%eax
+	pushl	%eax
 	movl	$0, %eax
 	call	printf
-	leave
-	.cfi_def_cfa 7, 8
+	#END CALL
+	#END BODY
+	#EPILOGUE
+	movl	%ebp, %esp
+	popl	%ebp
 	ret
-	.cfi_endproc
-.LFE1:
-	.size	main, .-main
-	.ident	"GCC: (GNU) 4.8.5 20150623 (Red Hat 4.8.5-36)"
-	.section	.note.GNU-stack,"",@progbits
+#GLOBALS
+#STRINGS
+.L6:	.asciz	"%d"
+.L7:	.asciz	"%d\n"

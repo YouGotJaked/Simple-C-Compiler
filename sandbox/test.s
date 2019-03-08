@@ -37,21 +37,28 @@ main:
 	cmp	b, %eax
 	jle	.L1
 	 #BLOCK
-	  #ASSIGNMENT
-	   #INT
-	   #_operand = $44
-	   #END INT
+	#CALL
+	#ADDRESS
+	   #STRING
+	leal	.L3, %eax
+	#END ADDRESS
 	    #ID
 	    #_operand = a
 	    #END ID
-	movl	$44, a
-	  #END ASSIGNMENT
+	#IDK IF THIS WORKS
+	movl	a, %eax
+	pushl	%eax
+	pushl	%eax
+	movl	$0, %eax
+	call	printf
+	#END CALL
 .L1:
 	#END IF
 	#RETURN
 	   #INT
 	   #_operand = $0
 	   #END INT
+	movl	%eax, -4(%ebp)
 	movl	$0, %eax
 	#END RETURN
 	#END BODY
@@ -63,3 +70,4 @@ main:
 	.comm	a, 4
 	.comm	b, 4
 #STRINGS
+.L3:	.asciz	"you did it %d"

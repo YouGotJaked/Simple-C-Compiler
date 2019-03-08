@@ -149,12 +149,22 @@ void Call::generate() {
     for (auto const &arg: _args) {
 	if (arg->_register != nullptr) {
 	    cout << "\tpushl\t" << arg->_register << endl;
+	} else if (arg->_operand[0] == '$') {
+	    cout << "\tpushl\t" << arg << endl;
 	} else {
-	    cout << "\tpush" << suffix(arg) << arg->_operand << endl;
+	    cout << "\t#IDK IF THIS WORKS" << endl;
+	    cout << "\tmov" << suffix(arg) << arg << ", ";
+	    cout << eax << endl;
+	    cout << "\tpushl\t" << eax << endl;
 	}
     }
+
+    if (_id->type().parameters() == nullptr) {
+	cout << "\tmovl\t$0, " << eax << endl;
+    }
     cout << "\tcall\t" << _id->name() << endl;
-    
+    assign(this, eax);
+ 
     cout << "\t#END CALL" << endl;
 }
 
@@ -254,8 +264,16 @@ void LogicalOr::generate() {
     Label left, right;
 
     _left->test(left, true);
-    _right->test(right, true);
+    _right->test(left, true);
 
+    Register *temp = getRegister();
+    cout << "\tmov\t $0, " << temp << endl;
+    cout << "\tjmp\t" << right << endl;
+    cout << left << ":" << endl;
+    cout << "\tmov\t $1, " << temp << endl;
+    cout << right << ":" << endl;
+
+    assign(this, temp);
     cout << "\t#END OR" << endl;
 }
 
@@ -268,12 +286,21 @@ void Equal::generate() {
 
     Label left, right;
 
-    _left->test(left, true);
-    _right->test(right, true);
+    _left->generate();
+    _right->generate();
+    //_left->test(left, true);
+    //_right->test(right, true);
 
     if (_left->_register == nullptr) {
 	load(_left, getRegister());
     }
+
+    cout << "\tcmpl\t" << _right << ", " << _left << endl;
+    cout << "\tsete\t" << _left->_register->name(1) << endl;
+    cout << "\tmovezbl\t" << _left->_register->name(1) << ", " << _left->_register->name(4) << endl;
+
+    assign(_right, nullptr);
+    assign(this, _left->_register);
 
     cout << "\t#END EQUAL" << endl;
 }
@@ -613,7 +640,7 @@ void LogicalAnd::test(const Label &label, bool ifTrue) {
         load(_left, getRegister());
     }
 }
-
+/*
 void LogicalOr::test(const Label &label, bool ifTrue) {
     _left->generate();
     _right->generate();
@@ -626,7 +653,7 @@ void LogicalOr::test(const Label &label, bool ifTrue) {
     cout << "\tcmpl\t$0, " << _right << endl;
     cout << (ifTrue ? "\tje\t" : "\tjne\t") << label << endl;
 }
-
+*/
 void Equal::test(const Label &label, bool ifTrue) {
     _left->generate();
     _right->generate();

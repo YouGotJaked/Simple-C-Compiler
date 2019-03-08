@@ -351,7 +351,7 @@ public:
     LogicalOr(Expression *left, Expression *right, const Type &type);
     virtual void write(ostream &ostr) const;
     virtual void generate();
-    virtual void test(const Label &label, bool ifTrue);
+    //virtual void test(const Label &label, bool ifTrue);
 };
 
 
