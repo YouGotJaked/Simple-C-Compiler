@@ -8,11 +8,10 @@
 
 # include <cstdlib>
 # include <iostream>
+# include "generator.h"
 # include "checker.h"
 # include "tokens.h"
 # include "lexer.h"
-# include "Tree.h"
-# include "generate.h"
 
 using namespace std;
 
@@ -23,7 +22,6 @@ static Type returnType;
 static Expression *expression();
 static Statement *statement();
 
-static Symbols globals;
 
 /*
  * Function:	error
@@ -819,29 +817,24 @@ static void globalDeclarator(int typespec)
     unsigned indirection;
     string name;
 
+
     indirection = pointers();
     name = identifier();
-
-    Symbol *symbol;
 
     if (lookahead == '(') {
 	match('(');
 	declareFunction(name, Type(typespec, indirection, parameters()));
 	closeScope();
 	match(')');
- 
+
     } else if (lookahead == '[') {
 	match('[');
-	symbol = declareVariable(name, Type(typespec, indirection, integer()));
-	globals.push_back(symbol);
+	declareVariable(name, Type(typespec, indirection, integer()));
 	match(']');
 
-    } else {
-	symbol = declareVariable(name, Type(typespec, indirection));
-	globals.push_back(symbol);
-    }
+    } else
+	declareVariable(name, Type(typespec, indirection));
 }
-
 
 
 /*
@@ -860,6 +853,7 @@ static void remainingDeclarators(int typespec)
 	match(',');
 	globalDeclarator(typespec);
     }
+
     match(';');
 }
 
@@ -883,16 +877,14 @@ static void globalOrFunction()
     Parameters *params;
     string name;
 
+
     typespec = specifier();
     indirection = pointers();
     name = identifier();
 
-    Symbol *symbol;
-
     if (lookahead == '[') {
 	match('[');
-	symbol = declareVariable(name, Type(typespec, indirection, integer()));
-	globals.push_back(symbol);
+	declareVariable(name, Type(typespec, indirection, integer()));
 	match(']');
 	remainingDeclarators(typespec);
 
@@ -914,10 +906,12 @@ static void globalOrFunction()
 	    stmts = statements();
 	    decls = closeScope();
 	    match('}');
-	    
-	    generateGlobals(globals);
+
 	    function = new Function(symbol, new Block(decls, stmts));
-	    function->generate();
+
+	    if (numerrors == 0)
+		function->generate();
+
 	} else {
 	    closeScope();
 	    declareFunction(name, Type(typespec, indirection, params));
@@ -925,9 +919,7 @@ static void globalOrFunction()
 	}
 
     } else {
-	symbol = declareVariable(name, Type(typespec, indirection));
-	symbol->_offset = 0;
-	globals.push_back(symbol);
+	declareVariable(name, Type(typespec, indirection));
 	remainingDeclarators(typespec);
     }
 }
@@ -947,7 +939,8 @@ int main()
     while (lookahead != DONE)
 	globalOrFunction();
 
-    generateStrings();    
-    closeScope();
+    if (numerrors == 0)
+	generateGlobals(closeScope());
+
     exit(EXIT_SUCCESS);
 }

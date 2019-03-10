@@ -1,52 +1,29 @@
-#ifndef REGISTER_H
-#define REGISTER_H
+/*
+ * File:	Register.h
+ *
+ * Description:	This file contains the class definition for registers on
+ *		the Intel 32-bit processor.  Each integer register has two
+ *		operand names depending upon the access size.
+ */
 
-#include <string>
-#include <ostream>
-#include <vector>
+# ifndef REGISTER_H
+# define REGISTER_H
+# include <string>
+# include <ostream>
 
 class Register {
-	typedef std::string string;
-	string _lword;
-	string _byte;
+    typedef std::string string;
+    string _name;
+    string _byte;
 
 public:
-    Register();
-	Register(const string &lword, const string &byte);
-	class Expression *_node;
-	const string &name(unsigned size = 0) const;
+    class Expression *_node;
+
+    Register(const string &name, const string &byte = "");
+    const string &name(unsigned size = 0) const;
+    const string &byte() const;
 };
 
-class FPRegister: public Register {
-	typedef std::string string;
-	string _oword;
+std::ostream &operator <<(std::ostream &ostr, const Register *reg);
 
-public:
-	FPRegister(const string &oword);
-};
-
-// NON-MEMBER HELPER FUNCTIONS
-Register *getRegister();
-FPRegister *getFPRegister();
-
-// NON-MEMBER OUTPUT FUNCTION
-std::ostream &operator <<(std::ostream &out, const Register &reg);
-
-static Register *eax = new Register("%eax", "%al");
-static Register *ebx = new Register("%ebx", "%bl");
-static Register *ecx = new Register("%ecx", "%cl");
-static Register *edx = new Register("%edx", "%dl");
-static std::vector<Register *> registers = { eax, ebx, ecx, edx };
-
-static FPRegister *xmm0 = new FPRegister("%xmm0");
-static FPRegister *xmm1 = new FPRegister("%xmm1");
-static FPRegister *xmm2 = new FPRegister("%xmm2");
-static FPRegister *xmm3 = new FPRegister("%xmm3");
-static FPRegister *xmm4 = new FPRegister("%xmm4");
-static FPRegister *xmm5 = new FPRegister("%xmm5");
-static FPRegister *xmm6 = new FPRegister("%xmm6");
-static FPRegister *xmm7 = new FPRegister("%xmm7");
-static std::vector<FPRegister *> fp_registers = { xmm0, xmm1, xmm2, xmm3, xmm4, xmm5,
-					   xmm6, xmm7 };
-
-#endif /* REGISTER_H */
+# endif /* REGISTER_H */

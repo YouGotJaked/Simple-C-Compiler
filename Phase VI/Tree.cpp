@@ -35,7 +35,7 @@ using namespace std;
  */
 
 Expression::Expression(const Type &type)
-    : _type(type), _lvalue(false)
+    : _type(type), _lvalue(false), _hasCall(false), _register(nullptr)
 {
 }
 
@@ -63,6 +63,7 @@ bool Expression::lvalue() const
     return _lvalue;
 }
 
+
 /*
  * Function:	Binary::Binary (constructor)
  *
@@ -73,6 +74,7 @@ bool Expression::lvalue() const
 Binary::Binary(Expression *left, Expression *right, const Type &type)
     : Expression(type), _left(left), _right(right)
 {
+    _hasCall = left->_hasCall | right->_hasCall;
 }
 
 
@@ -86,6 +88,7 @@ Binary::Binary(Expression *left, Expression *right, const Type &type)
 Unary::Unary(Expression *expr, const Type &type)
     : Expression(type), _expr(expr)
 {
+    _hasCall = expr->_hasCall;
 }
 
 
@@ -230,6 +233,7 @@ const string &Real::value() const
 Call::Call(const Symbol *id, const Expressions &args, const Type &type)
     : Expression(type), _id(id), _args(args)
 {
+    _hasCall = true;
 }
 
 

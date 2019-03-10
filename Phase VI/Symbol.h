@@ -17,10 +17,11 @@ class Symbol {
     Type _type;
 
 public:
+    int _offset;
+
     Symbol(const string &name, const Type &type);
     const string &name() const;
     const Type &type() const;
-    int _offset;
 };
 
 # endif /* SYMBOL_H */

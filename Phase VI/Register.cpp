@@ -1,66 +1,64 @@
-#include "Register.h"
-#include "Tree.h"
-#include "generate.h"
+/*
+ * File:	Register.cpp
+ *
+ * Description:	This file contains the member functions for registers on
+ *		the Intel 32-bit processor.
+ */
 
-using std::string;
-using std::ostream;
+# include "Tree.h"
+# include "Register.h"
 
-Register::Register(const string &lword, const string &byte)
-    : _lword(lword), _byte(byte), _node(nullptr)
+using namespace std;
+
+
+/*
+ * Function:	Register::Register (constructor)
+ *
+ * Description:	Initialize this register with its correct operand names.
+ */
+
+Register::Register(const string &name, const string &byte)
+    : _name(name), _byte(byte), _node(nullptr)
 {
 }
 
-FPRegister::FPRegister(const string &oword)
-    : Register("", ""), _oword(oword)
+
+/*
+ * Function:	Register::name (accessor)
+ *
+ * Description:	Return the correct operand name given an access size.
+ */
+
+const string &Register::name(unsigned size) const
 {
+    return size == 1 ? _byte : _name;
 }
+
 
 /*
- * Function:    Register::name
+ * Function:	Register::byte (accessor)
  *
- * Description: Return the correct register name based on sized needed.
+ * Description:	Return the byte operand name for this register.
  */
-const string &Register::name(unsigned name) const {
-    return name == 4 ? _lword : _byte;
+
+const string &Register::byte() const
+{
+    return _byte;
 }
+
 
 /*
- * Function:	getRegister
+ * Function:	operator <<
  *
- * Description:	Return the first available register. If no registers are
- *		available, spill the first register.
+ * Description:	Write a register to a stream.  The operand name is
+ *		determined by the type of the associated expression if
+ *		present.  Otherwise, the default name will be used.
  */
-Register *getRegister() {
-    for (auto const &reg: registers) {
-        if (reg == nullptr) {
-            return reg;
-        }
-    }
-    // spill first register so it's available
-    load(nullptr, registers[0]);
-    return registers[0];
-}
 
-/*
- * Function:	getFPRegister
- *
- * Description:	Return the first available floating-point register. The logic
- *		of this function is the same as that of getRegister.
- */
-FPRegister *getFPRegister() {
-	for (auto const &fp_reg: fp_registers) {
-		if (fp_reg->_node == nullptr) {
-			return fp_reg;
-		}
-	}
+ostream &operator <<(ostream &ostr, const Register *reg)
+{
+    if (reg->_node != nullptr)
+	return ostr << reg->name(reg->_node->type().size());
 
-	load(nullptr, fp_registers[0]);
-	return fp_registers[0];
-}
-
-ostream &operator <<(ostream &out, const Register &reg) {
-    if (reg._node != nullptr) {
-        return out << reg.name(reg._node->type().size());
-    }
-    return out << reg.name();
+    return ostr << reg->name();
 }

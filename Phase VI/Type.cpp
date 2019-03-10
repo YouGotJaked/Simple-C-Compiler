@@ -339,45 +339,6 @@ Type Type::deref() const
     return Type(_specifier, _indirection - 1);
 }
 
-/*
- * Function:    Type::size
- *
- * Description: Return the size of the type in bytes. The type INT is a signed 
- * 		type and requires 4 bytes of storage.  The type "pointer to T"
- * 		requires 4 bytes of storage regardless of the type T. The type
- * 		"array of T" is stored as a consecutive sequence of objects of 
- * 		type T.
- */
-
-unsigned Type::size() const {
-    assert(_kind != ERROR && _kind != FUNCTION);
-    
-    int spec = 0;
-    switch (_specifier) {
-        case CHAR:
-            spec = 1;
-            break;
-        case INT:
-            spec = 4;
-            break;
-        case DOUBLE:
-            spec = 8;
-            break;
-        default:
-            break;
-    }
-
-    if (_indirection > 0) {
-    	spec *= 4;
-    }
-
-    if (_kind == ARRAY) {
-        return _length * spec;
-    }
-    
-    return spec;
-}
-
 
 /*
  * Function:	operator <<

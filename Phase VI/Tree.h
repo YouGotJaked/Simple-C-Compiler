@@ -47,10 +47,9 @@ protected:
 
 public:
     virtual ~Node() {}
-    virtual void generate() {}
     virtual void write(ostream &ostr) const = 0;
-    virtual Expression *dereference() { return nullptr; }
-    virtual void allocate(int &offset) { }
+    virtual void allocate(int &offset) const {}
+    virtual void generate() {}
 };
 
 
@@ -66,18 +65,20 @@ protected:
 
 class Expression : public Statement {
 protected:
-    typedef std::string string;
     Type _type;
     bool _lvalue;
     Expression(const Type &type);
 
 public:
-    const Type &type() const;
-    bool lvalue() const;
+    bool _hasCall;
     string _operand;
     Register *_register;
-    void test(const Label &label, bool ifTrue);
+
+    const Type &type() const;
+    bool lvalue() const;
+    virtual void test(const Label &label, bool ifTrue);
 };
+
 
 /* A binary operator */
 
@@ -270,8 +271,8 @@ class LessThan : public Binary {
 public:
     LessThan(Expression *left, Expression *right, const Type &type);
     virtual void write(ostream &ostr) const;
-    virtual void test(const Label &label, bool ifTrue);
     virtual void generate();
+    virtual void test(const Label &label, bool ifTrue);
 };
 
 
@@ -282,6 +283,7 @@ public:
     GreaterThan(Expression *left, Expression *right, const Type &type);
     virtual void write(ostream &ostr) const;
     virtual void generate();
+    virtual void test(const Label &label, bool ifTrue);
 };
 
 
@@ -292,6 +294,7 @@ public:
     LessOrEqual(Expression *left, Expression *right, const Type &type);
     virtual void write(ostream &ostr) const;
     virtual void generate();
+    virtual void test(const Label &label, bool ifTrue);
 };
 
 
@@ -302,6 +305,7 @@ public:
     GreaterOrEqual(Expression *left, Expression *right, const Type &type);
     virtual void write(ostream &ostr) const;
     virtual void generate();
+    virtual void test(const Label &label, bool ifTrue);
 };
 
 
@@ -312,6 +316,7 @@ public:
     Equal(Expression *left, Expression *right, const Type &type);
     virtual void write(ostream &ostr) const;
     virtual void generate();
+    virtual void test(const Label &label, bool ifTrue);
 };
 
 
@@ -322,6 +327,7 @@ public:
     NotEqual(Expression *left, Expression *right, const Type &type);
     virtual void write(ostream &ostr) const;
     virtual void generate();
+    virtual void test(const Label &label, bool ifTrue);
 };
 
 
@@ -332,6 +338,7 @@ public:
     LogicalAnd(Expression *left, Expression *right, const Type &type);
     virtual void write(ostream &ostr) const;
     virtual void generate();
+    virtual void test(const Label &label, bool ifTrue);
 };
 
 
@@ -342,6 +349,7 @@ public:
     LogicalOr(Expression *left, Expression *right, const Type &type);
     virtual void write(ostream &ostr) const;
     virtual void generate();
+    virtual void test(const Label &label, bool ifTrue);
 };
 
 
@@ -379,8 +387,8 @@ public:
     Block(Scope *decls, const Statements &stmts);
     Scope *declarations() const;
     virtual void write(ostream &ostr) const;
+    virtual void allocate(int &offset) const;
     virtual void generate();
-    virtual void allocate(int &offset);
 };
 
 
@@ -393,8 +401,8 @@ class While : public Statement {
 public:
     While(Expression *expr, Statement *stmt);
     virtual void write(ostream &ostr) const;
+    virtual void allocate(int &offset) const;
     virtual void generate();
-    virtual void allocate(int &offset);
 };
 
 
@@ -407,8 +415,8 @@ class If : public Statement {
 public:
     If(Expression *expr, Statement *thenStmt, Statement *elseStmt);
     virtual void write(ostream &ostr) const;
+    virtual void allocate(int &offset) const;
     virtual void generate();
-    virtual void allocate(int &offset);
 };
 
 
@@ -421,10 +429,8 @@ class Function : public Node {
 public:
     Function(const Symbol *id, Block *body);
     virtual void write(ostream &ostr) const;
+    virtual void allocate(int &offset) const;
     virtual void generate();
-    virtual void allocate(int &offset);
-    void prologue(const int &offset);
-    void epilogue();
 };
 
 # endif /* TREE_H */
