@@ -1,39 +1,56 @@
 #FUNCTION
-.globl fib
 	#PROLOGUE
 fib:
-.L0:
 	pushl	%ebp
+	pushl	%ebx
+	pushl	%esi
+	pushl	%edi
 	movl	%esp, %ebp
-	subl	$0, %esp
+	subl	$fib.size, %esp
 	#BODY
 	 #BLOCK
 	#IF
 	#EXPRESSION::TEST
 	#OR
+	#EQUAL
 	    #ID
 	    #_operand = 8(%ebp)
 	    #END ID
 	   #INT
 	   #_operand = $0
 	   #END INT
+#reg %eax is empty
+	#LOAD
 	movl	8(%ebp), %eax
+	#END LOAD
 	cmpl	$0, %eax
-	je	.L3
+	sete	%al
+	movzbl	%al, %eax
+	#END EQUAL
+	#EQUAL
 	    #ID
 	    #_operand = 8(%ebp)
 	    #END ID
 	   #INT
 	   #_operand = $1
 	   #END INT
+#reg %ebx is empty
+	#LOAD
 	movl	8(%ebp), %ebx
+	#END LOAD
 	cmpl	$1, %ebx
+	sete	%bl
+	movzbl	%bl, %ebx
+	#END EQUAL
+#reg %ecx is empty
+	#LOAD
+	movl	%ebx, %ecx
+	#END LOAD
+	orl	%ecx, %eax
+	cmp	$0, %ecx
 	je	.L3
-	mov	 $0, %ecx
-	jmp	.L4
+	mov	$1, %ecx
 .L3:
-	mov	 $1, %ecx
-.L4:
 	#END OR
 	cmpl	$0, %ecx
 	je	.L1
@@ -41,13 +58,25 @@ fib:
 	   #INT
 	   #_operand = $1
 	   #END INT
+	#LOAD
 	movl	$1, %eax
+	#END LOAD
+	jmp	.L0
 	#END RETURN
 .L1:
 	#END IF
 	#RETURN
 	#ADD
 	#CALL
+	#LOAD
+	movl	%eax, -4(%ebp)
+	#END LOAD
+	#LOAD
+	#END LOAD
+	#LOAD
+	#END LOAD
+	#LOAD
+	#END LOAD
 	#SUBTRACT
 	    #ID
 	    #_operand = 8(%ebp)
@@ -55,14 +84,26 @@ fib:
 	   #INT
 	   #_operand = $1
 	   #END INT
-	movl	8(%ebp), %ecx
-	subl	$1, %ecx
+#reg %ebx is empty
+	#LOAD
+	movl	8(%ebp), %ebx
+	#END LOAD
+	subl	$1, %ebx
 	#END SUBTRACT
-	movl	%eax, -4(%ebp)
-	pushl	%ecx
+	pushl	%ebx
 	call	fib
+	addl	$4, %esp
 	#END CALL
 	#CALL
+	#LOAD
+	movl	%eax, -8(%ebp)
+	#END LOAD
+	#LOAD
+	#END LOAD
+	#LOAD
+	#END LOAD
+	#LOAD
+	#END LOAD
 	#SUBTRACT
 	    #ID
 	    #_operand = 8(%ebp)
@@ -70,84 +111,130 @@ fib:
 	   #INT
 	   #_operand = $2
 	   #END INT
-	movl	8(%ebp), %edx
-	subl	$2, %edx
+#reg %ecx is empty
+	#LOAD
+	movl	8(%ebp), %ecx
+	#END LOAD
+	subl	$2, %ecx
 	#END SUBTRACT
-	movl	%eax, -8(%ebp)
-	pushl	%edx
+	pushl	%ecx
 	call	fib
+	addl	$4, %esp
 	#END CALL
-	movl	%eax, -12(%ebp)
-	movl	-8(%ebp), %eax
-	addl	%eax, %eax
+#reg %edx is empty
+	#LOAD
+	movl	-8(%ebp), %edx
+	#END LOAD
+	addl	%eax, %edx
 	#END ADD
-	movl	%eax, %eax
+	#LOAD
+	movl	%edx, %eax
+	#END LOAD
+	jmp	.L0
 	#END RETURN
+.L0:
 	#END BODY
 	#EPILOGUE
 	movl	%ebp, %esp
-	popl	%ebp
+	popl	%edi
+	popl	%esi
+	popl	%ebx
+	pop	%ebp
 	ret
+	.set	fib.size, 0
+	.globl	fib
 #FUNCTION
-.globl main
 	#PROLOGUE
 main:
-.L5:
 	pushl	%ebp
+	pushl	%ebx
+	pushl	%esi
+	pushl	%edi
 	movl	%esp, %ebp
-	subl	$4, %esp
+	subl	$main.size, %esp
 	#BODY
 	 #BLOCK
 	#CALL
-	#ADDRESS
-	   #STRING
-	leal	.L6, %eax
-	#END ADDRESS
+	#LOAD
+	movl	%eax, -12(%ebp)
+	#END LOAD
+	#LOAD
+	#END LOAD
+	#LOAD
+	#END LOAD
+	#LOAD
+	#END LOAD
 	#ADDRESS
 	    #ID
 	    #_operand = -4(%ebp)
 	    #END ID
-	movl	%eax, -16(%ebp)
-	leal	-4(%ebp), %eax
+#reg %edx is empty
+	leal	-4(%ebp), %edx
 	#END ADDRESS
-	movl	%eax, -20(%ebp)
-	pushl	%eax
-	#IDK IF THIS WORKS
-	movl	-16(%ebp), %eax
+	pushl	%edx
+	#ADDRESS
+	   #STRING
+	#LOAD
+	movl	%eax, -16(%ebp)
+	#END LOAD
+	leal	.L9, %eax
+	#END ADDRESS
 	pushl	%eax
 	movl	$0, %eax
 	call	scanf
+	addl	$20, %esp
 	#END CALL
 	#CALL
-	#ADDRESS
-	   #STRING
-	movl	%eax, -36(%ebp)
-	leal	.L7, %eax
-	#END ADDRESS
+	#LOAD
+	movl	%eax, -20(%ebp)
+	#END LOAD
+	#LOAD
+	#END LOAD
+	#LOAD
+	#END LOAD
+	#LOAD
+	#END LOAD
 	#CALL
+	#LOAD
+	#END LOAD
+	#LOAD
+	#END LOAD
+	#LOAD
+	#END LOAD
+	#LOAD
+	#END LOAD
 	    #ID
 	    #_operand = -4(%ebp)
 	    #END ID
-	movl	%eax, -40(%ebp)
-	#IDK IF THIS WORKS
-	movl	-4(%ebp), %eax
-	pushl	%eax
+	pushl	-4(%ebp)
 	call	fib
+	addl	$4, %esp
 	#END CALL
-	movl	%eax, -44(%ebp)
-	#IDK IF THIS WORKS
-	movl	-44(%ebp), %eax
 	pushl	%eax
+	#ADDRESS
+	   #STRING
+	#LOAD
+	movl	%eax, -24(%ebp)
+	#END LOAD
+	leal	.L10, %eax
+	#END ADDRESS
 	pushl	%eax
 	movl	$0, %eax
 	call	printf
+	addl	$8, %esp
 	#END CALL
+.L8:
 	#END BODY
 	#EPILOGUE
 	movl	%ebp, %esp
-	popl	%ebp
+	popl	%edi
+	popl	%esi
+	popl	%ebx
+	pop	%ebp
 	ret
+	.set	main.size, 4
+	.globl	main
 #GLOBALS
 #STRINGS
-.L6:	.asciz	"%d"
-.L7:	.asciz	"%d\n"
+.L9:	.asciz	"%d"
+.L10:	.asciz	"%d\n"

@@ -1,11 +1,12 @@
 #FUNCTION
-.globl main
 	#PROLOGUE
 main:
-.L0:
 	pushl	%ebp
+	pushl	%ebx
+	pushl	%esi
+	pushl	%edi
 	movl	%esp, %ebp
-	subl	$32, %esp
+	subl	$main.size, %esp
 	#BODY
 	 #BLOCK
 	  #ASSIGNMENT
@@ -38,7 +39,9 @@ main:
 	    #ID
 	    #_operand = -8(%ebp)
 	    #END ID
+	#LOAD
 	movsd	-4(%ebp), 
+	#END LOAD
 	addsd	-8(%ebp), 
 	#END ADD
 	    #ID
@@ -60,7 +63,9 @@ main:
 	    #ID
 	    #_operand = -8(%ebp)
 	    #END ID
+	#LOAD
 	movsd	-4(%ebp), 
+	#END LOAD
 	subsd	-8(%ebp), 
 	#END SUBTRACT
 	    #ID
@@ -82,8 +87,10 @@ main:
 	    #ID
 	    #_operand = -8(%ebp)
 	    #END ID
+	#LOAD
 	movsd	-4(%ebp), 
-	imulsd	-8(%ebp), -4(%ebp)
+	#END LOAD
+	imulsd	-8(%ebp), 
 	#END MULTIPLY
 	    #ID
 	    #_operand = -12(%ebp)
@@ -104,11 +111,12 @@ main:
 	    #ID
 	    #_operand = -8(%ebp)
 	    #END ID
+	#LOAD
 	movsd	-4(%ebp), %eax
-	movsd	-8(%ebp), %ecx
-	movl	 %eax, %edx
-	sarl	$31, %edx
-	idivl	%ecx
+	#END LOAD
+	cqto
+	idivq	-8(%ebp)
+	#END DIVIDE
 	    #ID
 	    #_operand = -12(%ebp)
 	    #END ID
@@ -117,7 +125,7 @@ main:
 	    #ID
 	    #_operand = -28(%ebp)
 	    #END ID
-	movsd	, -28(%ebp)
+	movsd	%eax, -28(%ebp)
 	  #END ASSIGNMENT
 	  #ASSIGNMENT
 	#SUBTRACT
@@ -128,12 +136,13 @@ main:
 	    #ID
 	    #_operand = -8(%ebp)
 	    #END ID
-	movsd	%eax, -8(%ebp)
+	#LOAD
+	movsd	%eax, -40(%ebp)
 	movsd	-4(%ebp), %eax
-	movsd	-8(%ebp), %ecx
-	movl	 %eax, %edx
-	sarl	$31, %edx
-	idivl	%ecx
+	#END LOAD
+	cqto
+	idivq	-8(%ebp)
+	#END DIVIDE
 	    #ID
 	    #_operand = -12(%ebp)
 	    #END ID
@@ -142,75 +151,132 @@ main:
 	    #ID
 	    #_operand = -32(%ebp)
 	    #END ID
-	movsd	, -32(%ebp)
+	movsd	%eax, -32(%ebp)
 	  #END ASSIGNMENT
 	#CALL
-	#ADDRESS
-	   #STRING
-	leal	.L1, %eax
-	#END ADDRESS
+	#LOAD
+	movsd	%eax, -48(%ebp)
+	#END LOAD
+	#LOAD
+	#END LOAD
+	#LOAD
+	#END LOAD
+	#LOAD
+	#END LOAD
 	    #ID
 	    #_operand = -16(%ebp)
 	    #END ID
-	movsd	%eax, -16(%ebp)
-	pushsd	-16(%ebp)
-	pushl	%eax
-	call	printf
-	#END CALL
-	#CALL
+	pushl	-16(%ebp)
 	#ADDRESS
 	   #STRING
-	leal	.L2, %eax
+#reg %eax is empty
+	leal	.L1, %eax
 	#END ADDRESS
+	pushl	%eax
+	call	printf
+	addl	$12, %esp
+	#END CALL
+	#CALL
+	#LOAD
+	#END LOAD
+	#LOAD
+	#END LOAD
+	#LOAD
+	#END LOAD
+	#LOAD
+	#END LOAD
 	    #ID
 	    #_operand = -20(%ebp)
 	    #END ID
-	pushsd	-20(%ebp)
-	pushl	%ebx
-	call	printf
-	#END CALL
-	#CALL
+	pushl	-20(%ebp)
 	#ADDRESS
 	   #STRING
-	leal	.L3, %eax
+#reg %ebx is empty
+	leal	.L2, %ebx
 	#END ADDRESS
+	pushl	%ebx
+	call	printf
+	addl	$12, %esp
+	#END CALL
+	#CALL
+	#LOAD
+	#END LOAD
+	#LOAD
+	#END LOAD
+	#LOAD
+	#END LOAD
+	#LOAD
+	#END LOAD
 	    #ID
 	    #_operand = -24(%ebp)
 	    #END ID
-	pushsd	-24(%ebp)
-	pushl	%ecx
-	call	printf
-	#END CALL
-	#CALL
+	pushl	-24(%ebp)
 	#ADDRESS
 	   #STRING
-	leal	.L4, %eax
+#reg %ecx is empty
+	leal	.L3, %ecx
 	#END ADDRESS
+	pushl	%ecx
+	call	printf
+	addl	$12, %esp
+	#END CALL
+	#CALL
+	#LOAD
+	#END LOAD
+	#LOAD
+	#END LOAD
+	#LOAD
+	#END LOAD
+	#LOAD
+	#END LOAD
 	    #ID
 	    #_operand = -28(%ebp)
 	    #END ID
-	pushsd	-28(%ebp)
-	pushl	%edx
-	call	printf
-	#END CALL
-	#CALL
+	pushl	-28(%ebp)
 	#ADDRESS
 	   #STRING
-	movl	%eax, -20(%ebp)
-	leal	.L5, %eax
+#reg %edx is empty
+	leal	.L4, %edx
 	#END ADDRESS
+	pushl	%edx
+	call	printf
+	addl	$12, %esp
+	#END CALL
+	#CALL
+	#LOAD
+	#END LOAD
+	#LOAD
+	#END LOAD
+	#LOAD
+	#END LOAD
+	#LOAD
+	#END LOAD
 	    #ID
 	    #_operand = -32(%ebp)
 	    #END ID
-	pushsd	-32(%ebp)
+	pushl	-32(%ebp)
+	#ADDRESS
+	   #STRING
+	#LOAD
+	movl	%eax, -52(%ebp)
+	#END LOAD
+	leal	.L5, %eax
+	#END ADDRESS
 	pushl	%eax
 	call	printf
+	addl	$12, %esp
 	#END CALL
+.L0:
 	#END BODY
 	#EPILOGUE
 	movl	%ebp, %esp
-	popl	%ebp
+	popl	%edi
+	popl	%esi
+	popl	%ebx
+	pop	%ebp
 	ret
+	.set	main.size, 52
+	.globl	main
 #GLOBALS
 #STRINGS
 .L1:	.asciz	"%f\n"

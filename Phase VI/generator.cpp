@@ -19,7 +19,7 @@ using namespace std;
 
 /* This needs to be set to zero if temporaries are placed on the stack. */
 
-# define SIMPLE_PROLOGUE 1
+# define SIMPLE_PROLOGUE 0
 
 
 /* This should be set if we want to use the callee-saved registers. */
@@ -31,7 +31,9 @@ using namespace std;
 
 typedef vector<Register *>Registers;
 
+static Register *eax = new Register("%eax", "%al");
 static Register *ebx = new Register("%ebx", "%bl");
+static Register *ecx = new Register("%ecx", "%cl");
 static Register *esi = new Register("%esi");
 static Register *edi = new Register("%edi");
 
@@ -161,8 +163,9 @@ void Call::generate()
 
 
     /* Call the function and then adjust the stack pointer back. */
-
     cout << "\tcall\t" << global_prefix << _id->name() << endl;
+
+    assign(this, eax);
 
     if (bytesPushed > 0)
 	cout << "\taddl\t$" << bytesPushed << ", %esp" << endl;

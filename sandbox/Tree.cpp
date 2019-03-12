@@ -23,7 +23,9 @@
 # include "tokens.h"
 # include <sstream>
 # include <cstdlib>
+# include <cassert>
 # include <iostream>
+
 using namespace std;
 
 
@@ -35,7 +37,7 @@ using namespace std;
  */
 
 Expression::Expression(const Type &type)
-    : _type(type), _lvalue(false)
+    : _type(type), _lvalue(false), _hasCall(false), _register(nullptr)
 {
 }
 
@@ -64,6 +66,24 @@ bool Expression::lvalue() const
 }
 
 /*
+ * Function:	Expression::byteRegister (accessor)
+ *
+ * Description:	Return the byte register name for this expression.
+ */
+const string &Expression::byteRegister() const {
+    return _register->name(1);
+}
+
+const string &Expression::lwordRegister() const {
+    return _register->name(4);
+}
+
+const string &Expression::owordRegister() const {
+    assert(_type.isReal());
+    return _register->name();
+}
+
+/*
  * Function:	
  *
  * Description:	Overloaded output stream operator.
@@ -76,8 +96,7 @@ ostream &operator <<(ostream &out, Expression *expr) {
 	return out << expr->_operand;
     }
    
-    unsigned size = expr->type().size();
-    return out << expr->_register->name(size);
+    return out << expr->_register;
 }
 
 /*
@@ -90,6 +109,7 @@ ostream &operator <<(ostream &out, Expression *expr) {
 Binary::Binary(Expression *left, Expression *right, const Type &type)
     : Expression(type), _left(left), _right(right)
 {
+    _hasCall = _left->_hasCall || _right->_hasCall;
 }
 
 
@@ -103,6 +123,7 @@ Binary::Binary(Expression *left, Expression *right, const Type &type)
 Unary::Unary(Expression *expr, const Type &type)
     : Expression(type), _expr(expr)
 {
+    _hasCall = expr->_hasCall;
 }
 
 
@@ -247,6 +268,7 @@ const string &Real::value() const
 Call::Call(const Symbol *id, const Expressions &args, const Type &type)
     : Expression(type), _id(id), _args(args)
 {
+    _hasCall = true;
 }
 
 

@@ -8,8 +8,16 @@
 
 # ifndef GENERATOR_H
 # define GENERATOR_H
+#include <string>
+#include "Tree.h"
+#include "Register.h"
 # include "Scope.h"
 
 void generateGlobals(Scope *scope);
-
+void generateStrings();
+void load(Expression *expr, Register *reg);
+void release();
+void assign(Expression *expr, Register *reg);
+void assignTemp(Expression *expr);
+std::string suffix(Expression *expr);
 # endif /* GENERATOR_H */

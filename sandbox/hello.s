@@ -1,11 +1,9 @@
 #FUNCTION
-.globl main
 	#PROLOGUE
 main:
-.L0:
 	pushl	%ebp
 	movl	%esp, %ebp
-	subl	$0, %esp
+	subl	$main.size, %esp
 	#BODY
 	 #BLOCK
 	#CALL
@@ -16,12 +14,16 @@ main:
 	pushl	%eax
 	movl	$0, %eax
 	call	printf
+	addl	$4, %esp
 	#END CALL
+.L0:
 	#END BODY
 	#EPILOGUE
 	movl	%ebp, %esp
-	popl	%ebp
+	pop	%ebp
 	ret
+	.set	main.size, 0
+	.globl	main
 #GLOBALS
 #STRINGS
 .L1:	.asciz	"hello world\n"

@@ -21,7 +21,7 @@ FPRegister::FPRegister(const string &oword)
 /*
  * Function:    Register::name
  *
- * Description: Return the correct register name based on sized needed.
+ * Description: Return the correct register name based on size needed.
  */
 const string &Register::name(unsigned name) const {
     return name == 1 ? _byte : _lword;
@@ -40,6 +40,7 @@ const string &FPRegister::name(unsigned name) const {
 Register *getRegister() {
     for (auto const &reg: registers) {
         if (reg->_node == nullptr) {
+	    cout << "#reg " << reg << " is empty" << endl;
             return reg;
         }
     }
