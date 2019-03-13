@@ -49,7 +49,6 @@ public:
     virtual ~Node() {}
     virtual void generate() {}
     virtual void write(ostream &ostr) const = 0;
-    //virtual Expression *dereference() { return nullptr; }
     virtual void allocate(int &offset) { }
 };
 
@@ -81,6 +80,7 @@ public:
     const string &byteRegister() const;
     const string &lwordRegister() const;
     const string &owordRegister() const;
+    Expression *isDeref() { return nullptr; }
 };
 
 std::ostream &operator <<(std::ostream &out, Expression *expr);
@@ -197,7 +197,7 @@ public:
     Dereference(Expression *expr, const Type &type);
     virtual void write(ostream &ostr) const;
     virtual void generate();
-    virtual Expression *dereference() { return _expr; }
+    Expression *isDeref() { return _expr; }
 };
 
 

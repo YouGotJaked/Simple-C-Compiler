@@ -1,10 +1,10 @@
-int a, b;
+int a, b, *aa;
 double d;
 
 int main(void) {
 	int out, i;
 	char c;
-	double mean, *dd;
+	double dout, *dd;
 
 	/* add */
 	a = 7;
@@ -23,6 +23,9 @@ int main(void) {
 	/* mul */
 	a = 9;
 	b = 8;
+	d = 3.14;
+	dout = d * 69;
+	printf("\n%f * 69 = %f\n",d,dout);
 	
 	out = a*b;
 	printf("\n%d*%d=%d\n",a,b,out);
@@ -58,14 +61,14 @@ int main(void) {
 	out = a % b;
 	printf("\n%d%%%d=%d\n",a,b,out);
 
-	/* addr */
-	
-	
 	/* neg */
 	a = -66;
 	
 	out = -a;
 	printf("\n-(%d)=%d\n",a,out);
+	
+	dout = -d;
+	printf("\b-(%f)=%f\n",d,dout);
 	
 	/* cast */
 	/*
@@ -87,9 +90,25 @@ int main(void) {
 	printf("\n!%d = %d\n", a, out);
 		
 
-	/* deref */
+	/* deref and addr */
+	a = 10;
+	aa = &a;
+	printf("\nvalue of a: %d\n",*aa);	
+	
 	/* while */
+	i = 0;
+	while (i < 20) {
+		i = i + 1;
+		printf("\n%d\n",i);
+	}
+
 	/* if */
+	if (a != 0) {
+		printf("\n%d != 0",a);
+	} else {
+		printf("\n%d == 0",a);
+	}
+	
 	/* less than */
 	a = 66;
 	

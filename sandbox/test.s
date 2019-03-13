@@ -10,447 +10,270 @@ main:
 	#BODY
 	 #BLOCK
 	  #ASSIGNMENT
-	   #INT
-	   #_operand = $7
-	   #END INT
 	    #ID
-	    #_operand = a
 	    #END ID
-	movl	$7, a
+	   #INT
+	   #END INT
+#register %eax is empty
+#reg= %eax
+	movl	$7, %eax
+	movl	%eax, a
 	  #END ASSIGNMENT
 	  #ASSIGNMENT
-	   #INT
-	   #_operand = $393
-	   #END INT
 	    #ID
-	    #_operand = b
 	    #END ID
-	movl	$393, b
+	   #INT
+	   #END INT
+#register %ecx is empty
+#reg= %ecx
+	movl	$393, %ecx
+	movl	%ecx, b
 	  #END ASSIGNMENT
 	  #ASSIGNMENT
+	    #ID
+	    #END ID
 	#ADD
 	    #ID
-	    #_operand = a
 	    #END ID
 	    #ID
-	    #_operand = b
 	    #END ID
-#reg %eax is empty
-	#LOAD
-	movl	a, %eax
-	#END LOAD
-	addl	b, %eax
+#register %edx is empty
+#reg= %edx
+	movl	a, %edx
+	addl	b, %edx
 	#END ADD
-	    #ID
-	    #_operand = -4(%ebp)
-	    #END ID
-	movl	%eax, -4(%ebp)
+	movl	%edx, -4(%ebp)
 	  #END ASSIGNMENT
 	#CALL
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
+	movl	%eax, -53(%ebp)
+	movl	%ecx, -57(%ebp)
+	movl	%edx, -61(%ebp)
 	    #ID
-	    #_operand = -4(%ebp)
 	    #END ID
 	pushl	-4(%ebp)
 	    #ID
-	    #_operand = b
 	    #END ID
 	pushl	b
 	    #ID
-	    #_operand = a
 	    #END ID
 	pushl	a
 	#ADDRESS
 	   #STRING
-#reg %ebx is empty
-	leal	.L1, %ebx
+#register %eax is empty
+	leal	.L1, %eax
 	#END ADDRESS
-	pushl	%ebx
+	pushl	%eax
 	call	printf
 	addl	$16, %esp
 	#END CALL
 	  #ASSIGNMENT
-	   #INT
-	   #_operand = $50
-	   #END INT
 	    #ID
-	    #_operand = a
 	    #END ID
-	movl	$50, a
+	   #INT
+	   #END INT
+#register %ecx is empty
+#reg= %ecx
+	movl	$50, %ecx
+	movl	%ecx, a
 	  #END ASSIGNMENT
 	  #ASSIGNMENT
-	   #INT
-	   #_operand = $170
-	   #END INT
 	    #ID
-	    #_operand = b
 	    #END ID
-	movl	$170, b
+	   #INT
+	   #END INT
+#register %edx is empty
+#reg= %edx
+	movl	$170, %edx
+	movl	%edx, b
 	  #END ASSIGNMENT
 	  #ASSIGNMENT
+	    #ID
+	    #END ID
 	#SUBTRACT
 	    #ID
-	    #_operand = a
 	    #END ID
 	    #ID
-	    #_operand = b
 	    #END ID
-#reg %ecx is empty
-	#LOAD
-	movl	a, %ecx
-	#END LOAD
-	subl	b, %ecx
+	movl	%eax, -65(%ebp)
+#reg= %eax
+	movl	a, %eax
+	subl	b, %eax
 	#END SUBTRACT
-	    #ID
-	    #_operand = -4(%ebp)
-	    #END ID
-	movl	%ecx, -4(%ebp)
+	movl	%eax, -4(%ebp)
 	  #END ASSIGNMENT
 	#CALL
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
+	movl	%eax, -69(%ebp)
+	movl	%ecx, -73(%ebp)
+	movl	%edx, -77(%ebp)
 	    #ID
-	    #_operand = -4(%ebp)
 	    #END ID
 	pushl	-4(%ebp)
 	    #ID
-	    #_operand = b
 	    #END ID
 	pushl	b
 	    #ID
-	    #_operand = a
 	    #END ID
 	pushl	a
 	#ADDRESS
 	   #STRING
-#reg %edx is empty
-	leal	.L2, %edx
+#register %eax is empty
+	leal	.L2, %eax
 	#END ADDRESS
-	pushl	%edx
+	pushl	%eax
 	call	printf
 	addl	$16, %esp
 	#END CALL
 	  #ASSIGNMENT
-	   #INT
-	   #_operand = $9
-	   #END INT
 	    #ID
-	    #_operand = a
 	    #END ID
-	movl	$9, a
+	   #INT
+	   #END INT
+#register %ecx is empty
+#reg= %ecx
+	movl	$9, %ecx
+	movl	%ecx, a
 	  #END ASSIGNMENT
 	  #ASSIGNMENT
-	   #INT
-	   #_operand = $8
-	   #END INT
 	    #ID
-	    #_operand = b
 	    #END ID
-	movl	$8, b
+	   #INT
+	   #END INT
+#register %edx is empty
+#reg= %edx
+	movl	$8, %edx
+	movl	%edx, b
 	  #END ASSIGNMENT
 	  #ASSIGNMENT
+	    #ID
+	    #END ID
+	   #REAL
+#reg= %xmm0
+	movsd	.L3, %xmm0
+	movsd	%xmm0, d
+	  #END ASSIGNMENT
+	  #ASSIGNMENT
+	    #ID
+	    #END ID
 	#MULTIPLY
 	    #ID
-	    #_operand = a
 	    #END ID
-	    #ID
-	    #_operand = b
-	    #END ID
-	#LOAD
-	movl	%eax, -24(%ebp)
-	#END LOAD
-	#LOAD
-	movl	a, %eax
-	#END LOAD
-	imull	b, %eax
+	   #REAL
+#reg= %xmm1
+	movsd	d, %xmm1
+	mulsd	.L4, %xmm1
 	#END MULTIPLY
-	    #ID
-	    #_operand = -4(%ebp)
-	    #END ID
-	movl	%eax, -4(%ebp)
+	movsd	%xmm1, -17(%ebp)
 	  #END ASSIGNMENT
 	#CALL
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
+	movl	%eax, -81(%ebp)
+	movl	%ecx, -85(%ebp)
+	movl	%edx, -89(%ebp)
 	    #ID
-	    #_operand = -4(%ebp)
 	    #END ID
-	pushl	-4(%ebp)
+	movsd	-17(%ebp), %xmm2
+	subl	$8, %esp
+	movsd	%xmm2, (%esp)
 	    #ID
-	    #_operand = b
 	    #END ID
-	pushl	b
-	    #ID
-	    #_operand = a
-	    #END ID
-	pushl	a
+	movsd	d, %xmm2
+	subl	$8, %esp
+	movsd	%xmm2, (%esp)
 	#ADDRESS
 	   #STRING
-	#LOAD
-	movl	%eax, -28(%ebp)
-	#END LOAD
-	leal	.L3, %eax
-	#END ADDRESS
-	pushl	%eax
-	call	printf
-	addl	$16, %esp
-	#END CALL
-	  #ASSIGNMENT
-	   #INT
-	   #_operand = $100
-	   #END INT
-	    #ID
-	    #_operand = a
-	    #END ID
-	movl	$100, a
-	  #END ASSIGNMENT
-	  #ASSIGNMENT
-	   #INT
-	   #_operand = $5
-	   #END INT
-	    #ID
-	    #_operand = b
-	    #END ID
-	movl	$5, b
-	  #END ASSIGNMENT
-	  #ASSIGNMENT
-	#DIVIDE
-	    #ID
-	    #_operand = a
-	    #END ID
-	    #ID
-	    #_operand = b
-	    #END ID
-	#LOAD
-	movl	a, %eax
-	#END LOAD
-	cltd
-	idivl	b
-	#END DIVIDE
-	    #ID
-	    #_operand = -4(%ebp)
-	    #END ID
-	movl	%eax, -4(%ebp)
-	  #END ASSIGNMENT
-	#CALL
-	#LOAD
-	movl	%eax, -32(%ebp)
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	    #ID
-	    #_operand = -4(%ebp)
-	    #END ID
-	pushl	-4(%ebp)
-	    #ID
-	    #_operand = b
-	    #END ID
-	pushl	b
-	    #ID
-	    #_operand = a
-	    #END ID
-	pushl	a
-	#ADDRESS
-	   #STRING
-	#LOAD
-	movl	%eax, -36(%ebp)
-	#END LOAD
-	leal	.L4, %eax
-	#END ADDRESS
-	pushl	%eax
-	call	printf
-	addl	$16, %esp
-	#END CALL
-	  #ASSIGNMENT
-	#DIVIDE
-	    #ID
-	    #_operand = a
-	    #END ID
-	   #INT
-	   #_operand = $50
-	   #END INT
-	#LOAD
-	movl	a, %eax
-	#END LOAD
-	cltd
-	#LOAD
-	movl	$50, %ebx
-	#END LOAD
-	idivl	%ebx
-	#END DIVIDE
-	    #ID
-	    #_operand = -4(%ebp)
-	    #END ID
-	movl	%eax, -4(%ebp)
-	  #END ASSIGNMENT
-	#CALL
-	#LOAD
-	movl	%eax, -40(%ebp)
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	    #ID
-	    #_operand = -4(%ebp)
-	    #END ID
-	pushl	-4(%ebp)
-	    #ID
-	    #_operand = a
-	    #END ID
-	pushl	a
-	#ADDRESS
-	   #STRING
-	#LOAD
-	movl	%eax, -44(%ebp)
-	#END LOAD
+#register %eax is empty
 	leal	.L5, %eax
 	#END ADDRESS
 	pushl	%eax
 	call	printf
-	addl	$12, %esp
+	addl	$20, %esp
 	#END CALL
 	  #ASSIGNMENT
-	#DIVIDE
 	    #ID
-	    #_operand = b
 	    #END ID
-	   #INT
-	   #_operand = $2
-	   #END INT
-	#LOAD
-	movl	b, %eax
-	#END LOAD
-	cltd
-	#LOAD
-	movl	$2, %ebx
-	#END LOAD
-	idivl	%ebx
-	#END DIVIDE
+	#MULTIPLY
 	    #ID
-	    #_operand = -4(%ebp)
 	    #END ID
-	movl	%eax, -4(%ebp)
+	    #ID
+	    #END ID
+#register %ecx is empty
+#reg= %ecx
+	movl	a, %ecx
+	imull	b, %ecx
+	#END MULTIPLY
+	movl	%ecx, -4(%ebp)
 	  #END ASSIGNMENT
 	#CALL
-	#LOAD
-	movl	%eax, -48(%ebp)
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
+	movl	%eax, -93(%ebp)
+	movl	%ecx, -97(%ebp)
 	    #ID
-	    #_operand = -4(%ebp)
 	    #END ID
 	pushl	-4(%ebp)
 	    #ID
-	    #_operand = b
-	    #END ID
-	pushl	b
-	#ADDRESS
-	   #STRING
-	#LOAD
-	movl	%eax, -52(%ebp)
-	#END LOAD
-	leal	.L6, %eax
-	#END ADDRESS
-	pushl	%eax
-	call	printf
-	addl	$12, %esp
-	#END CALL
-	  #ASSIGNMENT
-	   #INT
-	   #_operand = $12
-	   #END INT
-	    #ID
-	    #_operand = a
-	    #END ID
-	movl	$12, a
-	  #END ASSIGNMENT
-	  #ASSIGNMENT
-	   #INT
-	   #_operand = $7
-	   #END INT
-	    #ID
-	    #_operand = b
-	    #END ID
-	movl	$7, b
-	  #END ASSIGNMENT
-	  #ASSIGNMENT
-	#REMAINDER
-	    #ID
-	    #_operand = a
-	    #END ID
-	    #ID
-	    #_operand = b
-	    #END ID
-	#LOAD
-	movl	a, %eax
-	#END LOAD
-#temp=%ebx
-	cltd
-	idivl	b
-	#END REMAINDER
-	    #ID
-	    #_operand = -4(%ebp)
-	    #END ID
-	movl	%edx, -4(%ebp)
-	  #END ASSIGNMENT
-	#CALL
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	movl	%edx, -56(%ebp)
-	#END LOAD
-	    #ID
-	    #_operand = -4(%ebp)
-	    #END ID
-	pushl	-4(%ebp)
-	    #ID
-	    #_operand = b
 	    #END ID
 	pushl	b
 	    #ID
-	    #_operand = a
 	    #END ID
 	pushl	a
 	#ADDRESS
 	   #STRING
-	#LOAD
-	movl	%eax, -60(%ebp)
-	#END LOAD
+#register %eax is empty
+	leal	.L6, %eax
+	#END ADDRESS
+	pushl	%eax
+	call	printf
+	addl	$16, %esp
+	#END CALL
+	  #ASSIGNMENT
+	    #ID
+	    #END ID
+	   #INT
+	   #END INT
+#register %ecx is empty
+#reg= %ecx
+	movl	$100, %ecx
+	movl	%ecx, a
+	  #END ASSIGNMENT
+	  #ASSIGNMENT
+	    #ID
+	    #END ID
+	   #INT
+	   #END INT
+#register %edx is empty
+#reg= %edx
+	movl	$5, %edx
+	movl	%edx, b
+	  #END ASSIGNMENT
+	  #ASSIGNMENT
+	    #ID
+	    #END ID
+	#DIVIDE
+	    #ID
+	    #END ID
+	    #ID
+	    #END ID
+	movl	%eax, -101(%ebp)
+#reg= %eax
+	movl	a, %eax
+	cltd
+	idivl	b
+	#END DIVIDE
+	movl	%eax, -4(%ebp)
+	  #END ASSIGNMENT
+	#CALL
+	movl	%eax, -105(%ebp)
+	movl	%ecx, -109(%ebp)
+	    #ID
+	    #END ID
+	pushl	-4(%ebp)
+	    #ID
+	    #END ID
+	pushl	b
+	    #ID
+	    #END ID
+	pushl	a
+	#ADDRESS
+	   #STRING
+#register %eax is empty
 	leal	.L7, %eax
 	#END ADDRESS
 	pushl	%eax
@@ -458,366 +281,278 @@ main:
 	addl	$16, %esp
 	#END CALL
 	  #ASSIGNMENT
+	    #ID
+	    #END ID
+	#DIVIDE
+	    #ID
+	    #END ID
 	   #INT
-	   #_operand = $100
 	   #END INT
-	    #ID
-	    #_operand = a
-	    #END ID
-	movl	$100, a
-	  #END ASSIGNMENT
-	  #ASSIGNMENT
-	#REMAINDER
-	    #ID
-	    #_operand = a
-	    #END ID
-	    #ID
-	    #_operand = b
-	    #END ID
-	#LOAD
+	movl	%eax, -113(%ebp)
+#reg= %eax
 	movl	a, %eax
-	#END LOAD
-#temp=%ebx
 	cltd
-	idivl	b
-	#END REMAINDER
-	    #ID
-	    #_operand = -4(%ebp)
-	    #END ID
-	movl	%edx, -4(%ebp)
+#reg= %ebx
+	movl	$50, %ebx
+	idivl	%ebx
+	#END DIVIDE
+	movl	%eax, -4(%ebp)
 	  #END ASSIGNMENT
 	#CALL
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	movl	%edx, -64(%ebp)
-	#END LOAD
+	movl	%eax, -117(%ebp)
 	    #ID
-	    #_operand = -4(%ebp)
 	    #END ID
 	pushl	-4(%ebp)
 	    #ID
-	    #_operand = b
-	    #END ID
-	pushl	b
-	    #ID
-	    #_operand = a
 	    #END ID
 	pushl	a
 	#ADDRESS
 	   #STRING
-	#LOAD
-	movl	%eax, -68(%ebp)
-	#END LOAD
+#register %eax is empty
 	leal	.L8, %eax
 	#END ADDRESS
 	pushl	%eax
 	call	printf
-	addl	$16, %esp
+	addl	$12, %esp
 	#END CALL
 	  #ASSIGNMENT
+	    #ID
+	    #END ID
+	#DIVIDE
+	    #ID
+	    #END ID
 	   #INT
-	   #_operand = $24
 	   #END INT
-	    #ID
-	    #_operand = a
-	    #END ID
-	movl	$24, a
-	  #END ASSIGNMENT
-	  #ASSIGNMENT
-	   #INT
-	   #_operand = $33
-	   #END INT
-	    #ID
-	    #_operand = b
-	    #END ID
-	movl	$33, b
-	  #END ASSIGNMENT
-	  #ASSIGNMENT
-	#REMAINDER
-	    #ID
-	    #_operand = a
-	    #END ID
-	    #ID
-	    #_operand = b
-	    #END ID
-	#LOAD
-	movl	a, %eax
-	#END LOAD
-#temp=%ebx
+	movl	%eax, -121(%ebp)
+#reg= %eax
+	movl	b, %eax
 	cltd
-	idivl	b
-	#END REMAINDER
-	    #ID
-	    #_operand = -4(%ebp)
-	    #END ID
-	movl	%edx, -4(%ebp)
+#reg= %ebx
+	movl	$2, %ebx
+	idivl	%ebx
+	#END DIVIDE
+	movl	%eax, -4(%ebp)
 	  #END ASSIGNMENT
 	#CALL
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	movl	%edx, -72(%ebp)
-	#END LOAD
+	movl	%eax, -125(%ebp)
 	    #ID
-	    #_operand = -4(%ebp)
 	    #END ID
 	pushl	-4(%ebp)
 	    #ID
-	    #_operand = b
 	    #END ID
 	pushl	b
-	    #ID
-	    #_operand = a
-	    #END ID
-	pushl	a
 	#ADDRESS
 	   #STRING
-	#LOAD
-	movl	%eax, -76(%ebp)
-	#END LOAD
+#register %eax is empty
 	leal	.L9, %eax
 	#END ADDRESS
 	pushl	%eax
 	call	printf
-	addl	$16, %esp
+	addl	$12, %esp
 	#END CALL
 	  #ASSIGNMENT
-	#NEGATE
-	   #INT
-	   #_operand = $66
-	   #END INT
-	#LOAD
-	movl	%eax, -80(%ebp)
-	#END LOAD
-	#LOAD
-	movl	$66, %eax
-	#END LOAD
-	negl	%eax
-	#END NEGATE
 	    #ID
-	    #_operand = a
 	    #END ID
-	movl	%eax, a
+	   #INT
+	   #END INT
+#register %ecx is empty
+#reg= %ecx
+	movl	$12, %ecx
+	movl	%ecx, a
 	  #END ASSIGNMENT
 	  #ASSIGNMENT
-	#NEGATE
 	    #ID
-	    #_operand = a
 	    #END ID
-	#LOAD
-	movl	%eax, -84(%ebp)
-	#END LOAD
-	#LOAD
+	   #INT
+	   #END INT
+#register %edx is empty
+#reg= %edx
+	movl	$7, %edx
+	movl	%edx, b
+	  #END ASSIGNMENT
+	  #ASSIGNMENT
+	    #ID
+	    #END ID
+	#REMAINDER
+	    #ID
+	    #END ID
+	    #ID
+	    #END ID
+	movl	%eax, -129(%ebp)
+#reg= %eax
 	movl	a, %eax
-	#END LOAD
-	negl	%eax
-	#END NEGATE
-	    #ID
-	    #_operand = -4(%ebp)
-	    #END ID
-	movl	%eax, -4(%ebp)
+#temp=%ebx
+	cltd
+	idivl	b
+	#END REMAINDER
+	movl	%edx, -4(%ebp)
 	  #END ASSIGNMENT
 	#CALL
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
+	movl	%ecx, -133(%ebp)
+	movl	%edx, -137(%ebp)
 	    #ID
-	    #_operand = -4(%ebp)
 	    #END ID
 	pushl	-4(%ebp)
 	    #ID
-	    #_operand = a
+	    #END ID
+	pushl	b
+	    #ID
 	    #END ID
 	pushl	a
 	#ADDRESS
 	   #STRING
-	#LOAD
-	movl	%eax, -88(%ebp)
-	#END LOAD
+#register %eax is empty
 	leal	.L10, %eax
 	#END ADDRESS
 	pushl	%eax
 	call	printf
-	addl	$12, %esp
+	addl	$16, %esp
 	#END CALL
 	  #ASSIGNMENT
-	   #INT
-	   #_operand = $0
-	   #END INT
 	    #ID
-	    #_operand = a
 	    #END ID
-	movl	$0, a
+	   #INT
+	   #END INT
+#register %ecx is empty
+#reg= %ecx
+	movl	$100, %ecx
+	movl	%ecx, a
 	  #END ASSIGNMENT
 	  #ASSIGNMENT
-	#NOT
 	    #ID
-	    #_operand = a
 	    #END ID
-	#LOAD
-	movl	%eax, -92(%ebp)
-	#END LOAD
-	#LOAD
+	#REMAINDER
+	    #ID
+	    #END ID
+	    #ID
+	    #END ID
+	movl	%eax, -141(%ebp)
+#reg= %eax
 	movl	a, %eax
-	#END LOAD
-	notl	%eax
-	#END NOT
-	    #ID
-	    #_operand = -4(%ebp)
-	    #END ID
-	movl	%eax, -4(%ebp)
+#temp=%ebx
+	cltd
+	idivl	b
+	#END REMAINDER
+	movl	%edx, -4(%ebp)
 	  #END ASSIGNMENT
 	#CALL
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
+	movl	%ecx, -145(%ebp)
+	movl	%edx, -149(%ebp)
 	    #ID
-	    #_operand = -4(%ebp)
 	    #END ID
 	pushl	-4(%ebp)
 	    #ID
-	    #_operand = a
+	    #END ID
+	pushl	b
+	    #ID
 	    #END ID
 	pushl	a
 	#ADDRESS
 	   #STRING
-	#LOAD
-	movl	%eax, -96(%ebp)
-	#END LOAD
+#register %eax is empty
 	leal	.L11, %eax
 	#END ADDRESS
 	pushl	%eax
 	call	printf
-	addl	$12, %esp
+	addl	$16, %esp
 	#END CALL
 	  #ASSIGNMENT
-	   #INT
-	   #_operand = $1
-	   #END INT
 	    #ID
-	    #_operand = a
 	    #END ID
-	movl	$1, a
+	   #INT
+	   #END INT
+#register %ecx is empty
+#reg= %ecx
+	movl	$24, %ecx
+	movl	%ecx, a
 	  #END ASSIGNMENT
 	  #ASSIGNMENT
-	#NOT
 	    #ID
-	    #_operand = a
 	    #END ID
-	#LOAD
-	movl	%eax, -100(%ebp)
-	#END LOAD
-	#LOAD
+	   #INT
+	   #END INT
+#register %edx is empty
+#reg= %edx
+	movl	$33, %edx
+	movl	%edx, b
+	  #END ASSIGNMENT
+	  #ASSIGNMENT
+	    #ID
+	    #END ID
+	#REMAINDER
+	    #ID
+	    #END ID
+	    #ID
+	    #END ID
+	movl	%eax, -153(%ebp)
+#reg= %eax
 	movl	a, %eax
-	#END LOAD
-	notl	%eax
-	#END NOT
-	    #ID
-	    #_operand = -4(%ebp)
-	    #END ID
-	movl	%eax, -4(%ebp)
+#temp=%ebx
+	cltd
+	idivl	b
+	#END REMAINDER
+	movl	%edx, -4(%ebp)
 	  #END ASSIGNMENT
 	#CALL
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
+	movl	%ecx, -157(%ebp)
+	movl	%edx, -161(%ebp)
 	    #ID
-	    #_operand = -4(%ebp)
 	    #END ID
 	pushl	-4(%ebp)
 	    #ID
-	    #_operand = a
+	    #END ID
+	pushl	b
+	    #ID
 	    #END ID
 	pushl	a
 	#ADDRESS
 	   #STRING
-	#LOAD
-	movl	%eax, -104(%ebp)
-	#END LOAD
+#register %eax is empty
 	leal	.L12, %eax
 	#END ADDRESS
 	pushl	%eax
 	call	printf
-	addl	$12, %esp
+	addl	$16, %esp
 	#END CALL
 	  #ASSIGNMENT
-	   #INT
-	   #_operand = $66
-	   #END INT
 	    #ID
-	    #_operand = a
 	    #END ID
-	movl	$66, a
+	#NEGATE
+	   #INT
+	   #END INT
+#register %ecx is empty
+#reg= %ecx
+	movl	$66, %ecx
+	negl	%ecx
+	#END NEGATE
+	movl	%ecx, a
 	  #END ASSIGNMENT
 	  #ASSIGNMENT
-	#LESS THAN
 	    #ID
-	    #_operand = a
 	    #END ID
-	   #INT
-	   #_operand = $10
-	   #END INT
-	#LOAD
-	movl	%eax, -108(%ebp)
-	#END LOAD
-	#LOAD
-	movl	a, %eax
-	#END LOAD
-	cmp	$10, %eax
-	setl	%al
-	movzbl	%al, %eax
-	#END LESS THAN
+	#NEGATE
 	    #ID
-	    #_operand = -4(%ebp)
 	    #END ID
-	movl	%eax, -4(%ebp)
+#register %edx is empty
+#reg= %edx
+	movl	a, %edx
+	negl	%edx
+	#END NEGATE
+	movl	%edx, -4(%ebp)
 	  #END ASSIGNMENT
 	#CALL
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
+	movl	%eax, -165(%ebp)
+	movl	%ecx, -169(%ebp)
+	movl	%edx, -173(%ebp)
 	    #ID
-	    #_operand = -4(%ebp)
 	    #END ID
 	pushl	-4(%ebp)
 	    #ID
-	    #_operand = a
 	    #END ID
 	pushl	a
 	#ADDRESS
 	   #STRING
-	#LOAD
-	movl	%eax, -112(%ebp)
-	#END LOAD
+#register %eax is empty
 	leal	.L13, %eax
 	#END ADDRESS
 	pushl	%eax
@@ -825,618 +560,406 @@ main:
 	addl	$12, %esp
 	#END CALL
 	  #ASSIGNMENT
-	#LESS THAN
 	    #ID
-	    #_operand = a
 	    #END ID
-	   #INT
-	   #_operand = $90
-	   #END INT
-	#LOAD
-	movl	%eax, -116(%ebp)
-	#END LOAD
-	#LOAD
-	movl	a, %eax
-	#END LOAD
-	cmp	$90, %eax
-	setl	%al
-	movzbl	%al, %eax
-	#END LESS THAN
+	#NEGATE
 	    #ID
-	    #_operand = -4(%ebp)
 	    #END ID
-	movl	%eax, -4(%ebp)
+#reg= %xmm2
+	movsd	d, %xmm2
+	pxor	%xmm3, %xmm3
+	subsd	%xmm3, %xmm2
+	#END NEGATE
+	movsd	%xmm2, -17(%ebp)
 	  #END ASSIGNMENT
 	#CALL
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
+	movl	%eax, -177(%ebp)
 	    #ID
-	    #_operand = -4(%ebp)
+	    #END ID
+	movsd	-17(%ebp), %xmm3
+	subl	$8, %esp
+	movsd	%xmm3, (%esp)
+	    #ID
+	    #END ID
+	movsd	d, %xmm3
+	subl	$8, %esp
+	movsd	%xmm3, (%esp)
+	#ADDRESS
+	   #STRING
+#register %eax is empty
+	leal	.L14, %eax
+	#END ADDRESS
+	pushl	%eax
+	call	printf
+	addl	$20, %esp
+	#END CALL
+	  #ASSIGNMENT
+	    #ID
+	    #END ID
+	   #INT
+	   #END INT
+#register %ecx is empty
+#reg= %ecx
+	movl	$0, %ecx
+	movl	%ecx, a
+	  #END ASSIGNMENT
+	  #ASSIGNMENT
+	    #ID
+	    #END ID
+	#NOT
+	    #ID
+	    #END ID
+#register %edx is empty
+#reg= %edx
+	movl	a, %edx
+	cmpl	$0, %edx
+	sete	%dl
+	movzbl	%dl, %edx
+	#END NOT
+	movl	%edx, -4(%ebp)
+	  #END ASSIGNMENT
+	#CALL
+	movl	%eax, -181(%ebp)
+	movl	%ecx, -185(%ebp)
+	movl	%edx, -189(%ebp)
+	    #ID
 	    #END ID
 	pushl	-4(%ebp)
 	    #ID
-	    #_operand = a
 	    #END ID
 	pushl	a
 	#ADDRESS
 	   #STRING
-	#LOAD
-	movl	%eax, -120(%ebp)
-	#END LOAD
-	leal	.L14, %eax
+#register %eax is empty
+	leal	.L15, %eax
 	#END ADDRESS
 	pushl	%eax
 	call	printf
 	addl	$12, %esp
 	#END CALL
 	  #ASSIGNMENT
+	    #ID
+	    #END ID
 	   #INT
-	   #_operand = $21
 	   #END INT
-	    #ID
-	    #_operand = b
-	    #END ID
-	movl	$21, b
+#register %ecx is empty
+#reg= %ecx
+	movl	$1, %ecx
+	movl	%ecx, a
 	  #END ASSIGNMENT
 	  #ASSIGNMENT
-	#GREATER THAN
 	    #ID
-	    #_operand = a
 	    #END ID
+	#NOT
 	    #ID
-	    #_operand = b
 	    #END ID
-	#LOAD
-	movl	%eax, -124(%ebp)
-	#END LOAD
-	#LOAD
-	movl	a, %eax
-	#END LOAD
-	cmp	b, %eax
-	setg	%al
-	movzbl	%al, %eax
-	#END GREATER THAN
-	    #ID
-	    #_operand = -4(%ebp)
-	    #END ID
-	movl	%eax, -4(%ebp)
+#register %edx is empty
+#reg= %edx
+	movl	a, %edx
+	cmpl	$0, %edx
+	sete	%dl
+	movzbl	%dl, %edx
+	#END NOT
+	movl	%edx, -4(%ebp)
 	  #END ASSIGNMENT
 	#CALL
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
+	movl	%eax, -193(%ebp)
+	movl	%ecx, -197(%ebp)
+	movl	%edx, -201(%ebp)
 	    #ID
-	    #_operand = -4(%ebp)
 	    #END ID
 	pushl	-4(%ebp)
 	    #ID
-	    #_operand = b
-	    #END ID
-	pushl	b
-	    #ID
-	    #_operand = a
 	    #END ID
 	pushl	a
 	#ADDRESS
 	   #STRING
-	#LOAD
-	movl	%eax, -128(%ebp)
-	#END LOAD
-	leal	.L15, %eax
-	#END ADDRESS
-	pushl	%eax
-	call	printf
-	addl	$16, %esp
-	#END CALL
-	  #ASSIGNMENT
-	#GREATER THAN
-	    #ID
-	    #_operand = b
-	    #END ID
-	    #ID
-	    #_operand = a
-	    #END ID
-	#LOAD
-	movl	%eax, -132(%ebp)
-	#END LOAD
-	#LOAD
-	movl	b, %eax
-	#END LOAD
-	cmp	a, %eax
-	setg	%al
-	movzbl	%al, %eax
-	#END GREATER THAN
-	    #ID
-	    #_operand = -4(%ebp)
-	    #END ID
-	movl	%eax, -4(%ebp)
-	  #END ASSIGNMENT
-	#CALL
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	    #ID
-	    #_operand = -4(%ebp)
-	    #END ID
-	pushl	-4(%ebp)
-	    #ID
-	    #_operand = a
-	    #END ID
-	pushl	a
-	    #ID
-	    #_operand = b
-	    #END ID
-	pushl	b
-	#ADDRESS
-	   #STRING
-	#LOAD
-	movl	%eax, -136(%ebp)
-	#END LOAD
+#register %eax is empty
 	leal	.L16, %eax
 	#END ADDRESS
 	pushl	%eax
 	call	printf
-	addl	$16, %esp
+	addl	$12, %esp
 	#END CALL
 	  #ASSIGNMENT
-	#LESS OR EQUAL
 	    #ID
-	    #_operand = a
 	    #END ID
-	    #ID
-	    #_operand = b
-	    #END ID
-	#LOAD
-	movl	%eax, -140(%ebp)
-	#END LOAD
-	#LOAD
-	movl	a, %eax
-	#END LOAD
-	cmp	b, %eax
-	setle	%al
-	movzbl	%al, %eax
-	#END LESS OR EQUAL
-	    #ID
-	    #_operand = -4(%ebp)
-	    #END ID
-	movl	%eax, -4(%ebp)
-	  #END ASSIGNMENT
-	#CALL
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	    #ID
-	    #_operand = -4(%ebp)
-	    #END ID
-	pushl	-4(%ebp)
-	    #ID
-	    #_operand = b
-	    #END ID
-	pushl	b
-	    #ID
-	    #_operand = a
-	    #END ID
-	pushl	a
-	#ADDRESS
-	   #STRING
-	#LOAD
-	movl	%eax, -144(%ebp)
-	#END LOAD
-	leal	.L17, %eax
-	#END ADDRESS
-	pushl	%eax
-	call	printf
-	addl	$16, %esp
-	#END CALL
-	  #ASSIGNMENT
 	   #INT
-	   #_operand = $21
 	   #END INT
-	    #ID
-	    #_operand = a
-	    #END ID
-	movl	$21, a
+#register %ecx is empty
+#reg= %ecx
+	movl	$10, %ecx
+	movl	%ecx, a
 	  #END ASSIGNMENT
 	  #ASSIGNMENT
-	#LESS OR EQUAL
 	    #ID
-	    #_operand = a
 	    #END ID
+	#ADDRESS
 	    #ID
-	    #_operand = b
 	    #END ID
-	#LOAD
-	movl	%eax, -148(%ebp)
-	#END LOAD
-	#LOAD
-	movl	a, %eax
-	#END LOAD
-	cmp	b, %eax
-	setle	%al
-	movzbl	%al, %eax
-	#END LESS OR EQUAL
-	    #ID
-	    #_operand = -4(%ebp)
-	    #END ID
-	movl	%eax, -4(%ebp)
+#register %edx is empty
+	leal	a, %edx
+	#END ADDRESS
+	movl	%edx, aa
 	  #END ASSIGNMENT
 	#CALL
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
+	movl	%eax, -205(%ebp)
+	movl	%ecx, -209(%ebp)
+	movl	%edx, -225(%ebp)
+	#DEREFERENCE
 	    #ID
-	    #_operand = -4(%ebp)
 	    #END ID
-	pushl	-4(%ebp)
-	    #ID
-	    #_operand = b
-	    #END ID
-	pushl	b
-	    #ID
-	    #_operand = a
-	    #END ID
-	pushl	a
+#register %eax is empty
+#reg= %eax
+	movl	aa, %eax
+	movl	(%eax), %eax
+	#END DEREFERENCE
+	pushl	%eax
 	#ADDRESS
 	   #STRING
-	#LOAD
-	movl	%eax, -152(%ebp)
-	#END LOAD
-	leal	.L18, %eax
+#register %ecx is empty
+	leal	.L17, %ecx
 	#END ADDRESS
-	pushl	%eax
+	pushl	%ecx
 	call	printf
-	addl	$16, %esp
+	addl	$8, %esp
 	#END CALL
 	  #ASSIGNMENT
-	#GREATER OR EQUAL
 	    #ID
-	    #_operand = a
 	    #END ID
-	    #ID
-	    #_operand = b
-	    #END ID
-	#LOAD
-	movl	%eax, -156(%ebp)
-	#END LOAD
-	#LOAD
-	movl	a, %eax
-	#END LOAD
-	cmp	b, %eax
-	setge	%al
-	movzbl	%al, %eax
-	#END GREATER OR EQUAL
-	    #ID
-	    #_operand = -4(%ebp)
-	    #END ID
-	movl	%eax, -4(%ebp)
-	  #END ASSIGNMENT
-	#CALL
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	    #ID
-	    #_operand = -4(%ebp)
-	    #END ID
-	pushl	-4(%ebp)
-	    #ID
-	    #_operand = b
-	    #END ID
-	pushl	b
-	    #ID
-	    #_operand = a
-	    #END ID
-	pushl	a
-	#ADDRESS
-	   #STRING
-	#LOAD
-	movl	%eax, -160(%ebp)
-	#END LOAD
-	leal	.L19, %eax
-	#END ADDRESS
-	pushl	%eax
-	call	printf
-	addl	$16, %esp
-	#END CALL
-	  #ASSIGNMENT
 	   #INT
-	   #_operand = $243
 	   #END INT
-	    #ID
-	    #_operand = b
-	    #END ID
-	movl	$243, b
+#register %edx is empty
+#reg= %edx
+	movl	$0, %edx
+	movl	%edx, -8(%ebp)
 	  #END ASSIGNMENT
-	  #ASSIGNMENT
-	#GREATER OR EQUAL
+	#WHILE
+.L18:
+	#EXPRESSION::TEST
+	#LESS THAN
 	    #ID
-	    #_operand = b
 	    #END ID
-	    #ID
-	    #_operand = a
-	    #END ID
-	#LOAD
-	movl	%eax, -164(%ebp)
-	#END LOAD
-	#LOAD
-	movl	b, %eax
-	#END LOAD
-	cmp	a, %eax
-	setge	%al
+	   #INT
+	   #END INT
+	movl	%eax, -229(%ebp)
+#reg= %eax
+	movl	-8(%ebp), %eax
+	cmp	$20, %eax
+	setl	%al
 	movzbl	%al, %eax
-	#END GREATER OR EQUAL
+	#END LESS THAN
+	cmpl	$0, %eax
+	je	.L19
+	 #BLOCK
+	  #ASSIGNMENT
 	    #ID
-	    #_operand = -4(%ebp)
 	    #END ID
-	movl	%eax, -4(%ebp)
+	#ADD
+	    #ID
+	    #END ID
+	   #INT
+	   #END INT
+#register %eax is empty
+#reg= %eax
+	movl	-8(%ebp), %eax
+	addl	$1, %eax
+	#END ADD
+	movl	%eax, -8(%ebp)
 	  #END ASSIGNMENT
 	#CALL
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
+	movl	%eax, -233(%ebp)
+	movl	%ecx, -237(%ebp)
+	movl	%edx, -241(%ebp)
 	    #ID
-	    #_operand = -4(%ebp)
 	    #END ID
-	pushl	-4(%ebp)
-	    #ID
-	    #_operand = a
-	    #END ID
-	pushl	a
-	    #ID
-	    #_operand = b
-	    #END ID
-	pushl	b
+	pushl	-8(%ebp)
 	#ADDRESS
 	   #STRING
-	#LOAD
-	movl	%eax, -168(%ebp)
-	#END LOAD
+#register %eax is empty
 	leal	.L20, %eax
 	#END ADDRESS
 	pushl	%eax
 	call	printf
-	addl	$16, %esp
+	addl	$8, %esp
 	#END CALL
-	  #ASSIGNMENT
-	   #INT
-	   #_operand = $345
-	   #END INT
-	    #ID
-	    #_operand = a
-	    #END ID
-	movl	$345, a
-	  #END ASSIGNMENT
-	  #ASSIGNMENT
-	   #INT
-	   #_operand = $345
-	   #END INT
-	    #ID
-	    #_operand = b
-	    #END ID
-	movl	$345, b
-	  #END ASSIGNMENT
-	  #ASSIGNMENT
-	#EQUAL
-	    #ID
-	    #_operand = a
-	    #END ID
-	    #ID
-	    #_operand = b
-	    #END ID
-	#LOAD
-	movl	%eax, -172(%ebp)
-	#END LOAD
-	#LOAD
-	movl	a, %eax
-	#END LOAD
-	cmpl	b, %eax
-	sete	%al
-	movzbl	%al, %eax
-	#END EQUAL
-	    #ID
-	    #_operand = -4(%ebp)
-	    #END ID
-	movl	%eax, -4(%ebp)
-	  #END ASSIGNMENT
-	#CALL
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	    #ID
-	    #_operand = -4(%ebp)
-	    #END ID
-	pushl	-4(%ebp)
-	    #ID
-	    #_operand = b
-	    #END ID
-	pushl	b
-	    #ID
-	    #_operand = a
-	    #END ID
-	pushl	a
-	#ADDRESS
-	   #STRING
-	#LOAD
-	movl	%eax, -176(%ebp)
-	#END LOAD
-	leal	.L23, %eax
-	#END ADDRESS
-	pushl	%eax
-	call	printf
-	addl	$16, %esp
-	#END CALL
-	  #ASSIGNMENT
-	   #INT
-	   #_operand = $366
-	   #END INT
-	    #ID
-	    #_operand = b
-	    #END ID
-	movl	$366, b
-	  #END ASSIGNMENT
-	  #ASSIGNMENT
-	#EQUAL
-	    #ID
-	    #_operand = a
-	    #END ID
-	    #ID
-	    #_operand = b
-	    #END ID
-	#LOAD
-	movl	%eax, -180(%ebp)
-	#END LOAD
-	#LOAD
-	movl	a, %eax
-	#END LOAD
-	cmpl	b, %eax
-	sete	%al
-	movzbl	%al, %eax
-	#END EQUAL
-	    #ID
-	    #_operand = -4(%ebp)
-	    #END ID
-	movl	%eax, -4(%ebp)
-	  #END ASSIGNMENT
-	#CALL
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	    #ID
-	    #_operand = -4(%ebp)
-	    #END ID
-	pushl	-4(%ebp)
-	    #ID
-	    #_operand = b
-	    #END ID
-	pushl	b
-	    #ID
-	    #_operand = a
-	    #END ID
-	pushl	a
-	#ADDRESS
-	   #STRING
-	#LOAD
-	movl	%eax, -184(%ebp)
-	#END LOAD
-	leal	.L26, %eax
-	#END ADDRESS
-	pushl	%eax
-	call	printf
-	addl	$16, %esp
-	#END CALL
-	  #ASSIGNMENT
-	   #INT
-	   #_operand = $21
-	   #END INT
-	    #ID
-	    #_operand = a
-	    #END ID
-	movl	$21, a
-	  #END ASSIGNMENT
-	  #ASSIGNMENT
-	   #INT
-	   #_operand = $44
-	   #END INT
-	    #ID
-	    #_operand = b
-	    #END ID
-	movl	$44, b
-	  #END ASSIGNMENT
-	  #ASSIGNMENT
+	jmp	.L18
+.L19:
+	#END WHILE
+	#IF
+	#EXPRESSION::TEST
 	#NOT EQUAL
 	    #ID
-	    #_operand = a
 	    #END ID
-	    #ID
-	    #_operand = b
-	    #END ID
-	#LOAD
-	movl	%eax, -188(%ebp)
-	#END LOAD
-	#LOAD
+	   #INT
+	   #END INT
+#register %eax is empty
+#reg= %eax
 	movl	a, %eax
-	#END LOAD
-	cmpl	b, %eax
+	cmpl	$0, %eax
 	setne	%al
 	movzbl	%al, %eax
 	#END EQUAL
 	#END NOT EQUAL
-	    #ID
-	    #_operand = -4(%ebp)
-	    #END ID
-	movl	%eax, -4(%ebp)
-	  #END ASSIGNMENT
+	cmpl	$0, %eax
+	je	.L21
+	 #BLOCK
 	#CALL
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
 	    #ID
-	    #_operand = -4(%ebp)
-	    #END ID
-	pushl	-4(%ebp)
-	    #ID
-	    #_operand = b
-	    #END ID
-	pushl	b
-	    #ID
-	    #_operand = a
 	    #END ID
 	pushl	a
 	#ADDRESS
 	   #STRING
-	#LOAD
-	movl	%eax, -192(%ebp)
-	#END LOAD
+#register %eax is empty
+	leal	.L23, %eax
+	#END ADDRESS
+	pushl	%eax
+	call	printf
+	addl	$8, %esp
+	#END CALL
+	jmp	.L22
+.L21:
+	 #BLOCK
+	#CALL
+	movl	%eax, -245(%ebp)
+	    #ID
+	    #END ID
+	pushl	a
+	#ADDRESS
+	   #STRING
+#register %eax is empty
+	leal	.L24, %eax
+	#END ADDRESS
+	pushl	%eax
+	call	printf
+	addl	$8, %esp
+	#END CALL
+.L22:
+	#END IF
+	  #ASSIGNMENT
+	    #ID
+	    #END ID
+	   #INT
+	   #END INT
+#register %ecx is empty
+#reg= %ecx
+	movl	$66, %ecx
+	movl	%ecx, a
+	  #END ASSIGNMENT
+	  #ASSIGNMENT
+	    #ID
+	    #END ID
+	#LESS THAN
+	    #ID
+	    #END ID
+	   #INT
+	   #END INT
+#register %edx is empty
+#reg= %edx
+	movl	a, %edx
+	cmp	$10, %edx
+	setl	%dl
+	movzbl	%dl, %edx
+	#END LESS THAN
+	movl	%edx, -4(%ebp)
+	  #END ASSIGNMENT
+	#CALL
+	movl	%eax, -249(%ebp)
+	movl	%ecx, -253(%ebp)
+	movl	%edx, -257(%ebp)
+	    #ID
+	    #END ID
+	pushl	-4(%ebp)
+	    #ID
+	    #END ID
+	pushl	a
+	#ADDRESS
+	   #STRING
+#register %eax is empty
+	leal	.L25, %eax
+	#END ADDRESS
+	pushl	%eax
+	call	printf
+	addl	$12, %esp
+	#END CALL
+	  #ASSIGNMENT
+	    #ID
+	    #END ID
+	#LESS THAN
+	    #ID
+	    #END ID
+	   #INT
+	   #END INT
+#register %ecx is empty
+#reg= %ecx
+	movl	a, %ecx
+	cmp	$90, %ecx
+	setl	%cl
+	movzbl	%cl, %ecx
+	#END LESS THAN
+	movl	%ecx, -4(%ebp)
+	  #END ASSIGNMENT
+	#CALL
+	movl	%eax, -261(%ebp)
+	movl	%ecx, -265(%ebp)
+	    #ID
+	    #END ID
+	pushl	-4(%ebp)
+	    #ID
+	    #END ID
+	pushl	a
+	#ADDRESS
+	   #STRING
+#register %eax is empty
+	leal	.L26, %eax
+	#END ADDRESS
+	pushl	%eax
+	call	printf
+	addl	$12, %esp
+	#END CALL
+	  #ASSIGNMENT
+	    #ID
+	    #END ID
+	   #INT
+	   #END INT
+#register %ecx is empty
+#reg= %ecx
+	movl	$21, %ecx
+	movl	%ecx, b
+	  #END ASSIGNMENT
+	  #ASSIGNMENT
+	    #ID
+	    #END ID
+	#GREATER THAN
+	    #ID
+	    #END ID
+	    #ID
+	    #END ID
+#register %edx is empty
+#reg= %edx
+	movl	a, %edx
+	cmp	b, %edx
+	setg	%dl
+	movzbl	%dl, %edx
+	#END GREATER THAN
+	movl	%edx, -4(%ebp)
+	  #END ASSIGNMENT
+	#CALL
+	movl	%eax, -269(%ebp)
+	movl	%ecx, -273(%ebp)
+	movl	%edx, -277(%ebp)
+	    #ID
+	    #END ID
+	pushl	-4(%ebp)
+	    #ID
+	    #END ID
+	pushl	b
+	    #ID
+	    #END ID
+	pushl	a
+	#ADDRESS
+	   #STRING
+#register %eax is empty
 	leal	.L27, %eax
 	#END ADDRESS
 	pushl	%eax
@@ -1444,64 +967,37 @@ main:
 	addl	$16, %esp
 	#END CALL
 	  #ASSIGNMENT
-	   #INT
-	   #_operand = $21
-	   #END INT
 	    #ID
-	    #_operand = b
 	    #END ID
-	movl	$21, b
-	  #END ASSIGNMENT
-	  #ASSIGNMENT
-	#NOT EQUAL
+	#GREATER THAN
 	    #ID
-	    #_operand = a
 	    #END ID
 	    #ID
-	    #_operand = b
 	    #END ID
-	#LOAD
-	movl	%eax, -196(%ebp)
-	#END LOAD
-	#LOAD
-	movl	a, %eax
-	#END LOAD
-	cmpl	b, %eax
-	setne	%al
-	movzbl	%al, %eax
-	#END EQUAL
-	#END NOT EQUAL
-	    #ID
-	    #_operand = -4(%ebp)
-	    #END ID
-	movl	%eax, -4(%ebp)
+#register %ecx is empty
+#reg= %ecx
+	movl	b, %ecx
+	cmp	a, %ecx
+	setg	%cl
+	movzbl	%cl, %ecx
+	#END GREATER THAN
+	movl	%ecx, -4(%ebp)
 	  #END ASSIGNMENT
 	#CALL
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
+	movl	%eax, -281(%ebp)
+	movl	%ecx, -285(%ebp)
 	    #ID
-	    #_operand = -4(%ebp)
 	    #END ID
 	pushl	-4(%ebp)
 	    #ID
-	    #_operand = b
-	    #END ID
-	pushl	b
-	    #ID
-	    #_operand = a
 	    #END ID
 	pushl	a
+	    #ID
+	    #END ID
+	pushl	b
 	#ADDRESS
 	   #STRING
-	#LOAD
-	movl	%eax, -200(%ebp)
-	#END LOAD
+#register %eax is empty
 	leal	.L28, %eax
 	#END ADDRESS
 	pushl	%eax
@@ -1509,81 +1005,124 @@ main:
 	addl	$16, %esp
 	#END CALL
 	  #ASSIGNMENT
-	   #INT
-	   #_operand = $1
-	   #END INT
 	    #ID
-	    #_operand = a
 	    #END ID
-	movl	$1, a
-	  #END ASSIGNMENT
-	  #ASSIGNMENT
-	   #INT
-	   #_operand = $0
-	   #END INT
+	#LESS OR EQUAL
 	    #ID
-	    #_operand = b
-	    #END ID
-	movl	$0, b
-	  #END ASSIGNMENT
-	  #ASSIGNMENT
-	#OR
-	    #ID
-	    #_operand = a
 	    #END ID
 	    #ID
-	    #_operand = b
 	    #END ID
-	#LOAD
-	movl	%eax, -204(%ebp)
-	#END LOAD
-	#LOAD
-	movl	a, %eax
-	#END LOAD
-	cmpl	$0, %eax
-	jne	.L29
-	cmpl	$0, b
-	jne	.L29
-	#LOAD
-	movl	%eax, -208(%ebp)
-	#END LOAD
-	mov	$0, %eax
-	jmp	.L30
-.L29:
-	mov	$1, %eax
-.L30:
-	#END OR
-	    #ID
-	    #_operand = -4(%ebp)
-	    #END ID
-	movl	%eax, -4(%ebp)
+#register %ecx is empty
+#reg= %ecx
+	movl	a, %ecx
+	cmp	b, %ecx
+	setle	%cl
+	movzbl	%cl, %ecx
+	#END LESS OR EQUAL
+	movl	%ecx, -4(%ebp)
 	  #END ASSIGNMENT
 	#CALL
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
+	movl	%eax, -289(%ebp)
+	movl	%ecx, -293(%ebp)
 	    #ID
-	    #_operand = -4(%ebp)
 	    #END ID
 	pushl	-4(%ebp)
 	    #ID
-	    #_operand = b
 	    #END ID
 	pushl	b
 	    #ID
-	    #_operand = a
 	    #END ID
 	pushl	a
 	#ADDRESS
 	   #STRING
-	#LOAD
-	movl	%eax, -212(%ebp)
-	#END LOAD
+#register %eax is empty
+	leal	.L29, %eax
+	#END ADDRESS
+	pushl	%eax
+	call	printf
+	addl	$16, %esp
+	#END CALL
+	  #ASSIGNMENT
+	    #ID
+	    #END ID
+	   #INT
+	   #END INT
+#register %ecx is empty
+#reg= %ecx
+	movl	$21, %ecx
+	movl	%ecx, a
+	  #END ASSIGNMENT
+	  #ASSIGNMENT
+	    #ID
+	    #END ID
+	#LESS OR EQUAL
+	    #ID
+	    #END ID
+	    #ID
+	    #END ID
+#register %edx is empty
+#reg= %edx
+	movl	a, %edx
+	cmp	b, %edx
+	setle	%dl
+	movzbl	%dl, %edx
+	#END LESS OR EQUAL
+	movl	%edx, -4(%ebp)
+	  #END ASSIGNMENT
+	#CALL
+	movl	%eax, -297(%ebp)
+	movl	%ecx, -301(%ebp)
+	movl	%edx, -305(%ebp)
+	    #ID
+	    #END ID
+	pushl	-4(%ebp)
+	    #ID
+	    #END ID
+	pushl	b
+	    #ID
+	    #END ID
+	pushl	a
+	#ADDRESS
+	   #STRING
+#register %eax is empty
+	leal	.L30, %eax
+	#END ADDRESS
+	pushl	%eax
+	call	printf
+	addl	$16, %esp
+	#END CALL
+	  #ASSIGNMENT
+	    #ID
+	    #END ID
+	#GREATER OR EQUAL
+	    #ID
+	    #END ID
+	    #ID
+	    #END ID
+#register %ecx is empty
+#reg= %ecx
+	movl	a, %ecx
+	cmp	b, %ecx
+	setge	%cl
+	movzbl	%cl, %ecx
+	#END GREATER OR EQUAL
+	movl	%ecx, -4(%ebp)
+	  #END ASSIGNMENT
+	#CALL
+	movl	%eax, -309(%ebp)
+	movl	%ecx, -313(%ebp)
+	    #ID
+	    #END ID
+	pushl	-4(%ebp)
+	    #ID
+	    #END ID
+	pushl	b
+	    #ID
+	    #END ID
+	pushl	a
+	#ADDRESS
+	   #STRING
+#register %eax is empty
 	leal	.L31, %eax
 	#END ADDRESS
 	pushl	%eax
@@ -1591,236 +1130,266 @@ main:
 	addl	$16, %esp
 	#END CALL
 	  #ASSIGNMENT
-	   #INT
-	   #_operand = $0
-	   #END INT
 	    #ID
-	    #_operand = a
 	    #END ID
-	movl	$0, a
+	   #INT
+	   #END INT
+#register %ecx is empty
+#reg= %ecx
+	movl	$243, %ecx
+	movl	%ecx, b
 	  #END ASSIGNMENT
 	  #ASSIGNMENT
-	   #INT
-	   #_operand = $1
-	   #END INT
 	    #ID
-	    #_operand = b
 	    #END ID
-	movl	$1, b
-	  #END ASSIGNMENT
-	  #ASSIGNMENT
-	#OR
+	#GREATER OR EQUAL
 	    #ID
-	    #_operand = a
 	    #END ID
 	    #ID
-	    #_operand = b
 	    #END ID
-	#LOAD
-	movl	%eax, -216(%ebp)
-	#END LOAD
-	#LOAD
-	movl	a, %eax
-	#END LOAD
-	cmpl	$0, %eax
-	jne	.L32
-	cmpl	$0, b
-	jne	.L32
-	#LOAD
-	movl	%eax, -220(%ebp)
-	#END LOAD
-	mov	$0, %eax
-	jmp	.L33
-.L32:
-	mov	$1, %eax
-.L33:
-	#END OR
-	    #ID
-	    #_operand = -4(%ebp)
-	    #END ID
-	movl	%eax, -4(%ebp)
+#register %edx is empty
+#reg= %edx
+	movl	b, %edx
+	cmp	a, %edx
+	setge	%dl
+	movzbl	%dl, %edx
+	#END GREATER OR EQUAL
+	movl	%edx, -4(%ebp)
 	  #END ASSIGNMENT
 	#CALL
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
+	movl	%eax, -317(%ebp)
+	movl	%ecx, -321(%ebp)
+	movl	%edx, -325(%ebp)
 	    #ID
-	    #_operand = -4(%ebp)
 	    #END ID
 	pushl	-4(%ebp)
 	    #ID
-	    #_operand = b
-	    #END ID
-	pushl	b
-	    #ID
-	    #_operand = a
 	    #END ID
 	pushl	a
+	    #ID
+	    #END ID
+	pushl	b
 	#ADDRESS
 	   #STRING
-	#LOAD
-	movl	%eax, -224(%ebp)
-	#END LOAD
-	leal	.L34, %eax
+#register %eax is empty
+	leal	.L32, %eax
 	#END ADDRESS
 	pushl	%eax
 	call	printf
 	addl	$16, %esp
 	#END CALL
 	  #ASSIGNMENT
-	   #INT
-	   #_operand = $1
-	   #END INT
 	    #ID
-	    #_operand = a
 	    #END ID
-	movl	$1, a
+	   #INT
+	   #END INT
+#register %ecx is empty
+#reg= %ecx
+	movl	$345, %ecx
+	movl	%ecx, a
 	  #END ASSIGNMENT
 	  #ASSIGNMENT
-	#OR
 	    #ID
-	    #_operand = a
+	    #END ID
+	   #INT
+	   #END INT
+#register %edx is empty
+#reg= %edx
+	movl	$345, %edx
+	movl	%edx, b
+	  #END ASSIGNMENT
+	  #ASSIGNMENT
+	    #ID
+	    #END ID
+	#EQUAL
+	    #ID
 	    #END ID
 	    #ID
-	    #_operand = b
 	    #END ID
-	#LOAD
-	movl	%eax, -228(%ebp)
-	#END LOAD
-	#LOAD
+	movl	%eax, -329(%ebp)
+#reg= %eax
 	movl	a, %eax
-	#END LOAD
-	cmpl	$0, %eax
-	jne	.L35
-	cmpl	$0, b
-	jne	.L35
-	#LOAD
-	movl	%eax, -232(%ebp)
-	#END LOAD
-	mov	$0, %eax
-	jmp	.L36
-.L35:
-	mov	$1, %eax
-.L36:
-	#END OR
-	    #ID
-	    #_operand = -4(%ebp)
-	    #END ID
+	cmpl	b, %eax
+	sete	%al
+	movzbl	%al, %eax
+	#END EQUAL
 	movl	%eax, -4(%ebp)
 	  #END ASSIGNMENT
 	#CALL
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
+	movl	%eax, -333(%ebp)
+	movl	%ecx, -337(%ebp)
+	movl	%edx, -341(%ebp)
 	    #ID
-	    #_operand = -4(%ebp)
 	    #END ID
 	pushl	-4(%ebp)
 	    #ID
-	    #_operand = b
 	    #END ID
 	pushl	b
 	    #ID
-	    #_operand = a
 	    #END ID
 	pushl	a
 	#ADDRESS
 	   #STRING
-	#LOAD
-	movl	%eax, -236(%ebp)
-	#END LOAD
-	leal	.L37, %eax
+#register %eax is empty
+	leal	.L35, %eax
 	#END ADDRESS
 	pushl	%eax
 	call	printf
 	addl	$16, %esp
 	#END CALL
 	  #ASSIGNMENT
-	   #INT
-	   #_operand = $0
-	   #END INT
 	    #ID
-	    #_operand = a
 	    #END ID
-	movl	$0, a
+	   #INT
+	   #END INT
+#register %ecx is empty
+#reg= %ecx
+	movl	$366, %ecx
+	movl	%ecx, b
 	  #END ASSIGNMENT
 	  #ASSIGNMENT
-	   #INT
-	   #_operand = $0
-	   #END INT
 	    #ID
-	    #_operand = b
 	    #END ID
-	movl	$0, b
-	  #END ASSIGNMENT
-	  #ASSIGNMENT
-	#OR
+	#EQUAL
 	    #ID
-	    #_operand = a
 	    #END ID
 	    #ID
-	    #_operand = b
 	    #END ID
-	#LOAD
-	movl	%eax, -240(%ebp)
-	#END LOAD
-	#LOAD
-	movl	a, %eax
-	#END LOAD
-	cmpl	$0, %eax
-	jne	.L38
-	cmpl	$0, b
-	jne	.L38
-	#LOAD
-	movl	%eax, -244(%ebp)
-	#END LOAD
-	mov	$0, %eax
-	jmp	.L39
-.L38:
-	mov	$1, %eax
-.L39:
-	#END OR
-	    #ID
-	    #_operand = -4(%ebp)
-	    #END ID
-	movl	%eax, -4(%ebp)
+#register %edx is empty
+#reg= %edx
+	movl	a, %edx
+	cmpl	b, %edx
+	sete	%dl
+	movzbl	%dl, %edx
+	#END EQUAL
+	movl	%edx, -4(%ebp)
 	  #END ASSIGNMENT
 	#CALL
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
+	movl	%eax, -345(%ebp)
+	movl	%ecx, -349(%ebp)
+	movl	%edx, -353(%ebp)
 	    #ID
-	    #_operand = -4(%ebp)
 	    #END ID
 	pushl	-4(%ebp)
 	    #ID
-	    #_operand = b
 	    #END ID
 	pushl	b
 	    #ID
-	    #_operand = a
 	    #END ID
 	pushl	a
 	#ADDRESS
 	   #STRING
-	#LOAD
-	movl	%eax, -248(%ebp)
-	#END LOAD
+#register %eax is empty
+	leal	.L38, %eax
+	#END ADDRESS
+	pushl	%eax
+	call	printf
+	addl	$16, %esp
+	#END CALL
+	  #ASSIGNMENT
+	    #ID
+	    #END ID
+	   #INT
+	   #END INT
+#register %ecx is empty
+#reg= %ecx
+	movl	$21, %ecx
+	movl	%ecx, a
+	  #END ASSIGNMENT
+	  #ASSIGNMENT
+	    #ID
+	    #END ID
+	   #INT
+	   #END INT
+#register %edx is empty
+#reg= %edx
+	movl	$44, %edx
+	movl	%edx, b
+	  #END ASSIGNMENT
+	  #ASSIGNMENT
+	    #ID
+	    #END ID
+	#NOT EQUAL
+	    #ID
+	    #END ID
+	    #ID
+	    #END ID
+	movl	%eax, -357(%ebp)
+#reg= %eax
+	movl	a, %eax
+	cmpl	b, %eax
+	setne	%al
+	movzbl	%al, %eax
+	#END EQUAL
+	#END NOT EQUAL
+	movl	%eax, -4(%ebp)
+	  #END ASSIGNMENT
+	#CALL
+	movl	%eax, -361(%ebp)
+	movl	%ecx, -365(%ebp)
+	movl	%edx, -369(%ebp)
+	    #ID
+	    #END ID
+	pushl	-4(%ebp)
+	    #ID
+	    #END ID
+	pushl	b
+	    #ID
+	    #END ID
+	pushl	a
+	#ADDRESS
+	   #STRING
+#register %eax is empty
+	leal	.L39, %eax
+	#END ADDRESS
+	pushl	%eax
+	call	printf
+	addl	$16, %esp
+	#END CALL
+	  #ASSIGNMENT
+	    #ID
+	    #END ID
+	   #INT
+	   #END INT
+#register %ecx is empty
+#reg= %ecx
+	movl	$21, %ecx
+	movl	%ecx, b
+	  #END ASSIGNMENT
+	  #ASSIGNMENT
+	    #ID
+	    #END ID
+	#NOT EQUAL
+	    #ID
+	    #END ID
+	    #ID
+	    #END ID
+#register %edx is empty
+#reg= %edx
+	movl	a, %edx
+	cmpl	b, %edx
+	setne	%dl
+	movzbl	%dl, %edx
+	#END EQUAL
+	#END NOT EQUAL
+	movl	%edx, -4(%ebp)
+	  #END ASSIGNMENT
+	#CALL
+	movl	%eax, -373(%ebp)
+	movl	%ecx, -377(%ebp)
+	movl	%edx, -381(%ebp)
+	    #ID
+	    #END ID
+	pushl	-4(%ebp)
+	    #ID
+	    #END ID
+	pushl	b
+	    #ID
+	    #END ID
+	pushl	a
+	#ADDRESS
+	   #STRING
+#register %eax is empty
 	leal	.L40, %eax
 	#END ADDRESS
 	pushl	%eax
@@ -1828,207 +1397,406 @@ main:
 	addl	$16, %esp
 	#END CALL
 	  #ASSIGNMENT
-	#AND
 	    #ID
-	    #_operand = a
+	    #END ID
+	   #INT
+	   #END INT
+#register %ecx is empty
+#reg= %ecx
+	movl	$1, %ecx
+	movl	%ecx, a
+	  #END ASSIGNMENT
+	  #ASSIGNMENT
+	    #ID
+	    #END ID
+	   #INT
+	   #END INT
+#register %edx is empty
+#reg= %edx
+	movl	$0, %edx
+	movl	%edx, b
+	  #END ASSIGNMENT
+	  #ASSIGNMENT
+	    #ID
+	    #END ID
+	#OR
+	    #ID
 	    #END ID
 	    #ID
-	    #_operand = b
 	    #END ID
-	#LOAD
-	movl	%eax, -252(%ebp)
-	#END LOAD
-	#LOAD
+	movl	%eax, -385(%ebp)
+#reg= %eax
 	movl	a, %eax
-	#END LOAD
-	#LOAD
-	movl	%eax, -256(%ebp)
-	#END LOAD
-	#LOAD
-	movl	b, %eax
-	#END LOAD
-	andl	%eax, -256(%ebp)
-	cmp	$0, %eax
-	je	.L41
-	mov	$1, %eax
+	cmpl	$0, %eax
+	jne	.L41
+	cmpl	$0, b
+	jne	.L41
+	movl	%eax, -389(%ebp)
+	mov	$0, %eax
+	jmp	.L42
 .L41:
-	#END AND
-	    #ID
-	    #_operand = -4(%ebp)
-	    #END ID
-	movl	%eax, -4(%ebp)
-	  #END ASSIGNMENT
-	#CALL
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	    #ID
-	    #_operand = -4(%ebp)
-	    #END ID
-	pushl	-4(%ebp)
-	    #ID
-	    #_operand = b
-	    #END ID
-	pushl	b
-	    #ID
-	    #_operand = a
-	    #END ID
-	pushl	a
-	#ADDRESS
-	   #STRING
-	#LOAD
-	movl	%eax, -260(%ebp)
-	#END LOAD
-	leal	.L42, %eax
-	#END ADDRESS
-	pushl	%eax
-	call	printf
-	addl	$16, %esp
-	#END CALL
-	  #ASSIGNMENT
-	   #INT
-	   #_operand = $1
-	   #END INT
-	    #ID
-	    #_operand = a
-	    #END ID
-	movl	$1, a
-	  #END ASSIGNMENT
-	  #ASSIGNMENT
-	#AND
-	    #ID
-	    #_operand = a
-	    #END ID
-	    #ID
-	    #_operand = b
-	    #END ID
-	#LOAD
-	movl	%eax, -264(%ebp)
-	#END LOAD
-	#LOAD
-	movl	a, %eax
-	#END LOAD
-	#LOAD
-	movl	%eax, -268(%ebp)
-	#END LOAD
-	#LOAD
-	movl	b, %eax
-	#END LOAD
-	andl	%eax, -268(%ebp)
-	cmp	$0, %eax
-	je	.L43
 	mov	$1, %eax
-.L43:
-	#END AND
-	    #ID
-	    #_operand = -4(%ebp)
-	    #END ID
+.L42:
+	#END OR
 	movl	%eax, -4(%ebp)
 	  #END ASSIGNMENT
 	#CALL
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
+	movl	%eax, -393(%ebp)
+	movl	%ecx, -397(%ebp)
+	movl	%edx, -401(%ebp)
 	    #ID
-	    #_operand = -4(%ebp)
 	    #END ID
 	pushl	-4(%ebp)
 	    #ID
-	    #_operand = b
 	    #END ID
 	pushl	b
 	    #ID
-	    #_operand = a
 	    #END ID
 	pushl	a
 	#ADDRESS
 	   #STRING
-	#LOAD
-	movl	%eax, -272(%ebp)
-	#END LOAD
-	leal	.L44, %eax
+#register %eax is empty
+	leal	.L43, %eax
 	#END ADDRESS
 	pushl	%eax
 	call	printf
 	addl	$16, %esp
 	#END CALL
 	  #ASSIGNMENT
-	   #INT
-	   #_operand = $1
-	   #END INT
 	    #ID
-	    #_operand = b
 	    #END ID
-	movl	$1, b
+	   #INT
+	   #END INT
+#register %ecx is empty
+#reg= %ecx
+	movl	$0, %ecx
+	movl	%ecx, a
 	  #END ASSIGNMENT
 	  #ASSIGNMENT
-	#AND
 	    #ID
-	    #_operand = a
+	    #END ID
+	   #INT
+	   #END INT
+#register %edx is empty
+#reg= %edx
+	movl	$1, %edx
+	movl	%edx, b
+	  #END ASSIGNMENT
+	  #ASSIGNMENT
+	    #ID
+	    #END ID
+	#OR
+	    #ID
 	    #END ID
 	    #ID
-	    #_operand = b
 	    #END ID
-	#LOAD
-	movl	%eax, -276(%ebp)
-	#END LOAD
-	#LOAD
+	movl	%eax, -405(%ebp)
+#reg= %eax
 	movl	a, %eax
-	#END LOAD
-	#LOAD
-	movl	%eax, -280(%ebp)
-	#END LOAD
-	#LOAD
-	movl	b, %eax
-	#END LOAD
-	andl	%eax, -280(%ebp)
-	cmp	$0, %eax
-	je	.L45
+	cmpl	$0, %eax
+	jne	.L44
+	cmpl	$0, b
+	jne	.L44
+	movl	%eax, -409(%ebp)
+	mov	$0, %eax
+	jmp	.L45
+.L44:
 	mov	$1, %eax
 .L45:
-	#END AND
-	    #ID
-	    #_operand = -4(%ebp)
-	    #END ID
+	#END OR
 	movl	%eax, -4(%ebp)
 	  #END ASSIGNMENT
 	#CALL
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
+	movl	%eax, -413(%ebp)
+	movl	%ecx, -417(%ebp)
+	movl	%edx, -421(%ebp)
 	    #ID
-	    #_operand = -4(%ebp)
 	    #END ID
 	pushl	-4(%ebp)
 	    #ID
-	    #_operand = b
 	    #END ID
 	pushl	b
 	    #ID
-	    #_operand = a
 	    #END ID
 	pushl	a
 	#ADDRESS
 	   #STRING
-	#LOAD
-	movl	%eax, -284(%ebp)
-	#END LOAD
+#register %eax is empty
 	leal	.L46, %eax
+	#END ADDRESS
+	pushl	%eax
+	call	printf
+	addl	$16, %esp
+	#END CALL
+	  #ASSIGNMENT
+	    #ID
+	    #END ID
+	   #INT
+	   #END INT
+#register %ecx is empty
+#reg= %ecx
+	movl	$1, %ecx
+	movl	%ecx, a
+	  #END ASSIGNMENT
+	  #ASSIGNMENT
+	    #ID
+	    #END ID
+	#OR
+	    #ID
+	    #END ID
+	    #ID
+	    #END ID
+#register %edx is empty
+#reg= %edx
+	movl	a, %edx
+	cmpl	$0, %edx
+	jne	.L47
+	cmpl	$0, b
+	jne	.L47
+	movl	%eax, -425(%ebp)
+	mov	$0, %eax
+	jmp	.L48
+.L47:
+	mov	$1, %eax
+.L48:
+	#END OR
+	movl	%eax, -4(%ebp)
+	  #END ASSIGNMENT
+	#CALL
+	movl	%eax, -429(%ebp)
+	movl	%ecx, -433(%ebp)
+	movl	%edx, -437(%ebp)
+	    #ID
+	    #END ID
+	pushl	-4(%ebp)
+	    #ID
+	    #END ID
+	pushl	b
+	    #ID
+	    #END ID
+	pushl	a
+	#ADDRESS
+	   #STRING
+#register %eax is empty
+	leal	.L49, %eax
+	#END ADDRESS
+	pushl	%eax
+	call	printf
+	addl	$16, %esp
+	#END CALL
+	  #ASSIGNMENT
+	    #ID
+	    #END ID
+	   #INT
+	   #END INT
+#register %ecx is empty
+#reg= %ecx
+	movl	$0, %ecx
+	movl	%ecx, a
+	  #END ASSIGNMENT
+	  #ASSIGNMENT
+	    #ID
+	    #END ID
+	   #INT
+	   #END INT
+#register %edx is empty
+#reg= %edx
+	movl	$0, %edx
+	movl	%edx, b
+	  #END ASSIGNMENT
+	  #ASSIGNMENT
+	    #ID
+	    #END ID
+	#OR
+	    #ID
+	    #END ID
+	    #ID
+	    #END ID
+	movl	%eax, -441(%ebp)
+#reg= %eax
+	movl	a, %eax
+	cmpl	$0, %eax
+	jne	.L50
+	cmpl	$0, b
+	jne	.L50
+	movl	%eax, -445(%ebp)
+	mov	$0, %eax
+	jmp	.L51
+.L50:
+	mov	$1, %eax
+.L51:
+	#END OR
+	movl	%eax, -4(%ebp)
+	  #END ASSIGNMENT
+	#CALL
+	movl	%eax, -449(%ebp)
+	movl	%ecx, -453(%ebp)
+	movl	%edx, -457(%ebp)
+	    #ID
+	    #END ID
+	pushl	-4(%ebp)
+	    #ID
+	    #END ID
+	pushl	b
+	    #ID
+	    #END ID
+	pushl	a
+	#ADDRESS
+	   #STRING
+#register %eax is empty
+	leal	.L52, %eax
+	#END ADDRESS
+	pushl	%eax
+	call	printf
+	addl	$16, %esp
+	#END CALL
+	  #ASSIGNMENT
+	    #ID
+	    #END ID
+	#AND
+	    #ID
+	    #END ID
+	    #ID
+	    #END ID
+#register %ecx is empty
+#reg= %ecx
+	movl	a, %ecx
+#register %edx is empty
+#reg= %edx
+	movl	b, %edx
+	andl	%edx, %ecx
+	cmp	$0, %edx
+	je	.L53
+	mov	$1, %edx
+.L53:
+	#END AND
+	movl	%edx, -4(%ebp)
+	  #END ASSIGNMENT
+	#CALL
+	movl	%eax, -461(%ebp)
+	movl	%ecx, -465(%ebp)
+	movl	%edx, -469(%ebp)
+	    #ID
+	    #END ID
+	pushl	-4(%ebp)
+	    #ID
+	    #END ID
+	pushl	b
+	    #ID
+	    #END ID
+	pushl	a
+	#ADDRESS
+	   #STRING
+#register %eax is empty
+	leal	.L54, %eax
+	#END ADDRESS
+	pushl	%eax
+	call	printf
+	addl	$16, %esp
+	#END CALL
+	  #ASSIGNMENT
+	    #ID
+	    #END ID
+	   #INT
+	   #END INT
+#register %ecx is empty
+#reg= %ecx
+	movl	$1, %ecx
+	movl	%ecx, a
+	  #END ASSIGNMENT
+	  #ASSIGNMENT
+	    #ID
+	    #END ID
+	#AND
+	    #ID
+	    #END ID
+	    #ID
+	    #END ID
+#register %edx is empty
+#reg= %edx
+	movl	a, %edx
+	movl	%eax, -473(%ebp)
+#reg= %eax
+	movl	b, %eax
+	andl	%eax, %edx
+	cmp	$0, %eax
+	je	.L55
+	mov	$1, %eax
+.L55:
+	#END AND
+	movl	%eax, -4(%ebp)
+	  #END ASSIGNMENT
+	#CALL
+	movl	%eax, -477(%ebp)
+	movl	%ecx, -481(%ebp)
+	movl	%edx, -485(%ebp)
+	    #ID
+	    #END ID
+	pushl	-4(%ebp)
+	    #ID
+	    #END ID
+	pushl	b
+	    #ID
+	    #END ID
+	pushl	a
+	#ADDRESS
+	   #STRING
+#register %eax is empty
+	leal	.L56, %eax
+	#END ADDRESS
+	pushl	%eax
+	call	printf
+	addl	$16, %esp
+	#END CALL
+	  #ASSIGNMENT
+	    #ID
+	    #END ID
+	   #INT
+	   #END INT
+#register %ecx is empty
+#reg= %ecx
+	movl	$1, %ecx
+	movl	%ecx, b
+	  #END ASSIGNMENT
+	  #ASSIGNMENT
+	    #ID
+	    #END ID
+	#AND
+	    #ID
+	    #END ID
+	    #ID
+	    #END ID
+#register %edx is empty
+#reg= %edx
+	movl	a, %edx
+	movl	%eax, -489(%ebp)
+#reg= %eax
+	movl	b, %eax
+	andl	%eax, %edx
+	cmp	$0, %eax
+	je	.L57
+	mov	$1, %eax
+.L57:
+	#END AND
+	movl	%eax, -4(%ebp)
+	  #END ASSIGNMENT
+	#CALL
+	movl	%eax, -493(%ebp)
+	movl	%ecx, -497(%ebp)
+	movl	%edx, -501(%ebp)
+	    #ID
+	    #END ID
+	pushl	-4(%ebp)
+	    #ID
+	    #END ID
+	pushl	b
+	    #ID
+	    #END ID
+	pushl	a
+	#ADDRESS
+	   #STRING
+#register %eax is empty
+	leal	.L58, %eax
 	#END ADDRESS
 	pushl	%eax
 	call	printf
@@ -2036,11 +1804,10 @@ main:
 	#END CALL
 	#RETURN
 	   #INT
-	   #_operand = $0
 	   #END INT
-	#LOAD
+	movl	%eax, -505(%ebp)
+#reg= %eax
 	movl	$0, %eax
-	#END LOAD
 	jmp	.L0
 	#END RETURN
 .L0:
@@ -2052,41 +1819,51 @@ main:
 	popl	%ebx
 	pop	%ebp
 	ret
-	.set	main.size, 284
+	.set	main.size, 508
 	.globl	main
 #GLOBALS
 	.comm	a, 4
 	.comm	b, 4
+	.comm	aa, 16
 	.comm	d, 8
 #STRINGS
 .L1:	.asciz	"\n%d+%d=%d\n"
 .L2:	.asciz	"\n%d-%d=%d\n"
-.L3:	.asciz	"\n%d*%d=%d\n"
-.L4:	.asciz	"\n%d/%d=%d\n"
-.L5:	.asciz	"\n%d/50=%d\n"
-.L6:	.asciz	"\n%d/2=%d\n"
-.L7:	.asciz	"\n%d%%%d=%d\n"
-.L8:	.asciz	"\n%d%%%d=%d\n"
-.L9:	.asciz	"\n%d%%%d=%d\n"
-.L10:	.asciz	"\n-(%d)=%d\n"
-.L11:	.asciz	"\n!%d = %d\n"
-.L12:	.asciz	"\n!%d = %d\n"
-.L13:	.asciz	"\n%d < 10: %d\n"
-.L14:	.asciz	"\n%d < 90: %d\n"
-.L15:	.asciz	"\n%d > %d: %d\n"
-.L16:	.asciz	"\n%d > %d: %d\n"
-.L17:	.asciz	"\n%d <= %d: %d\n"
-.L18:	.asciz	"\n%d <= %d: %d\n"
-.L19:	.asciz	"\n%d >= %d: %d\n"
-.L20:	.asciz	"\n%d >= %d: %d\n"
-.L23:	.asciz	"\n%d == %d: %d\n"
-.L26:	.asciz	"\n%d == %d: %d\n"
-.L27:	.asciz	"\n%d != %d: %d\n"
-.L28:	.asciz	"\n%d != %d: %d\n"
-.L31:	.asciz	"\n%d or %d = %d\n"
-.L34:	.asciz	"\n%d or %d = %d\n"
-.L37:	.asciz	"\n%d or %d = %d\n"
-.L40:	.asciz	"\n%d or %d = %d\n"
-.L42:	.asciz	"\n%d && %d = %d\n"
-.L44:	.asciz	"\n%d && %d = %d\n"
-.L46:	.asciz	"\n%d && %d = %d\n"
+.L5:	.asciz	"\n%f * 69 = %f\n"
+.L6:	.asciz	"\n%d*%d=%d\n"
+.L7:	.asciz	"\n%d/%d=%d\n"
+.L8:	.asciz	"\n%d/50=%d\n"
+.L9:	.asciz	"\n%d/2=%d\n"
+.L10:	.asciz	"\n%d%%%d=%d\n"
+.L11:	.asciz	"\n%d%%%d=%d\n"
+.L12:	.asciz	"\n%d%%%d=%d\n"
+.L13:	.asciz	"\n-(%d)=%d\n"
+.L14:	.asciz	"\b-(%f)=%f\n"
+.L15:	.asciz	"\n!%d = %d\n"
+.L16:	.asciz	"\n!%d = %d\n"
+.L17:	.asciz	"\nvalue of a: %d\n"
+.L20:	.asciz	"\n%d\n"
+.L23:	.asciz	"\n%d != 0"
+.L24:	.asciz	"\n%d == 0"
+.L25:	.asciz	"\n%d < 10: %d\n"
+.L26:	.asciz	"\n%d < 90: %d\n"
+.L27:	.asciz	"\n%d > %d: %d\n"
+.L28:	.asciz	"\n%d > %d: %d\n"
+.L29:	.asciz	"\n%d <= %d: %d\n"
+.L30:	.asciz	"\n%d <= %d: %d\n"
+.L31:	.asciz	"\n%d >= %d: %d\n"
+.L32:	.asciz	"\n%d >= %d: %d\n"
+.L35:	.asciz	"\n%d == %d: %d\n"
+.L38:	.asciz	"\n%d == %d: %d\n"
+.L39:	.asciz	"\n%d != %d: %d\n"
+.L40:	.asciz	"\n%d != %d: %d\n"
+.L43:	.asciz	"\n%d or %d = %d\n"
+.L46:	.asciz	"\n%d or %d = %d\n"
+.L49:	.asciz	"\n%d or %d = %d\n"
+.L52:	.asciz	"\n%d or %d = %d\n"
+.L54:	.asciz	"\n%d && %d = %d\n"
+.L56:	.asciz	"\n%d && %d = %d\n"
+.L58:	.asciz	"\n%d && %d = %d\n"
+#REALS
+.L3:	.double	3.14
+.L4:	.double	69

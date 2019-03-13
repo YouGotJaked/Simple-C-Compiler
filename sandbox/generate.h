@@ -4,9 +4,12 @@
 
 void generateGlobals(const Symbols &globals);
 void generateStrings();
+void generateReals();
 void load(Expression *expr, Register *reg);
 void release();
 void assign(Expression *expr, Register *reg);
 void assignTemp(Expression *expr);
 std::string suffix(Expression *expr, bool isCast = false);
+Register *getRegister();
+Register *getFPRegister();
 Register *getCalleeRegister();

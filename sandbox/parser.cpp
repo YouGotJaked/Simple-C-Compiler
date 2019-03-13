@@ -949,6 +949,8 @@ int main()
 
     generateGlobals(globals);
     generateStrings();    
+    generateReals();
+
     closeScope();
     exit(EXIT_SUCCESS);
 }

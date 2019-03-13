@@ -14,8 +14,6 @@
 #define FP(expr)	( (expr)->type().isReal() )
 #define BYTE(expr)	( (expr)->type().size() == 1 )
 
-#define isNumber(expr)	( expr->_operand[0] == '$' )
-#define isRegister(expr)( expr->_register != nullptr)
 using std::cout;
 using std::endl;
 using std::string;
@@ -26,9 +24,31 @@ using std::reverse;
 using std::begin;
 using std::end;
 
+// Global variables
 static int tempOffset = 0;
 static vector<string> stringLabels;
+static vector<string> realLabels;
 static Label *returnLabel;
+
+// Registers
+static Register *eax = new Register("%eax", "%al");
+static Register *ebx = new Register("%ebx", "%bl");
+static Register *ecx = new Register("%ecx", "%cl");
+static Register *edx = new Register("%edx", "%dl");
+static Register *esi = new Register("%esi", "");
+static Register *edi = new Register("%edi", "");
+static Registers registers = { eax, ecx, edx };
+
+static Register *xmm0 = new Register("%xmm0");
+static Register *xmm1 = new Register("%xmm1");
+static Register *xmm2 = new Register("%xmm2");
+static Register *xmm3 = new Register("%xmm3");
+static Register *xmm4 = new Register("%xmm4");
+static Register *xmm5 = new Register("%xmm5");
+static Register *xmm6 = new Register("%xmm6");
+static Register *xmm7 = new Register("%xmm7");
+static Registers fp_registers = { xmm0, xmm1, xmm2, xmm3, xmm4, xmm5,
+                                           xmm6, xmm7 };
 
 // This needs to be zero if temporaries are placed on the stack
 #define SIMPLE_PROLOGUE 0
@@ -80,6 +100,13 @@ void generateStrings() {
     cout << "#STRINGS" << endl;
     for (auto const &str: stringLabels) {
 	cout << str << endl;
+    }
+}
+
+void generateReals() {
+    cout << "#REALS" << endl;
+    for (auto const &real: realLabels) {
+	cout << real << endl;
     }
 }
 
@@ -141,7 +168,7 @@ void Function::generate() {
     cout << "\t#PROLOGUE" << endl;
     cout << _id->name() << ":" << endl;
     cout << "\tpushl\t%ebp" << endl;
-
+    
     for (auto const &reg: callee_saved) {
 	cout << "\tpushl\t" << reg << endl;
     }
@@ -162,7 +189,7 @@ void Function::generate() {
     offset = tempOffset;
     cout << *returnLabel << ":" << endl;
     cout << "\t#END BODY" << endl;
-    
+   
     // epilogue
     cout << "\t#EPILOGUE" << endl;
     cout << "\tmovl\t%ebp, %esp" << endl;
@@ -173,6 +200,10 @@ void Function::generate() {
 
     cout << "\tpop\t%ebp" << endl;
     cout << "\tret" << endl;
+
+    // IMPLEMENT RETURN VALUE
+    // assign(this, eax) for int
+    
 
     if (!SIMPLE_PROLOGUE) {
 	offset -= align(offset - parameter_offset);
@@ -206,11 +237,11 @@ void Call::generate() {
 
     unsigned bytesPushed = 0;
 
-    Expressions temp = _args;
-    reverse(begin(temp), end(temp));
+    //Expressions temp = _args;
+    reverse(begin(_args), end(_args));
 
     // compute number of bytes that will be pushed onto the stack
-    for (auto const &arg: temp) {
+    for (auto const &arg: _args) {
 	bytesPushed += arg->type().size();
    
 	if (STACK_ALIGNMENT != 4 && arg->_hasCall) {
@@ -218,7 +249,7 @@ void Call::generate() {
 	}
     }
 
-    // empty registers
+    // spill registers
     for (auto const &reg: registers) {
 	load(nullptr, reg);
     }
@@ -230,11 +261,18 @@ void Call::generate() {
     }
 
     // push each argument onto the stack
-    for (auto const &arg: temp) {
+    for (auto const &arg: _args) {
 	if (STACK_ALIGNMENT == 4 || !arg->_hasCall) {
 	    arg->generate();
 	}
-	cout << "\tpushl\t" << arg << endl;
+	if (FP(arg)) {
+	    Register *temp = getFPRegister();
+	    cout << "\tmovsd\t" << arg << ", " << temp << endl;
+	    cout << "\tsubl\t$8, %esp" << endl;
+	    cout << "\tmovsd\t" << temp << ", (%esp)" << endl;
+	} else {
+	    cout << "\tpushl\t" << arg << endl;
+    	}
     }
 
     // call function
@@ -320,14 +358,39 @@ void If::generate() {
  * Function:    Assignment::generate
  *
  * Description: Generate code for simple assignments.
- *         Right hand side of assignment is always generated first.
  */
 void Assignment::generate() {
     cout << "\t  #ASSIGNMENT" << endl;
+    /*
     _right->generate();
     _left->generate();
-    
     cout << "\tmov" << suffix(_left) << _right << ", " << _left << endl;
+    */
+    if (_left->isDeref() == nullptr) {
+	_left->generate();
+    } else {
+	_left->isDeref()->generate();
+    }    
+	
+    _right->generate();
+   
+    if (_right->_register == nullptr) {
+	load(_right, FP(_right) ? getFPRegister() : getRegister());
+    }
+    
+    stringstream ss;
+
+    if (_left->isDeref() == nullptr) {
+	ss << _left;
+    } else {
+	if (_left->isDeref()->_register == nullptr) {
+	    load(_left->isDeref(), FP(_left->isDeref()) ? getFPRegister() : getRegister());
+	}
+	ss << "(" << _left->isDeref() << ")" << endl;
+    }
+
+    cout << "\tmov" << suffix(_left) << _right << ", " << ss.str() << endl;
+  
     cout << "\t  #END ASSIGNMENT" << endl;
 }
 
@@ -593,10 +656,11 @@ void Add::generate() {
     // generate code for both left and right child
     _left->generate();
     _right->generate();
-    
+   
+
     // if left child not in register, allocate and load it
     if (_left->_register == nullptr) {
-        load(_left, FP(_left) ? getFPRegister() : getRegister());
+	 load(_left, FP(_left) ? getFPRegister() : getRegister());
     }
     
     // perform operation
@@ -643,7 +707,12 @@ void Multiply::generate() {
 	load(_left, FP(_left) ? getFPRegister() : getRegister());
     }
 
-    cout << "\timul" << suffix(_left);
+    if (FP(_left)) {
+    	cout << "\tmul" << suffix(_left);
+    } else {
+	cout << "\timul" << suffix(_left);
+    }	
+    
     cout << _right << ", " << _left << endl;;
 
     assign(_right, nullptr);
@@ -658,36 +727,38 @@ void Divide::generate() {
     _left->generate();
     _right->generate();
 
-    load(_left, eax);
+    load(_left, FP(_left) ? getFPRegister() : eax);
  
-    Register *temp;
-    temp = CALLEE_SAVED ? getCalleeRegister() : getRegister();
-
     // integer division
     if (_right->type().isInteger()) {
 	cout << "\tcltd" << endl;
 	if (_right->_operand[0] == '$') {
-	    load(_right, temp);
-	    cout << "\tidivl\t" << temp << endl;
+	    load(_right, getRegister());
+	    cout << "\tidivl\t" << _right << endl;
 	} else {
 	    cout << "\tidivl\t" << _right << endl;
 	}
     }
     // floating-point division
     else {
-	cout << "\tcqto" << endl;
+	//cout << "\tcqto" << endl;
 	if (_right->_operand[0] == '$') {
-	    load(_right, temp);
-	    cout << "\tidivq\t" << temp << endl;
+	    load(_right, getFPRegister());
+	    cout << "\tdivsd\t" << _right << ", " << _left << endl;
 	} else {
-	    cout << "\tidivq\t" << _right << endl;
+	    cout << "\tdivsd\t" << _right << ", " << _left << endl;
     	}
     }
 
     assign(_right, nullptr);
-    assign(this, eax);
-    assign(nullptr, edx);
-    assign(nullptr, temp);
+    
+    if (FP(_left)) {
+	assign(this, _left->_register);
+    } else {
+    	assign(this, eax);
+    	assign(nullptr, edx);
+    }
+
     cout << "\t#END DIVIDE" << endl;
 }
 
@@ -712,7 +783,8 @@ void Remainder::generate() {
 	} else {
 	    cout << "\tidivl\t" << _right << endl;
     	}
-    }                                                                            // floating-point division
+    }
+    // floating-point division
     else {
 	cout << "\tcqto" << endl;
 	if (_right->_operand[0] == '$') {
@@ -734,22 +806,38 @@ void Remainder::generate() {
 // ##  PREFIX  ##
 // ##############
 
+/*
+ * Function:	Negate::generate
+ *
+ * Description:	Generates code for a negate expression.
+ */
 void Negate::generate() {
     cout << "\t#NEGATE" << endl;
 
     _expr->generate();
 
     if (_expr->_register == nullptr) {
-	load(_expr, getRegister());
+	load(_expr, FP(_expr) ? getFPRegister() : getRegister());
     }
 
-    cout << "\tneg" << suffix(_expr) << _expr << endl;
-
+    if (FP(_expr)) {
+	Register *zeroTemp = getFPRegister();
+	cout << "\tpxor\t" << zeroTemp << ", " << zeroTemp << endl;
+	cout << "\tsubsd\t" << zeroTemp << ", " << _expr << endl;
+    } else {
+	cout << "\tneg" << suffix(_expr) << _expr << endl;
+    }
     assign(this, _expr->_register);
 
     cout << "\t#END NEGATE" << endl;
 }
 
+/*
+ * Function:	Not::generate
+ *
+ * Description:	Generate code for a logical not expression.
+ * 		Given an expression E, !E is identical to 0 == E.
+ */
 void Not::generate() {
     cout << "\t#NOT" << endl;
 
@@ -759,8 +847,11 @@ void Not::generate() {
 	load(_expr, getRegister());
     }
 
-    cout << "\tnot" << suffix(_expr) << _expr << endl;
-
+    cout << "\tcmp" << suffix(_expr) << "$0, " << _expr << endl;
+    cout << "\tsete\t" << _expr->byteRegister() << endl;
+    cout << "\tmovzbl\t" << _expr->byteRegister();
+    cout << ", " << _expr->lwordRegister() << endl;
+ 
     assign(this, _expr->_register);
 
     cout << "\t#END NOT" << endl;
@@ -775,10 +866,17 @@ void Not::generate() {
  */
 void Address::generate() {
     cout << "\t#ADDRESS" << endl;
-    
+   
+    // for &*p 
     if (_expr->_operand == "*") {
 	return;
     } else {
+	if (_expr->isDeref() != nullptr) {
+	    _expr->isDeref()->generate();
+	    assign(this, _expr->isDeref()->_register);
+	    return;
+	}
+
 	_expr->generate();
 
 	if (_expr->_register != nullptr) {
@@ -786,8 +884,9 @@ void Address::generate() {
 	}
 
 	assign(this, getRegister());
+
         // address is always 32-bit long
-        cout << "\tleal\t" << _expr->_operand << ", " << this << endl;
+        cout << "\tleal\t" << _expr << ", " << this << endl;
     }
     cout << "\t#END ADDRESS" << endl;
 }
@@ -801,9 +900,11 @@ void Dereference::generate() {
 	load(_expr, getRegister());
     }
 
-    cout << "\tmov" << suffix(_expr) << "\t(" << _expr->_register << "), ";
+    cout << "\tmov" << suffix(_expr) << "(" << _expr->_register << "), ";
     cout << _expr->_register << endl;
+    
     assign(this, _expr->_register);
+    
     cout << "\t#END DEREFERENCE" << endl;
 }
 
@@ -817,19 +918,44 @@ void Cast::generate() {
 
     _expr->generate();
 
-    if (_expr->type().size() >= _type.size()) {
-	_operand = _expr->_operand;
-	assign(this, _expr->_register);
-    } else {
-        Register *temp = getRegister();
-        if (_expr->_operand[0] == '$') {
-            load(_expr, temp);
-        }
+    if (_expr->_register == nullptr) {
+	load(_expr, FP(_expr) ? getFPRegister() : getRegister());
+    }
 
-        cout << "\tmovs" << suffix(_expr,true) << suffix(this,true) << "\t";
-	cout << _expr << ", " << temp->name(_type.size()) << endl;
+    const Type &src = _expr->type(), &dest = _type;
 
-        assign(this, temp);
+    switch (src.size()) {
+	case 1:
+	    if (dest.size() == 1) {
+		assign(this, _expr->_register);
+	    	/* ... */
+	    } else if (dest.size() == 4) {
+	    	/* ... */
+	    } else { // dest.size() == 8
+		// sign extend into 32-bit integer register
+	    	/* ... */
+	    }
+	    break;
+	case 4:
+	    if (dest.size() == 1 || dest.size() == 4) {
+		assign(this, _expr->_register);
+	    } else { // dest.size() == 8
+		assign(this, getFPRegister());
+		cout << "\tcvtsi2sd\t" << _expr << ", " << this << endl;
+		assign(_expr, nullptr);
+	    }
+	    break;
+	case 8:
+ 	    if (dest.size() == 1) {
+		/* ... */	
+	    } else if (dest.size() == 4) {
+	    	cout << "\tcvttsd2si\t" << _expr << ", " << this << endl;
+	    	/* ... */
+	    } else {
+	    	assign(this, _expr->_register);
+	    	/* ... */
+	    } 
+	    break;
     }
 
     cout << "\t#END CAST" << endl;
@@ -842,15 +968,17 @@ void Cast::generate() {
 /*
  * Function:    Identifier::generate
  *
- * Description: Set _operand field. If offset is nonzero, operand is a parameter
- *         or local and set to the offset from the frame pointer.
- *         Otherwise, operand is global and set to the variable name.
+ * Description: Set _operand field. If offset is nonzero, operand is a 
+ * 		parameter or local and set to the offset from the frame 
+ * 		pointer. Otherwise, operand is global and set to the 
+ * 		variable name.
  */
 void Identifier::generate() {
     cout << "\t    #ID" << endl;
     int offset = _symbol->_offset;
+    //cout << "\t#offset=" << offset << endl;
     _operand = offset ? to_string(offset) + "(%ebp)" : _symbol->name();
-    cout << "\t    #_operand = " << _operand << endl;
+    //cout << "\t    #_operand = " << _operand << endl;
     cout << "\t    #END ID" << endl;
 }
 
@@ -862,13 +990,20 @@ void Identifier::generate() {
 void Integer::generate() {
     cout << "\t   #INT" << endl;
     _operand = "$" + value();
-    cout << "\t   #_operand = " << _operand << endl;
+    //cout << "\t   #_operand = " << _operand << endl;
     cout << "\t   #END INT" << endl;
 }
 
 void Real::generate() {
-    cout << "\t   #REAL" << endl;    
-    _operand = value();
+    cout << "\t   #REAL" << endl;
+
+    stringstream ss, temp;
+    Label realLabel;
+
+    ss << realLabel << ":\t.double\t" << value();
+    temp << realLabel;
+    _operand = temp.str();
+    realLabels.push_back(ss.str());
 }
 
 void String::generate() {
@@ -878,7 +1013,7 @@ void String::generate() {
     Label stringLabel;
 
     ss << stringLabel << ":\t.asciz\t" << value();
-    temp << stringLabel;;
+    temp << stringLabel;
     _operand = temp.str();
     stringLabels.push_back(ss.str());
 }
@@ -1094,6 +1229,7 @@ void release() {
  */
 void load(Expression *expr, Register *reg) {
     //cout << "\t#LOAD" << endl;
+    
     if (reg->_node != expr) {
         if (reg->_node != nullptr) {
 	    unsigned size = reg->_node->type().size();
@@ -1104,13 +1240,14 @@ void load(Expression *expr, Register *reg) {
         }
         
         if (expr != nullptr) {
-            unsigned size = expr->type().size();
-            cout << "\tmov" << suffix(expr) << expr;
+	    unsigned size = expr->type().size();
+	    cout << "\tmov" << suffix(expr) << expr;
             cout << ", " << reg->name(size) << endl;
         }
         
         assign(expr, reg);
     }
+    
     //cout << "\t#END LOAD" << endl;
 }
 
@@ -1168,6 +1305,47 @@ string suffix(Expression *expr, bool isCast) {
     return FP(expr) ? "sd\t" : (BYTE(expr) ? "b\t" : "l\t");
 }
 
+/*
+ * Function:    getRegister
+ * 
+ * Description: Return the first available register. If no registers are
+ *              available, spill the first register.
+ */
+Register *getRegister() {
+    for (auto const &reg: registers) {
+        if (reg->_node == nullptr) {
+            cout << "#register " << reg << " is empty" << endl;
+            return reg;
+        }
+    }
+    // spill first register so it's available
+    load(nullptr, registers[0]);
+    return registers[0];
+}
+
+/*
+ * Function:    getFPRegister
+ *
+ * Description: Return the first available floating-point register. The logic
+ *              of this function is the same as that of getRegister.
+ */
+Register *getFPRegister() {
+cout << "#calling getFPReg" << endl;
+    for (auto const &fp_reg: fp_registers) {
+	if (fp_reg->_node == nullptr) {
+	    return fp_reg;
+	}
+    }	
+
+    load(nullptr, fp_registers[0]);
+    return fp_registers[0];
+}
+
+/*
+ * Function:	getCalleeRegister
+ *
+ * Description:	Return the first available callee-saved register.
+ */
 Register *getCalleeRegister() {
     for (auto const &reg: callee_saved) {
 	if (reg->_node == nullptr) {

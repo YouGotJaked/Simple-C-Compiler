@@ -10,41 +10,34 @@ foo:
 	#BODY
 	 #BLOCK
 	  #ASSIGNMENT
+	    #ID
+	    #END ID
 	#ADD
 	    #ID
-	    #_operand = x
 	    #END ID
 	   #INT
-	   #_operand = $1
 	   #END INT
-#reg %eax is empty
-	#LOAD
+#register %eax is empty
+#reg= %eax
 	movl	x, %eax
-	#END LOAD
 	addl	$1, %eax
 	#END ADD
-	    #ID
-	    #_operand = x
-	    #END ID
 	movl	%eax, x
 	  #END ASSIGNMENT
 	#RETURN
 	#ADD
 	    #ID
-	    #_operand = x
 	    #END ID
 	   #INT
-	   #_operand = $1
 	   #END INT
-#reg %ebx is empty
-	#LOAD
-	movl	x, %ebx
-	#END LOAD
-	addl	$1, %ebx
+#register %ecx is empty
+#reg= %ecx
+	movl	x, %ecx
+	addl	$1, %ecx
 	#END ADD
-	#LOAD
-	movl	%ebx, %eax
-	#END LOAD
+	movl	%eax, -4(%ebp)
+#reg= %eax
+	movl	%ecx, %eax
 	jmp	.L0
 	#END RETURN
 .L0:
@@ -56,7 +49,7 @@ foo:
 	popl	%ebx
 	pop	%ebp
 	ret
-	.set	foo.size, 0
+	.set	foo.size, 4
 	.globl	foo
 #FUNCTION
 	#PROLOGUE
@@ -70,49 +63,26 @@ main:
 	#BODY
 	 #BLOCK
 	  #ASSIGNMENT
-	   #INT
-	   #_operand = $65
-	   #END INT
 	    #ID
-	    #_operand = x
 	    #END ID
-	movl	$65, x
+	   #INT
+	   #END INT
+#register %ecx is empty
+#reg= %ecx
+	movl	$65, %ecx
+	movl	%ecx, x
 	  #END ASSIGNMENT
 	#CALL
-	#LOAD
 	movl	%eax, -4(%ebp)
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
+	movl	%ecx, -8(%ebp)
 	    #ID
-	    #_operand = x
 	    #END ID
 	pushl	x
 	call	putchar
 	addl	$4, %esp
 	#END CALL
 	#CALL
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
 	#CALL
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
 	call	foo
 	#END CALL
 	pushl	
@@ -120,32 +90,14 @@ main:
 	addl	$4, %esp
 	#END CALL
 	#CALL
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
 	    #ID
-	    #_operand = x
 	    #END ID
 	pushl	x
 	call	putchar
 	addl	$4, %esp
 	#END CALL
 	#CALL
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
 	   #INT
-	   #_operand = $10
 	   #END INT
 	pushl	$10
 	call	putchar
@@ -160,8 +112,9 @@ main:
 	popl	%ebx
 	pop	%ebp
 	ret
-	.set	main.size, 4
+	.set	main.size, 8
 	.globl	main
 #GLOBALS
 	.comm	x, 4
 #STRINGS
+#REALS

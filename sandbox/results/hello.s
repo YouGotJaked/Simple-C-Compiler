@@ -10,17 +10,9 @@ main:
 	#BODY
 	 #BLOCK
 	#CALL
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
-	#LOAD
-	#END LOAD
 	#ADDRESS
 	   #STRING
-#reg %eax is empty
+#register %eax is empty
 	leal	.L1, %eax
 	#END ADDRESS
 	pushl	%eax
@@ -41,3 +33,4 @@ main:
 #GLOBALS
 #STRINGS
 .L1:	.asciz	"hello world\n"
+#REALS

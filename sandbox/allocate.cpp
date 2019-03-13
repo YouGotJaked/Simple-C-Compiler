@@ -15,6 +15,21 @@ using std::endl;
  *              always be a multiple of 4.
  */
 void Function::allocate(int &offset) {
+    Parameters *params;
+    Symbols symbols;
+
+
+    params = _id->type().parameters();
+    symbols = _body->declarations()->symbols();
+
+    for (unsigned i = 0; i < params->size(); i ++) {
+	symbols[i]->_offset = offset;
+	offset += (*params)[i].promote().size();
+    }
+
+    offset = 0;
+    _body->allocate(offset);
+	/*
     Symbol *param, *local;
     
     // first parameter offset is always 8
@@ -37,6 +52,7 @@ void Function::allocate(int &offset) {
         offset -= length * 4;
         local->_offset = offset;
     }
+	*/
 }
 
 void Block::allocate(int &offset) {
@@ -67,7 +83,8 @@ void If::allocate(int &offset) {
     int saved, temp;
     saved = offset;
     _thenStmt->allocate(offset);
-    if (_elseStmt != nullptr) {
+   
+     if (_elseStmt != nullptr) {
         temp = saved;
         _elseStmt->allocate(temp);
         offset = min(offset, temp);
