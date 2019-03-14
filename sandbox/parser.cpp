@@ -915,7 +915,6 @@ static void globalOrFunction()
 	    decls = closeScope();
 	    match('}');
 	   
-	    //generateGlobals(globals);
 	    function = new Function(symbol, new Block(decls, stmts));
 	    function->generate();
 	} else {

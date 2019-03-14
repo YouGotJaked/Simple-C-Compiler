@@ -1,4 +1,10 @@
 #FUNCTION
+#int	0
+#int	0
+#int **	0
+#off: 20
+#off: 0
+#off: 0
 	#PROLOGUE
 allocate:
 	pushl	%ebp
@@ -10,98 +16,30 @@ allocate:
 	#BODY
 	 #BLOCK
 	  #ASSIGNMENT
+#before 
 	    #ID
+	    #offset(i) = -4
 	    #END ID
+#after -4(%ebp)
 	   #INT
 	   #END INT
-#register %eax is empty
-#reg= %eax
-	movl	$0, %eax
-	movl	%eax, -4(%ebp)
+	movl	$0, %ebx
+	movl	%ebx, -4(%ebp)
 	  #END ASSIGNMENT
 	  #ASSIGNMENT
+#before 
 	    #ID
+	    #offset(a) = -8
 	    #END ID
+#after -8(%ebp)
 	#CAST
 	#CALL
-	movl	%eax, -24(%ebp)
 	#MULTIPLY
-	#fp=false
 	    #ID
+	    #offset(n) = 20
 	    #END ID
 	   #INT
 	   #END INT
-#register %eax is empty
-#reg= %eax
-	movl	20(%ebp), %eax
-	imull	$16, %eax
-	#END MULTIPLY
-	pushl	%eax
-	call	malloc
-	addl	$4, %esp
-	#END CALL
-#register %ecx is empty
-#reg= %ecx
-	movl	, %ecx
-	#END CAST
-#register %edx is empty
-#reg= %edx
-	movl	, %edx
-	movl	%edx, -20(%ebp)
-	  #END ASSIGNMENT
-	#WHILE
-.L1:
-	#EXPRESSION::TEST
-	#LESS THAN
-	    #ID
-	    #END ID
-	    #ID
-	    #END ID
-	movl	%eax, -28(%ebp)
-#reg= %eax
-	movl	-4(%ebp), %eax
-	cmp	20(%ebp), %eax
-	setl	%al
-	movzbl	%al, %eax
-	#END LESS THAN
-	cmpl	$0, %eax
-	je	.L2
-	 #BLOCK
-	  #ASSIGNMENT
-	#DEREFERENCE
-	#ADD
-	    #ID
-	    #END ID
-	#MULTIPLY
-	#fp=false
-	    #ID
-	    #END ID
-	   #INT
-	   #END INT
-#register %eax is empty
-#reg= %eax
-	movl	-4(%ebp), %eax
-	imull	$16, %eax
-	#END MULTIPLY
-	movl	%eax, -32(%ebp)
-#reg= %eax
-	movl	-20(%ebp), %eax
-	addl	-32(%ebp), %eax
-	#END ADD
-	movl	(%eax), %eax
-	#END DEREFERENCE
-	#CALL
-	movl	%eax, -48(%ebp)
-	movl	%ecx, -64(%ebp)
-	movl	%edx, -80(%ebp)
-	#MULTIPLY
-	#fp=false
-	    #ID
-	    #END ID
-	   #INT
-	   #END INT
-#register %eax is empty
-#reg= %eax
 	movl	20(%ebp), %eax
 	imull	$4, %eax
 	#END MULTIPLY
@@ -109,21 +47,77 @@ allocate:
 	call	malloc
 	addl	$4, %esp
 	#END CALL
-#register %ecx is empty
-#reg= %ecx
-	movl	, %ecx
-	movl	%ecx, -48(%ebp)
+	#LONG TO BYTE/LONG
+	#END CAST
+	movl	%eax, -8(%ebp)
 	  #END ASSIGNMENT
-	  #ASSIGNMENT
+	#WHILE
+.L1:
+	#EXPRESSION::TEST
+	#LESS THAN
 	    #ID
+	    #offset(i) = -4
 	    #END ID
+	    #ID
+	    #offset(n) = 20
+	    #END ID
+	movl	-4(%ebp), %ecx
+	cmp	20(%ebp), %ecx
+	setl	%cl
+	movzbl	%cl, %ecx
+	#END LESS THAN
+	cmpl	$0, %ecx
+	je	.L2
+	 #BLOCK
+	  #ASSIGNMENT
 	#ADD
 	    #ID
+	    #offset(a) = -8
+	    #END ID
+	#MULTIPLY
+	    #ID
+	    #offset(i) = -4
 	    #END ID
 	   #INT
 	   #END INT
-#register %edx is empty
-#reg= %edx
+	movl	-4(%ebp), %ecx
+	imull	$4, %ecx
+	#END MULTIPLY
+	movl	-8(%ebp), %edx
+	addl	%ecx, %edx
+	#END ADD
+	#CALL
+	movl	%eax, -12(%ebp)
+	movl	%edx, -16(%ebp)
+	#MULTIPLY
+	    #ID
+	    #offset(n) = 20
+	    #END ID
+	   #INT
+	   #END INT
+	movl	20(%ebp), %eax
+	imull	$4, %eax
+	#END MULTIPLY
+	pushl	%eax
+	call	malloc
+	addl	$4, %esp
+	#END CALL
+	movl	-16(%ebp), %ecx
+	movl	%eax, (%ecx)
+
+	  #END ASSIGNMENT
+	  #ASSIGNMENT
+#before 
+	    #ID
+	    #offset(i) = -4
+	    #END ID
+#after -4(%ebp)
+	#ADD
+	    #ID
+	    #offset(i) = -4
+	    #END ID
+	   #INT
+	   #END INT
 	movl	-4(%ebp), %edx
 	addl	$1, %edx
 	#END ADD
@@ -134,9 +128,9 @@ allocate:
 	#END WHILE
 	#RETURN
 	    #ID
+	    #offset(a) = -8
 	    #END ID
-#reg= %eax
-	movl	-20(%ebp), %eax
+	movl	-8(%ebp), %eax
 	jmp	.L0
 	#END RETURN
 .L0:
@@ -148,9 +142,17 @@ allocate:
 	popl	%ebx
 	pop	%ebp
 	ret
-	.set	allocate.size, 80
+	.set	allocate.size, 16
 	.globl	allocate
 #FUNCTION
+#int **	0
+#int	0
+#int	0
+#int	0
+#off: 20
+#off: 24
+#off: 0
+#off: 0
 	#PROLOGUE
 initialize:
 	pushl	%ebp
@@ -162,55 +164,57 @@ initialize:
 	#BODY
 	 #BLOCK
 	  #ASSIGNMENT
+#before 
 	    #ID
+	    #offset(i) = -4
 	    #END ID
+#after -4(%ebp)
 	   #INT
 	   #END INT
-#register %ecx is empty
-#reg= %ecx
-	movl	$0, %ecx
-	movl	%ecx, -4(%ebp)
+	movl	$0, %ebx
+	movl	%ebx, -4(%ebp)
 	  #END ASSIGNMENT
 	#WHILE
 .L4:
 	#EXPRESSION::TEST
 	#LESS THAN
 	    #ID
+	    #offset(i) = -4
 	    #END ID
 	    #ID
+	    #offset(n) = 24
 	    #END ID
-#register %edx is empty
-#reg= %edx
-	movl	-4(%ebp), %edx
-	cmp	36(%ebp), %edx
-	setl	%dl
-	movzbl	%dl, %edx
+	movl	-4(%ebp), %eax
+	cmp	24(%ebp), %eax
+	setl	%al
+	movzbl	%al, %eax
 	#END LESS THAN
-	cmpl	$0, %edx
+	cmpl	$0, %eax
 	je	.L5
 	 #BLOCK
 	  #ASSIGNMENT
+#before 
 	    #ID
+	    #offset(j) = -8
 	    #END ID
+#after -8(%ebp)
 	   #INT
 	   #END INT
-#register %edx is empty
-#reg= %edx
-	movl	$0, %edx
-	movl	%edx, -8(%ebp)
+	movl	$0, %esi
+	movl	%esi, -8(%ebp)
 	  #END ASSIGNMENT
 	#WHILE
 .L6:
 	#EXPRESSION::TEST
 	#LESS THAN
 	    #ID
+	    #offset(j) = -8
 	    #END ID
 	    #ID
+	    #offset(n) = 24
 	    #END ID
-	movl	%eax, -24(%ebp)
-#reg= %eax
 	movl	-8(%ebp), %eax
-	cmp	36(%ebp), %eax
+	cmp	24(%ebp), %eax
 	setl	%al
 	movzbl	%al, %eax
 	#END LESS THAN
@@ -218,88 +222,82 @@ initialize:
 	je	.L7
 	 #BLOCK
 	  #ASSIGNMENT
-	#DEREFERENCE
 	#ADD
 	#DEREFERENCE
 	#ADD
 	    #ID
+	    #offset(a) = 20
 	    #END ID
 	#MULTIPLY
-	#fp=false
 	    #ID
+	    #offset(i) = -4
 	    #END ID
 	   #INT
 	   #END INT
-#register %eax is empty
-#reg= %eax
 	movl	-4(%ebp), %eax
-	imull	$16, %eax
+	imull	$4, %eax
 	#END MULTIPLY
-	movl	%eax, -28(%ebp)
-#reg= %eax
-	movl	20(%ebp), %eax
-	addl	-28(%ebp), %eax
+	movl	20(%ebp), %ecx
+	addl	%eax, %ecx
 	#END ADD
-	movl	(%eax), %eax
+	movl	(%ecx), %ecx
 	#END DEREFERENCE
 	#MULTIPLY
-	#fp=false
 	    #ID
+	    #offset(j) = -8
 	    #END ID
 	   #INT
 	   #END INT
-	movl	%eax, -44(%ebp)
-#reg= %eax
 	movl	-8(%ebp), %eax
 	imull	$4, %eax
 	#END MULTIPLY
-	movl	%eax, -48(%ebp)
-#reg= %eax
-	movl	-44(%ebp), %eax
-	addl	-48(%ebp), %eax
+	addl	%eax, %ecx
 	#END ADD
-	movl	(%eax), %eax
-	#END DEREFERENCE
 	#ADD
 	    #ID
+	    #offset(i) = -4
 	    #END ID
 	    #ID
+	    #offset(j) = -8
 	    #END ID
-	movl	%eax, -52(%ebp)
-#reg= %eax
 	movl	-4(%ebp), %eax
 	addl	-8(%ebp), %eax
 	#END ADD
-	movl	%eax, -52(%ebp)
+	movl	%eax, (%ecx)
+
 	  #END ASSIGNMENT
 	  #ASSIGNMENT
+#before 
 	    #ID
+	    #offset(j) = -8
 	    #END ID
+#after -8(%ebp)
 	#ADD
 	    #ID
+	    #offset(j) = -8
 	    #END ID
 	   #INT
 	   #END INT
-	movl	%eax, -56(%ebp)
-#reg= %eax
-	movl	-8(%ebp), %eax
-	addl	$1, %eax
+	movl	-8(%ebp), %edx
+	addl	$1, %edx
 	#END ADD
-	movl	%eax, -8(%ebp)
+	movl	%edx, -8(%ebp)
 	  #END ASSIGNMENT
 	jmp	.L6
 .L7:
 	#END WHILE
 	  #ASSIGNMENT
+#before 
 	    #ID
+	    #offset(i) = -4
 	    #END ID
+#after -4(%ebp)
 	#ADD
 	    #ID
+	    #offset(i) = -4
 	    #END ID
 	   #INT
 	   #END INT
-#register %eax is empty
-#reg= %eax
 	movl	-4(%ebp), %eax
 	addl	$1, %eax
 	#END ADD
@@ -317,9 +315,19 @@ initialize:
 	popl	%ebx
 	pop	%ebp
 	ret
-	.set	initialize.size, 56
+	.set	initialize.size, 8
 	.globl	initialize
 #FUNCTION
+#int **	0
+#int	0
+#int	0
+#int	0
+#int *	0
+#off: 20
+#off: 24
+#off: 0
+#off: 0
+#off: 0
 	#PROLOGUE
 display:
 	pushl	%ebp
@@ -331,117 +339,115 @@ display:
 	#BODY
 	 #BLOCK
 	  #ASSIGNMENT
+#before 
 	    #ID
+	    #offset(i) = -4
 	    #END ID
+#after -4(%ebp)
 	   #INT
 	   #END INT
-#register %eax is empty
-#reg= %eax
-	movl	$0, %eax
-	movl	%eax, -4(%ebp)
+	movl	$0, %ebx
+	movl	%ebx, -4(%ebp)
 	  #END ASSIGNMENT
 	#WHILE
 .L9:
 	#EXPRESSION::TEST
 	#LESS THAN
 	    #ID
+	    #offset(i) = -4
 	    #END ID
 	    #ID
+	    #offset(n) = 24
 	    #END ID
-#register %ecx is empty
-#reg= %ecx
-	movl	-4(%ebp), %ecx
-	cmp	36(%ebp), %ecx
-	setl	%cl
-	movzbl	%cl, %ecx
+	movl	-4(%ebp), %eax
+	cmp	24(%ebp), %eax
+	setl	%al
+	movzbl	%al, %eax
 	#END LESS THAN
-	cmpl	$0, %ecx
+	cmpl	$0, %eax
 	je	.L10
 	 #BLOCK
 	  #ASSIGNMENT
+#before 
 	    #ID
+	    #offset(j) = -8
 	    #END ID
+#after -8(%ebp)
 	   #INT
 	   #END INT
-#register %ecx is empty
-#reg= %ecx
-	movl	$0, %ecx
-	movl	%ecx, -8(%ebp)
+	movl	$0, %esi
+	movl	%esi, -8(%ebp)
 	  #END ASSIGNMENT
 	#WHILE
 .L11:
 	#EXPRESSION::TEST
 	#LESS THAN
 	    #ID
+	    #offset(j) = -8
 	    #END ID
 	    #ID
+	    #offset(n) = 24
 	    #END ID
-#register %edx is empty
-#reg= %edx
-	movl	-8(%ebp), %edx
-	cmp	36(%ebp), %edx
-	setl	%dl
-	movzbl	%dl, %edx
+	movl	-8(%ebp), %eax
+	cmp	24(%ebp), %eax
+	setl	%al
+	movzbl	%al, %eax
 	#END LESS THAN
-	cmpl	$0, %edx
+	cmpl	$0, %eax
 	je	.L12
 	 #BLOCK
 	  #ASSIGNMENT
+#before 
 	    #ID
+	    #offset(p) = -12
 	    #END ID
+#after -12(%ebp)
 	#DEREFERENCE
 	#ADD
 	    #ID
+	    #offset(a) = 20
 	    #END ID
 	#MULTIPLY
-	#fp=false
 	    #ID
+	    #offset(i) = -4
 	    #END ID
 	   #INT
 	   #END INT
-#register %edx is empty
-#reg= %edx
-	movl	-4(%ebp), %edx
-	imull	$16, %edx
+	movl	-4(%ebp), %eax
+	imull	$4, %eax
 	#END MULTIPLY
-	movl	%eax, -28(%ebp)
-#reg= %eax
-	movl	20(%ebp), %eax
-	addl	%edx, %eax
+	movl	20(%ebp), %ecx
+	addl	%eax, %ecx
 	#END ADD
-	movl	(%eax), %eax
+	movl	(%ecx), %ecx
 	#END DEREFERENCE
-	movl	%eax, -24(%ebp)
+	movl	%ecx, -12(%ebp)
 	  #END ASSIGNMENT
 	#CALL
-	movl	%eax, -44(%ebp)
-	movl	%ecx, -48(%ebp)
+	movl	%ecx, -16(%ebp)
 	#DEREFERENCE
 	#ADD
 	    #ID
+	    #offset(p) = -12
 	    #END ID
 	#MULTIPLY
-	#fp=false
 	    #ID
+	    #offset(j) = -8
 	    #END ID
 	   #INT
 	   #END INT
-#register %eax is empty
-#reg= %eax
 	movl	-8(%ebp), %eax
 	imull	$4, %eax
 	#END MULTIPLY
-#register %ecx is empty
-#reg= %ecx
-	movl	-24(%ebp), %ecx
+	movl	-12(%ebp), %ecx
 	addl	%eax, %ecx
 	#END ADD
 	movl	(%ecx), %ecx
 	#END DEREFERENCE
 	pushl	%ecx
 	#ADDRESS
+	#operand = 
 	   #STRING
-#register %eax is empty
 	leal	.L13, %eax
 	#END ADDRESS
 	pushl	%eax
@@ -449,15 +455,17 @@ display:
 	addl	$8, %esp
 	#END CALL
 	  #ASSIGNMENT
+#before 
 	    #ID
+	    #offset(j) = -8
 	    #END ID
+#after -8(%ebp)
 	#ADD
 	    #ID
+	    #offset(j) = -8
 	    #END ID
 	   #INT
 	   #END INT
-#register %edx is empty
-#reg= %edx
 	movl	-8(%ebp), %edx
 	addl	$1, %edx
 	#END ADD
@@ -467,25 +475,27 @@ display:
 .L12:
 	#END WHILE
 	  #ASSIGNMENT
+#before 
 	    #ID
+	    #offset(i) = -4
 	    #END ID
+#after -4(%ebp)
 	#ADD
 	    #ID
+	    #offset(i) = -4
 	    #END ID
 	   #INT
 	   #END INT
-#register %eax is empty
-#reg= %eax
 	movl	-4(%ebp), %eax
 	addl	$1, %eax
 	#END ADD
 	movl	%eax, -4(%ebp)
 	  #END ASSIGNMENT
 	#CALL
-	movl	%eax, -52(%ebp)
+	movl	%eax, -20(%ebp)
 	#ADDRESS
+	#operand = 
 	   #STRING
-#register %eax is empty
 	leal	.L14, %eax
 	#END ADDRESS
 	pushl	%eax
@@ -504,9 +514,15 @@ display:
 	popl	%ebx
 	pop	%ebp
 	ret
-	.set	display.size, 52
+	.set	display.size, 20
 	.globl	display
 #FUNCTION
+#int **	0
+#int	0
+#int	0
+#off: 20
+#off: 24
+#off: 0
 	#PROLOGUE
 deallocate:
 	pushl	%ebp
@@ -518,52 +534,49 @@ deallocate:
 	#BODY
 	 #BLOCK
 	  #ASSIGNMENT
+#before 
 	    #ID
+	    #offset(i) = -4
 	    #END ID
+#after -4(%ebp)
 	   #INT
 	   #END INT
-#register %eax is empty
-#reg= %eax
-	movl	$0, %eax
-	movl	%eax, -4(%ebp)
+	movl	$0, %ebx
+	movl	%ebx, -4(%ebp)
 	  #END ASSIGNMENT
 	#WHILE
 .L16:
 	#EXPRESSION::TEST
 	#LESS THAN
 	    #ID
+	    #offset(i) = -4
 	    #END ID
 	    #ID
+	    #offset(n) = 24
 	    #END ID
-#register %ecx is empty
-#reg= %ecx
-	movl	-4(%ebp), %ecx
-	cmp	36(%ebp), %ecx
-	setl	%cl
-	movzbl	%cl, %ecx
+	movl	-4(%ebp), %eax
+	cmp	24(%ebp), %eax
+	setl	%al
+	movzbl	%al, %eax
 	#END LESS THAN
-	cmpl	$0, %ecx
+	cmpl	$0, %eax
 	je	.L17
 	 #BLOCK
 	#CALL
-	movl	%eax, -8(%ebp)
 	#DEREFERENCE
 	#ADD
 	    #ID
+	    #offset(a) = 20
 	    #END ID
 	#MULTIPLY
-	#fp=false
 	    #ID
+	    #offset(i) = -4
 	    #END ID
 	   #INT
 	   #END INT
-#register %eax is empty
-#reg= %eax
 	movl	-4(%ebp), %eax
-	imull	$16, %eax
+	imull	$4, %eax
 	#END MULTIPLY
-#register %ecx is empty
-#reg= %ecx
 	movl	20(%ebp), %ecx
 	addl	%eax, %ecx
 	#END ADD
@@ -571,32 +584,35 @@ deallocate:
 	#END DEREFERENCE
 	pushl	%ecx
 	call	free
-	addl	$16, %esp
+	addl	$4, %esp
 	#END CALL
 	  #ASSIGNMENT
+#before 
 	    #ID
+	    #offset(i) = -4
 	    #END ID
+#after -4(%ebp)
 	#ADD
 	    #ID
+	    #offset(i) = -4
 	    #END ID
 	   #INT
 	   #END INT
-#register %eax is empty
-#reg= %eax
-	movl	-4(%ebp), %eax
-	addl	$1, %eax
+	movl	-4(%ebp), %edx
+	addl	$1, %edx
 	#END ADD
-	movl	%eax, -4(%ebp)
+	movl	%edx, -4(%ebp)
 	  #END ASSIGNMENT
 	jmp	.L16
 .L17:
 	#END WHILE
 	#CALL
 	    #ID
+	    #offset(a) = 20
 	    #END ID
 	pushl	20(%ebp)
 	call	free
-	addl	$16, %esp
+	addl	$4, %esp
 	#END CALL
 .L15:
 	#END BODY
@@ -607,9 +623,13 @@ deallocate:
 	popl	%ebx
 	pop	%ebp
 	ret
-	.set	deallocate.size, 8
+	.set	deallocate.size, 4
 	.globl	deallocate
 #FUNCTION
+#int **	0
+#int	0
+#off: 0
+#off: 0
 	#PROLOGUE
 main:
 	pushl	%ebp
@@ -622,68 +642,78 @@ main:
 	 #BLOCK
 	#CALL
 	#ADDRESS
+	#operand = 
 	    #ID
+	    #offset(n) = -8
 	    #END ID
-#register %eax is empty
-	leal	-20(%ebp), %eax
+	leal	-8(%ebp), %eax
 	#END ADDRESS
 	pushl	%eax
 	#ADDRESS
+	#operand = 
 	   #STRING
-#register %ecx is empty
 	leal	.L19, %ecx
 	#END ADDRESS
 	pushl	%ecx
 	call	scanf
-	addl	$20, %esp
+	addl	$8, %esp
 	#END CALL
 	  #ASSIGNMENT
+#before 
 	    #ID
+	    #offset(a) = -4
 	    #END ID
+#after -4(%ebp)
 	#CALL
-	movl	%eax, -36(%ebp)
-	movl	%ecx, -40(%ebp)
+	movl	%eax, -12(%ebp)
+	movl	%ecx, -16(%ebp)
 	    #ID
+	    #offset(n) = -8
 	    #END ID
-	pushl	-20(%ebp)
+	pushl	-8(%ebp)
 	call	allocate
 	addl	$4, %esp
 	#END CALL
-#register %eax is empty
-#reg= %eax
-	movl	, %eax
-	movl	%eax, -16(%ebp)
+	movl	%eax, -4(%ebp)
 	  #END ASSIGNMENT
 	#CALL
-	movl	%eax, -56(%ebp)
+	movl	%eax, -20(%ebp)
 	    #ID
+	    #offset(n) = -8
 	    #END ID
-	pushl	-20(%ebp)
+	pushl	-8(%ebp)
 	    #ID
+	    #offset(a) = -4
 	    #END ID
-	pushl	-16(%ebp)
+	pushl	-4(%ebp)
 	call	initialize
-	addl	$20, %esp
+	addl	$8, %esp
 	#END CALL
 	#CALL
+	movl	%eax, -24(%ebp)
 	    #ID
+	    #offset(n) = -8
 	    #END ID
-	pushl	-20(%ebp)
+	pushl	-8(%ebp)
 	    #ID
+	    #offset(a) = -4
 	    #END ID
-	pushl	-16(%ebp)
+	pushl	-4(%ebp)
 	call	display
-	addl	$20, %esp
+	addl	$8, %esp
 	#END CALL
 	#CALL
+	movl	%eax, -28(%ebp)
 	    #ID
+	    #offset(n) = -8
 	    #END ID
-	pushl	-20(%ebp)
+	pushl	-8(%ebp)
 	    #ID
+	    #offset(a) = -4
 	    #END ID
-	pushl	-16(%ebp)
+	pushl	-4(%ebp)
 	call	deallocate
-	addl	$20, %esp
+	addl	$8, %esp
 	#END CALL
 .L18:
 	#END BODY
@@ -694,7 +724,7 @@ main:
 	popl	%ebx
 	pop	%ebp
 	ret
-	.set	main.size, 56
+	.set	main.size, 28
 	.globl	main
 #GLOBALS
 #STRINGS

@@ -49,7 +49,7 @@ public:
     virtual ~Node() {}
     virtual void generate() {}
     virtual void write(ostream &ostr) const = 0;
-    virtual void allocate(int &offset) { }
+    virtual void allocate(int &offset) const { }
 };
 
 
@@ -80,7 +80,7 @@ public:
     const string &byteRegister() const;
     const string &lwordRegister() const;
     const string &owordRegister() const;
-    Expression *isDeref() { return nullptr; }
+    virtual Expression *isDeref() { return nullptr; }
 };
 
 std::ostream &operator <<(std::ostream &out, Expression *expr);
@@ -197,7 +197,7 @@ public:
     Dereference(Expression *expr, const Type &type);
     virtual void write(ostream &ostr) const;
     virtual void generate();
-    Expression *isDeref() { return _expr; }
+    virtual Expression *isDeref() { return _expr; }
 };
 
 
@@ -394,7 +394,7 @@ public:
     Scope *declarations() const;
     virtual void write(ostream &ostr) const;
     virtual void generate();
-    virtual void allocate(int &offset);
+    virtual void allocate(int &offset) const;
 };
 
 
@@ -408,7 +408,7 @@ public:
     While(Expression *expr, Statement *stmt);
     virtual void write(ostream &ostr) const;
     virtual void generate();
-    virtual void allocate(int &offset);
+    virtual void allocate(int &offset) const;
 };
 
 
@@ -422,7 +422,7 @@ public:
     If(Expression *expr, Statement *thenStmt, Statement *elseStmt);
     virtual void write(ostream &ostr) const;
     virtual void generate();
-    virtual void allocate(int &offset);
+    virtual void allocate(int &offset) const;
     //void test(const Label &label, bool ifTrue);
 };
 
@@ -437,9 +437,7 @@ public:
     Function(const Symbol *id, Block *body);
     virtual void write(ostream &ostr) const;
     virtual void generate();
-    virtual void allocate(int &offset);
-    void prologue(const int &offset);
-    void epilogue();
+    virtual void allocate(int &offset) const;
 };
 
 # endif /* TREE_H */

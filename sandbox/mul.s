@@ -10,72 +10,92 @@ main:
 	#BODY
 	 #BLOCK
 	  #ASSIGNMENT
+#before 
 	    #ID
+	    #offset=0
 	    #END ID
+#after c
 	   #REAL
-#calling getFPReg
 	movsd	.L1, %xmm0
 	movsd	%xmm0, c
 	  #END ASSIGNMENT
 	  #ASSIGNMENT
+#before 
 	    #ID
+	    #offset=0
 	    #END ID
+#after d
 	   #REAL
-#calling getFPReg
 	movsd	.L2, %xmm1
 	movsd	%xmm1, d
 	  #END ASSIGNMENT
 	  #ASSIGNMENT
+#before 
 	    #ID
+	    #offset=0
 	    #END ID
+#after out
+	#MULTIPLY
+	#MULTIPLY
 	#MULTIPLY
 	    #ID
+	    #offset=0
 	    #END ID
 	    #ID
+	    #offset=0
 	    #END ID
-#calling getFPReg
 	movsd	c, %xmm2
 	mulsd	d, %xmm2
+	#END MULTIPLY
+	   #REAL
+	mulsd	.L3, %xmm2
+	#END MULTIPLY
+	   #REAL
+	mulsd	.L4, %xmm2
 	#END MULTIPLY
 	movsd	%xmm2, out
 	  #END ASSIGNMENT
 	#CALL
 	    #ID
+	    #offset=0
 	    #END ID
-#calling getFPReg
 	movsd	out, %xmm3
 	subl	$8, %esp
 	movsd	%xmm3, (%esp)
 	    #ID
+	    #offset=0
 	    #END ID
-#calling getFPReg
 	movsd	d, %xmm3
 	subl	$8, %esp
 	movsd	%xmm3, (%esp)
 	    #ID
+	    #offset=0
 	    #END ID
-#calling getFPReg
 	movsd	c, %xmm3
 	subl	$8, %esp
 	movsd	%xmm3, (%esp)
 	#ADDRESS
+	#operand = 
 	   #STRING
-#register %eax is empty
-	leal	.L3, %eax
+	leal	.L5, %eax
 	#END ADDRESS
 	pushl	%eax
 	call	printf
 	addl	$28, %esp
 	#END CALL
 	  #ASSIGNMENT
+#before 
 	    #ID
+	    #offset=0
 	    #END ID
+#after out
 	#DIVIDE
 	    #ID
+	    #offset=0
 	    #END ID
 	    #ID
+	    #offset=0
 	    #END ID
-#calling getFPReg
 	movsd	c, %xmm3
 	divsd	d, %xmm3
 	#END DIVIDE
@@ -84,27 +104,27 @@ main:
 	#CALL
 	movl	%eax, -4(%ebp)
 	    #ID
+	    #offset=0
 	    #END ID
-#calling getFPReg
 	movsd	out, %xmm4
 	subl	$8, %esp
 	movsd	%xmm4, (%esp)
 	    #ID
+	    #offset=0
 	    #END ID
-#calling getFPReg
 	movsd	d, %xmm4
 	subl	$8, %esp
 	movsd	%xmm4, (%esp)
 	    #ID
+	    #offset=0
 	    #END ID
-#calling getFPReg
 	movsd	c, %xmm4
 	subl	$8, %esp
 	movsd	%xmm4, (%esp)
 	#ADDRESS
+	#operand = 
 	   #STRING
-#register %eax is empty
-	leal	.L4, %eax
+	leal	.L6, %eax
 	#END ADDRESS
 	pushl	%eax
 	call	printf
@@ -126,8 +146,10 @@ main:
 	.comm	d, 8
 	.comm	out, 8
 #STRINGS
-.L3:	.asciz	"\n%f * %f = %f\n"
-.L4:	.asciz	"\n%f / %f = %f\n"
+.L5:	.asciz	"\n%f * %f = %f\n"
+.L6:	.asciz	"\n%f / %f = %f\n"
 #REALS
 .L1:	.double	2.2
 .L2:	.double	2.0
+.L3:	.double	234.345345
+.L4:	.double	323

@@ -13,6 +13,7 @@
 #define PARAM_OFFSET 8
 #define FP(expr)	( (expr)->type().isReal() )
 #define BYTE(expr)	( (expr)->type().size() == 1 )
+#define IMM(expr)	( (expr)->_operand[0] == '$' )
 
 using std::cout;
 using std::endl;
@@ -111,33 +112,6 @@ void generateReals() {
 }
 
 /*
- * Function:	Function::prologue
- *
- * Description:	Generate code for the prologue of a function.
- */
-void Function::prologue(const int &offset) {
-    cout << "\t#PROLOGUE" << endl;
-    cout << _id->name() << ":" << endl;
-    returnLabel = new Label();
-    cout << *returnLabel << ":" << endl;
-    cout << "\tpushl\t%ebp" << endl;
-    cout << "\tmovl\t%esp, %ebp" << endl;
-    cout << "\tsubl\t$" << -offset << ", %esp" << endl;
-}
-
-/*
- * Function:	Function::epilogue
- *
- * Description:	Generate code for the epilogue of a function.
- */
-void Function::epilogue() {
-    cout << "\t#EPILOGUE" << endl;
-    cout << "\tmovl\t%ebp, %esp" << endl;
-    cout << "\tpopl\t%ebp" << endl;
-    cout << "\tret" << endl;
-}
-
-/*
  * Function:	Function::generate
  *
  * Description: Generate code for statements.
@@ -162,6 +136,7 @@ void Function::generate() {
 
     parameter_offset = PARAM_OFFSET + SIZEOF_REG * callee_saved.size();
     offset = parameter_offset;
+
     allocate(offset);
 
     // prologue
@@ -201,10 +176,6 @@ void Function::generate() {
     cout << "\tpop\t%ebp" << endl;
     cout << "\tret" << endl;
 
-    // IMPLEMENT RETURN VALUE
-    // assign(this, eax) for int
-    
-
     if (!SIMPLE_PROLOGUE) {
 	offset -= align(offset - parameter_offset);
 	cout << "\t.set\t" << _id->name() << ".size, " << -offset << endl;
@@ -224,6 +195,7 @@ void Block::generate() {
     for (auto const &stmt: _stmts) {
         stmt->generate();
     }
+    release();
 }
 
 /*
@@ -278,6 +250,9 @@ void Call::generate() {
     // call function
     cout << "\tcall\t" << _id->name() << endl;
 
+    // assign return value to register
+    assign(this, _id->type().isRealFunction() ? xmm0 : eax);
+
     // reclaim space of arguments pushed onto stack
     if (bytesPushed > 0) {
 	cout << "\taddl\t$" << bytesPushed << ", %esp" << endl;
@@ -300,7 +275,13 @@ void Return::generate() {
     cout << "\t#RETURN" << endl;
 
     _expr->generate();
-    load(_expr, eax);
+    
+    if (FP(_expr)) {
+	load(_expr, xmm0);
+    } else {	
+    	load(_expr, eax);
+    }
+
     cout << "\tjmp\t" << *returnLabel << endl;
 
     cout << "\t#END RETURN" << endl;
@@ -349,8 +330,10 @@ void If::generate() {
     	cout << skip << ":" << endl;
 	_elseStmt->generate();
     	cout << exit << ":" << endl;
-    } 
-    
+    }
+ 
+    release();    
+
     cout << "\t#END IF" << endl;
 }
 
@@ -361,13 +344,11 @@ void If::generate() {
  */
 void Assignment::generate() {
     cout << "\t  #ASSIGNMENT" << endl;
-    /*
-    _right->generate();
-    _left->generate();
-    cout << "\tmov" << suffix(_left) << _right << ", " << _left << endl;
-    */
+    
     if (_left->isDeref() == nullptr) {
+	cout << "#before " << _left << endl;
 	_left->generate();
+	cout << "#after " << _left << endl;
     } else {
 	_left->isDeref()->generate();
     }    
@@ -375,7 +356,7 @@ void Assignment::generate() {
     _right->generate();
    
     if (_right->_register == nullptr) {
-	load(_right, FP(_right) ? getFPRegister() : getRegister());
+	load(_right, FP(_right) ? getFPRegister() : CALLEE_SAVED ? getCalleeRegister() : getRegister());
     }
     
     stringstream ss;
@@ -428,18 +409,7 @@ void LogicalAnd::generate() {
     cout << "\tje\t" << label << endl;
     cout << "\tmov\t$1, " << temp << endl;
     cout << label << ":" << endl;
-    //cout << "\tmov\t$1, " << temp << nedl;
-	/*
-    _left->test(left, false);
-    _right->test(left, false);
-
-    Register *temp = getRegister();
-    cout << "\tmov\t$0, " << temp << endl;
-    cout << "\tjmp\t" << right << endl;
-    cout << left << ":" << endl;
-    cout << "\tmov\t$1, " << temp << endl;
-    cout << right << ":" << endl;
-	*/
+	
     assign(this, temp);
 	
     cout << "\t#END AND" << endl;
@@ -447,32 +417,12 @@ void LogicalAnd::generate() {
 
 void LogicalOr::generate() {
     cout << "\t#OR" << endl;
-/*
-    Label label;
-
-    _left->generate();
-    _right->generate();
-
-    if (_left->_register == nullptr) {
-	load(_left, getRegister());
-    }
-
-    Register *temp;
-    temp = CALLEE_SAVED ? getCalleeRegister() : getRegister();
-    load(_right, temp);
-    cout << "\torl\t" << temp << ", " << _left << endl;
-    cout << "\tcmp\t$0, " << temp << endl;
-    cout << "\tje\t" << label << endl;
-    cout << "\tmov\t$1, " << temp << endl;
-    cout << label << ":" << endl;
-    */
+    
     Label L1, L2;
 
     // generate left side
     // compare to 0
     // jump to L1 if not 0
-    ///_left->test(L1, true);
-    //_right->test(L1, true);
     _left->generate();
     _right->generate();
 
@@ -490,7 +440,6 @@ void LogicalOr::generate() {
     cout << "\tcmpl\t$0, " << _right << endl;
     cout << "\tjne\t" << L1 << endl;
     
-
     // else
     //     result = 0
     Register *temp = getRegister();
@@ -515,8 +464,6 @@ void Equal::generate() {
 
     _left->generate();
     _right->generate();
-    //_left->test(left, true);
-    //_right->test(right, true);
 
     if (_left->_register == nullptr) {
 	load(_left, getRegister());
@@ -649,7 +596,6 @@ void GreaterThan::generate() {
  *
  * Description: Generate code for an add expression.
  */
-// DO NOT MODIFY
 void Add::generate() {
     cout << "\t#ADD" << endl;
     
@@ -732,7 +678,7 @@ void Divide::generate() {
     // integer division
     if (_right->type().isInteger()) {
 	cout << "\tcltd" << endl;
-	if (_right->_operand[0] == '$') {
+	if (IMM(_right)) {
 	    load(_right, getRegister());
 	    cout << "\tidivl\t" << _right << endl;
 	} else {
@@ -742,7 +688,7 @@ void Divide::generate() {
     // floating-point division
     else {
 	//cout << "\tcqto" << endl;
-	if (_right->_operand[0] == '$') {
+	if (IMM(_right)) {
 	    load(_right, getFPRegister());
 	    cout << "\tdivsd\t" << _right << ", " << _left << endl;
 	} else {
@@ -762,6 +708,12 @@ void Divide::generate() {
     cout << "\t#END DIVIDE" << endl;
 }
 
+/*
+ * Function:	Remainder::generate
+ *
+ * Description:	Generates code for a remainder expression.
+ * 		Does not work with floating-point types.
+ */
 void Remainder::generate() {
     cout << "\t#REMAINDER" << endl;
 
@@ -770,35 +722,23 @@ void Remainder::generate() {
 
     load(_left, eax);
 
-    Register *temp;
-    temp = CALLEE_SAVED ? getCalleeRegister() : getRegister();
-    cout << "#temp=" << temp << endl; 
-    
-    //integer division
+    Register *temp = getRegister();
+
+    //integer remainder
     if (_right->type().isInteger()) {
 	cout << "\tcltd" << endl;
-        if (_right->_operand[0] == '$') {
+        if (IMM(_right)) {
 	    load(_right, temp);
      	    cout << "\tidivl\t" << temp << endl;
 	} else {
 	    cout << "\tidivl\t" << _right << endl;
     	}
     }
-    // floating-point division
-    else {
-	cout << "\tcqto" << endl;
-	if (_right->_operand[0] == '$') {
-            load(_right, temp);
-	    cout << "\tidivq\t" << temp << endl;
-        } else {
-            cout << "\tidivq\t" << _right << endl;
-    	}
-    }
     
     assign(_right, nullptr);
     assign(this, edx);
-    assign(nullptr, eax);
-    assign(nullptr, temp); 
+    assign(nullptr, eax); 
+
     cout << "\t#END REMAINDER" << endl;
 }
 
@@ -823,10 +763,12 @@ void Negate::generate() {
     if (FP(_expr)) {
 	Register *zeroTemp = getFPRegister();
 	cout << "\tpxor\t" << zeroTemp << ", " << zeroTemp << endl;
-	cout << "\tsubsd\t" << zeroTemp << ", " << _expr << endl;
+	cout << "\tsubsd\t" << _expr << ", " << zeroTemp << endl;
+	cout << "\tmovsd\t" << zeroTemp << ", " << _expr << endl;
     } else {
 	cout << "\tneg" << suffix(_expr) << _expr << endl;
     }
+
     assign(this, _expr->_register);
 
     cout << "\t#END NEGATE" << endl;
@@ -861,34 +803,42 @@ void Not::generate() {
  * Function:	Address:generate
  *
  * Description:	Generate code for an address expression.
- * 		If the operand is *, do nothing.
+ * 		If the operand is a dereference, assign operand location and register.
  * 		If the operand is ID, use LEA instruction to load address.
  */
 void Address::generate() {
     cout << "\t#ADDRESS" << endl;
-   
+    cout << "\t#operand = " << _expr->_operand << endl; 
+    
     // for &*p 
-    if (_expr->_operand == "*") {
-	return;
-    } else {
-	if (_expr->isDeref() != nullptr) {
-	    _expr->isDeref()->generate();
+    if (_expr->isDeref() != nullptr) {
+	_expr->isDeref()->generate();
+	_operand = _expr->isDeref()->_operand;
+	if (_expr->isDeref()->_register != nullptr) {
 	    assign(this, _expr->isDeref()->_register);
-	    return;
 	}
-
-	_expr->generate();
-
-	if (_expr->_register != nullptr) {
-	    assign(this, _expr->_register);
-	}
-
-	assign(this, getRegister());
-
-        // address is always 32-bit long
-        cout << "\tleal\t" << _expr << ", " << this << endl;
+	return;
     }
-    cout << "\t#END ADDRESS" << endl;
+
+    _expr->generate();
+
+    if (_expr->_register != nullptr) {
+	assign(this, _expr->_register);
+    }
+
+    assign(this, getRegister());
+  
+        // address is always 32-bit long
+        /*
+	if (_expr->_operand == "") { // otherwise, _expr is empty
+	    assign(_expr, getRegister());	   
+	    cout << "\tleal\t(" << _expr << "), " << this << endl;
+	} else { 
+	    cout << "\tleal\t" << _expr << ", " << this << endl;
+   	}*/
+   cout << "\tleal\t" << _expr << ", " << this << endl;
+ 
+   cout << "\t#END ADDRESS" << endl;
 }
 
 void Dereference::generate() {
@@ -897,14 +847,13 @@ void Dereference::generate() {
     _expr->generate();
 
     if (_expr->_register == nullptr) {
-	load(_expr, getRegister());
+	load(_expr, FP(_expr) ? getFPRegister() : getRegister());
     }
 
-    cout << "\tmov" << suffix(_expr) << "(" << _expr->_register << "), ";
-    cout << _expr->_register << endl;
+    cout << "\tmov" << suffix(_expr) << "(" << _expr << "), " << _expr << endl;
     
     assign(this, _expr->_register);
-    
+ 
     cout << "\t#END DEREFERENCE" << endl;
 }
 
@@ -926,20 +875,31 @@ void Cast::generate() {
 
     switch (src.size()) {
 	case 1:
-	    if (dest.size() == 1) {
+	    if (dest.size() == 1) { // byte to byte
+		cout << "\t#BYTE TO BYTE" << endl;
 		assign(this, _expr->_register);
-	    	/* ... */
-	    } else if (dest.size() == 4) {
-	    	/* ... */
-	    } else { // dest.size() == 8
-		// sign extend into 32-bit integer register
-	    	/* ... */
+		assign(_expr, nullptr);
+	    } else if (dest.size() == 4) { // byte to long
+		cout << "\t#BYTE TO LONG" << endl;
+		assign(this, getRegister());
+		cout << "\tmovsx\t" << _expr << ", " << this << endl;
+		assign(_expr, nullptr);    	
+	    } else { // byte to fp
+		cout << "\t#BYTE TO FP" << endl;
+		Register *temp = getRegister();
+		assign(this, getFPRegister());
+	    	cout << "\tmovsx\t" << _expr << ", " << temp << endl;
+		cout << "\tcvtsi2sd\t" << temp << ", " << this << endl;
+	    	assign(_expr, nullptr);
+		assign(nullptr, temp);
 	    }
 	    break;
-	case 4:
+	case 4: // long to byte or long
 	    if (dest.size() == 1 || dest.size() == 4) {
+		cout << "\t#LONG TO BYTE/LONG" << endl;
 		assign(this, _expr->_register);
-	    } else { // dest.size() == 8
+	    } else { // long to fp
+		cout << "\t#LONG TO FP" << endl;
 		assign(this, getFPRegister());
 		cout << "\tcvtsi2sd\t" << _expr << ", " << this << endl;
 		assign(_expr, nullptr);
@@ -947,14 +907,30 @@ void Cast::generate() {
 	    break;
 	case 8:
  	    if (dest.size() == 1) {
+		cout << "\t#FP TO BYTE" << endl;
+		Register *temp = getRegister();
+		assign(this, getRegister());
+		cout << "\tcvttsd2si\t" << _expr << ", " << temp << endl;
+		assign(this, temp);
+		assign(nullptr, temp);
 		/* ... */	
 	    } else if (dest.size() == 4) {
-	    	cout << "\tcvttsd2si\t" << _expr << ", " << this << endl;
-	    	/* ... */
+		cout << "\t#FP TO LONG" << endl;
+	    	assign(this, getRegister());
+		cout << "\tcvttsd2si\t" << _expr << ", " << this << endl;
+	    	assign(_expr, nullptr);
+		/* ... */
 	    } else {
+		cout << "\t#FP TO FP" << endl;
 	    	assign(this, _expr->_register);
+		assign(_expr, nullptr);
 	    	/* ... */
 	    } 
+	    break;
+	default:
+	    cout << "\t#DID NOT MATCH SIZE " << src.size() << endl;
+	    assign(this, _expr->_register);
+	    assign(_expr, nullptr);
 	    break;
     }
 
@@ -976,9 +952,7 @@ void Cast::generate() {
 void Identifier::generate() {
     cout << "\t    #ID" << endl;
     int offset = _symbol->_offset;
-    //cout << "\t#offset=" << offset << endl;
     _operand = offset ? to_string(offset) + "(%ebp)" : _symbol->name();
-    //cout << "\t    #_operand = " << _operand << endl;
     cout << "\t    #END ID" << endl;
 }
 
@@ -990,7 +964,6 @@ void Identifier::generate() {
 void Integer::generate() {
     cout << "\t   #INT" << endl;
     _operand = "$" + value();
-    //cout << "\t   #_operand = " << _operand << endl;
     cout << "\t   #END INT" << endl;
 }
 
@@ -1219,7 +1192,11 @@ void release() {
 
     for (auto const &fp_reg: fp_registers) {
 	assign(nullptr, fp_reg);
-    }	
+    }
+
+    for (auto const &c_reg: callee_saved) {
+	assign(nullptr, c_reg);
+    }
 }
 
 /*
@@ -1298,10 +1275,7 @@ void assignTemp(Expression *expr) {
  * Description:	Returns the correct instruction suffix based on the size of the
  *		given expression.
  */
-string suffix(Expression *expr, bool isCast) {
-    if (isCast) {
-	return FP(expr) ? "sd" : (BYTE(expr) ? "b" : "l");
-    }
+string suffix(Expression *expr) {
     return FP(expr) ? "sd\t" : (BYTE(expr) ? "b\t" : "l\t");
 }
 
@@ -1314,7 +1288,6 @@ string suffix(Expression *expr, bool isCast) {
 Register *getRegister() {
     for (auto const &reg: registers) {
         if (reg->_node == nullptr) {
-            cout << "#register " << reg << " is empty" << endl;
             return reg;
         }
     }
@@ -1330,7 +1303,6 @@ Register *getRegister() {
  *              of this function is the same as that of getRegister.
  */
 Register *getFPRegister() {
-cout << "#calling getFPReg" << endl;
     for (auto const &fp_reg: fp_registers) {
 	if (fp_reg->_node == nullptr) {
 	    return fp_reg;

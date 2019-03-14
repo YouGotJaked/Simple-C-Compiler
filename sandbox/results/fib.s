@@ -17,8 +17,6 @@ fib:
 	    #END ID
 	   #INT
 	   #END INT
-#register %eax is empty
-#reg= %eax
 	movl	20(%ebp), %eax
 	cmpl	$0, %eax
 	sete	%al
@@ -29,8 +27,6 @@ fib:
 	    #END ID
 	   #INT
 	   #END INT
-#register %ecx is empty
-#reg= %ecx
 	movl	20(%ebp), %ecx
 	cmpl	$1, %ecx
 	sete	%cl
@@ -40,7 +36,6 @@ fib:
 	jne	.L3
 	cmpl	$0, %ecx
 	jne	.L3
-#register %edx is empty
 	mov	$0, %edx
 	jmp	.L4
 .L3:
@@ -53,7 +48,6 @@ fib:
 	   #INT
 	   #END INT
 	movl	%eax, -4(%ebp)
-#reg= %eax
 	movl	$1, %eax
 	jmp	.L0
 	#END RETURN
@@ -62,15 +56,11 @@ fib:
 	#RETURN
 	#ADD
 	#CALL
-	movl	%eax, -8(%ebp)
-	movl	%ecx, -12(%ebp)
 	#SUBTRACT
 	    #ID
 	    #END ID
 	   #INT
 	   #END INT
-#register %eax is empty
-#reg= %eax
 	movl	20(%ebp), %eax
 	subl	$1, %eax
 	#END SUBTRACT
@@ -79,14 +69,12 @@ fib:
 	addl	$4, %esp
 	#END CALL
 	#CALL
-	movl	%eax, -16(%ebp)
+	movl	%eax, -8(%ebp)
 	#SUBTRACT
 	    #ID
 	    #END ID
 	   #INT
 	   #END INT
-#register %eax is empty
-#reg= %eax
 	movl	20(%ebp), %eax
 	subl	$2, %eax
 	#END SUBTRACT
@@ -94,13 +82,9 @@ fib:
 	call	fib
 	addl	$4, %esp
 	#END CALL
-#register %ecx is empty
-#reg= %ecx
-	movl	, %ecx
-	addl	, %ecx
+	movl	-8(%ebp), %ecx
+	addl	%eax, %ecx
 	#END ADD
-	movl	%eax, -20(%ebp)
-#reg= %eax
 	movl	%ecx, %eax
 	jmp	.L0
 	#END RETURN
@@ -113,7 +97,7 @@ fib:
 	popl	%ebx
 	pop	%ebp
 	ret
-	.set	fib.size, 20
+	.set	fib.size, 8
 	.globl	fib
 #FUNCTION
 	#PROLOGUE
@@ -127,26 +111,25 @@ main:
 	#BODY
 	 #BLOCK
 	#CALL
-	movl	%eax, -8(%ebp)
 	#ADDRESS
+	#operand = 
 	    #ID
 	    #END ID
-#register %eax is empty
 	leal	-4(%ebp), %eax
 	#END ADDRESS
 	pushl	%eax
 	#ADDRESS
+	#operand = 
 	   #STRING
-#register %ecx is empty
 	leal	.L10, %ecx
 	#END ADDRESS
 	pushl	%ecx
 	call	scanf
-	addl	$20, %esp
+	addl	$8, %esp
 	#END CALL
 	#CALL
-	movl	%eax, -24(%ebp)
-	movl	%ecx, -28(%ebp)
+	movl	%eax, -8(%ebp)
+	movl	%ecx, -12(%ebp)
 	#CALL
 	    #ID
 	    #END ID
@@ -154,13 +137,13 @@ main:
 	call	fib
 	addl	$4, %esp
 	#END CALL
-	pushl	
-	#ADDRESS
-	   #STRING
-#register %eax is empty
-	leal	.L11, %eax
-	#END ADDRESS
 	pushl	%eax
+	#ADDRESS
+	#operand = 
+	   #STRING
+	leal	.L11, %ecx
+	#END ADDRESS
+	pushl	%ecx
 	call	printf
 	addl	$8, %esp
 	#END CALL
@@ -173,7 +156,7 @@ main:
 	popl	%ebx
 	pop	%ebp
 	ret
-	.set	main.size, 28
+	.set	main.size, 12
 	.globl	main
 #GLOBALS
 #STRINGS

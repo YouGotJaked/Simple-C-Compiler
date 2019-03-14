@@ -11,8 +11,8 @@ main:
 	 #BLOCK
 	#CALL
 	#ADDRESS
+	#operand = 
 	   #STRING
-#register %eax is empty
 	leal	.L1, %eax
 	#END ADDRESS
 	pushl	%eax

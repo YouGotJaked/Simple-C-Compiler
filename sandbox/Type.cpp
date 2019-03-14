@@ -237,6 +237,14 @@ bool Type::isReal() const
     return _kind == SCALAR && _specifier == DOUBLE && _indirection == 0;
 }
 
+/*
+ * Function:	Type::isRealFunction
+ *
+ * Description:	Check if this type is a real (i.e. double) function.
+ */
+bool Type::isRealFunction() const {
+    return _kind == FUNCTION && _specifier == DOUBLE;
+}
 
 /*
  * Function:	Type::isInteger
@@ -350,34 +358,25 @@ Type Type::deref() const
  */
 
 unsigned Type::size() const {
-    assert(_kind != ERROR && _kind != FUNCTION);
-    
-    int spec = 0;
-    switch (_specifier) {
-        case CHAR:
-            spec = 1;
-            break;
-        case INT:
-            spec = 4;
-            break;
-        case DOUBLE:
-            spec = 8;
-            break;
-        default:
-            break;
-    }
+    unsigned count;
 
-    if (_indirection > 0) {
-    	spec *= 4;
-    }
+    assert(_kind != FUNCTION && _kind != ERROR);
+    count = (_kind == ARRAY ? _length : 1);
 
-    if (_kind == ARRAY) {
-        return _length * spec;
-    }
-    
-    return spec;
+    if (_indirection > 0)
+	return count * 4;
+
+    if (_specifier == DOUBLE)
+	return count * 8;
+
+    if (_specifier == INT)
+	return count * 4;
+
+    if (_specifier == CHAR)
+	return count * 1;
+
+    return 0;
 }
-
 
 /*
  * Function:	operator <<

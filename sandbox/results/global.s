@@ -10,15 +10,15 @@ foo:
 	#BODY
 	 #BLOCK
 	  #ASSIGNMENT
+#before 
 	    #ID
 	    #END ID
+#after x
 	#ADD
 	    #ID
 	    #END ID
 	   #INT
 	   #END INT
-#register %eax is empty
-#reg= %eax
 	movl	x, %eax
 	addl	$1, %eax
 	#END ADD
@@ -30,13 +30,10 @@ foo:
 	    #END ID
 	   #INT
 	   #END INT
-#register %ecx is empty
-#reg= %ecx
 	movl	x, %ecx
 	addl	$1, %ecx
 	#END ADD
 	movl	%eax, -4(%ebp)
-#reg= %eax
 	movl	%ecx, %eax
 	jmp	.L0
 	#END RETURN
@@ -63,18 +60,16 @@ main:
 	#BODY
 	 #BLOCK
 	  #ASSIGNMENT
+#before 
 	    #ID
 	    #END ID
+#after x
 	   #INT
 	   #END INT
-#register %ecx is empty
-#reg= %ecx
-	movl	$65, %ecx
-	movl	%ecx, x
+	movl	$65, %ebx
+	movl	%ebx, x
 	  #END ASSIGNMENT
 	#CALL
-	movl	%eax, -4(%ebp)
-	movl	%ecx, -8(%ebp)
 	    #ID
 	    #END ID
 	pushl	x
@@ -82,14 +77,16 @@ main:
 	addl	$4, %esp
 	#END CALL
 	#CALL
+	movl	%eax, -4(%ebp)
 	#CALL
 	call	foo
 	#END CALL
-	pushl	
+	pushl	%eax
 	call	putchar
 	addl	$4, %esp
 	#END CALL
 	#CALL
+	movl	%eax, -8(%ebp)
 	    #ID
 	    #END ID
 	pushl	x
@@ -97,6 +94,7 @@ main:
 	addl	$4, %esp
 	#END CALL
 	#CALL
+	movl	%eax, -12(%ebp)
 	   #INT
 	   #END INT
 	pushl	$10
@@ -112,7 +110,7 @@ main:
 	popl	%ebx
 	pop	%ebp
 	ret
-	.set	main.size, 8
+	.set	main.size, 12
 	.globl	main
 #GLOBALS
 	.comm	x, 4

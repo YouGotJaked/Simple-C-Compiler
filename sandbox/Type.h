@@ -57,6 +57,7 @@ public:
     Parameters *parameters() const;
 
     bool isReal() const;
+    bool isRealFunction() const;
     bool isInteger() const;
     bool isPointer() const;
     bool isNumeric() const;

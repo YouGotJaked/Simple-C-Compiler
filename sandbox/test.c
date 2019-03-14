@@ -1,10 +1,18 @@
 int a, b, *aa;
 double d;
 
+double pi(void) {
+	return 3.14;
+}
+
 int main(void) {
-	int out, i;
+	int out, i, arr[10];
 	char c;
 	double dout, *dd;
+
+	dout = pi();
+	
+	printf("\npi()=%f\n",dout);
 
 	/* add */
 	a = 7;
@@ -68,15 +76,22 @@ int main(void) {
 	printf("\n-(%d)=%d\n",a,out);
 	
 	dout = -d;
-	printf("\b-(%f)=%f\n",d,dout);
+	printf("\n-(%f)=%f\n",d,dout);
 	
 	/* cast */
-	/*
+	
 	a = 17;
 	b = 5;
-	mean = (double) a / b;
-	printf("(double) %d / %d = %d", a, b, mean);
-	*/
+
+	dout = (double) a / b;
+	printf("(double) %d / %d = %f", a, b, dout);
+
+	c = 15;
+	a = (int) c;
+	printf("\n(int)%c = %d\n",c,a);
+
+	dout = (double) c;
+	printf("\b(double)%c = %f\n",c,dout);
 
 	/* not */
 	a = 0;
@@ -206,6 +221,13 @@ int main(void) {
 	
 	out = a && b;
 	printf("\n%d && %d = %d\n", a, b, out);
+
+	/* arr */
+	i = 0;
+	while (i < 8) {
+		arr[i] = i;
+		i = i + 1;
+	}
 	
 	return 0;
 }

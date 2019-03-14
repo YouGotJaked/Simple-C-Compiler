@@ -14,8 +14,6 @@ insert:
 	#NOT
 	    #ID
 	    #END ID
-#register %eax is empty
-#reg= %eax
 	movl	20(%ebp), %eax
 	cmpl	$0, %eax
 	sete	%al
@@ -25,123 +23,92 @@ insert:
 	je	.L1
 	 #BLOCK
 	  #ASSIGNMENT
+#before 
 	    #ID
 	    #END ID
+#after 20(%ebp)
 	#CAST
 	#CALL
 	#MULTIPLY
-	#fp=false
 	   #INT
 	   #END INT
 	   #INT
 	   #END INT
-#register %eax is empty
-#reg= %eax
-	movl	$16, %eax
+	movl	$4, %eax
 	imull	$3, %eax
 	#END MULTIPLY
 	pushl	%eax
 	call	malloc
 	addl	$4, %esp
 	#END CALL
-#register %ecx is empty
-#reg= %ecx
-	movl	, %ecx
+	#LONG TO BYTE/LONG
 	#END CAST
-#register %edx is empty
-#reg= %edx
-	movl	, %edx
-	movl	%edx, 20(%ebp)
+	movl	%eax, 20(%ebp)
 	  #END ASSIGNMENT
 	  #ASSIGNMENT
-	#DEREFERENCE
 	#ADD
 	    #ID
 	    #END ID
 	#MULTIPLY
-	#fp=false
 	   #INT
 	   #END INT
 	   #INT
 	   #END INT
+	movl	$0, %ecx
+	imull	$4, %ecx
+	#END MULTIPLY
+	movl	20(%ebp), %edx
+	addl	%ecx, %edx
+	#END ADD
+	    #ID
+	    #END ID
+	movl	24(%ebp), %ebx
+	movl	%ebx, (%edx)
+
+	  #END ASSIGNMENT
+	  #ASSIGNMENT
+	#ADD
+	    #ID
+	    #END ID
+	#MULTIPLY
+	   #INT
+	   #END INT
+	   #INT
+	   #END INT
+	movl	$1, %ecx
+	imull	$4, %ecx
+	#END MULTIPLY
 	movl	%eax, -4(%ebp)
-#reg= %eax
-	movl	$0, %eax
-	imull	$16, %eax
+	movl	20(%ebp), %eax
+	addl	%ecx, %eax
+	#END ADD
+	    #ID
+	    #END ID
+	movl	null, %esi
+	movl	%esi, (%eax)
+
+	  #END ASSIGNMENT
+	  #ASSIGNMENT
+	#ADD
+	    #ID
+	    #END ID
+	#MULTIPLY
+	   #INT
+	   #END INT
+	   #INT
+	   #END INT
+	movl	$2, %ecx
+	imull	$4, %ecx
 	#END MULTIPLY
 	movl	%eax, -8(%ebp)
-#reg= %eax
 	movl	20(%ebp), %eax
-	addl	-8(%ebp), %eax
+	addl	%ecx, %eax
 	#END ADD
-	movl	(%eax), %eax
-	#END DEREFERENCE
 	    #ID
 	    #END ID
-	movl	%eax, -24(%ebp)
-#reg= %eax
-	movl	36(%ebp), %eax
-	movl	%eax, -24(%ebp)
-	  #END ASSIGNMENT
-	  #ASSIGNMENT
-	#DEREFERENCE
-	#ADD
-	    #ID
-	    #END ID
-	#MULTIPLY
-	#fp=false
-	   #INT
-	   #END INT
-	   #INT
-	   #END INT
-	movl	%eax, -40(%ebp)
-#reg= %eax
-	movl	$1, %eax
-	imull	$16, %eax
-	#END MULTIPLY
-	movl	%eax, -44(%ebp)
-#reg= %eax
-	movl	20(%ebp), %eax
-	addl	-44(%ebp), %eax
-	#END ADD
-	movl	(%eax), %eax
-	#END DEREFERENCE
-	    #ID
-	    #END ID
-	movl	%eax, -60(%ebp)
-#reg= %eax
-	movl	null, %eax
-	movl	%eax, -60(%ebp)
-	  #END ASSIGNMENT
-	  #ASSIGNMENT
-	#DEREFERENCE
-	#ADD
-	    #ID
-	    #END ID
-	#MULTIPLY
-	#fp=false
-	   #INT
-	   #END INT
-	   #INT
-	   #END INT
-	movl	%eax, -76(%ebp)
-#reg= %eax
-	movl	$2, %eax
-	imull	$16, %eax
-	#END MULTIPLY
-	movl	%eax, -80(%ebp)
-#reg= %eax
-	movl	20(%ebp), %eax
-	addl	-80(%ebp), %eax
-	#END ADD
-	movl	(%eax), %eax
-	#END DEREFERENCE
-	    #ID
-	    #END ID
-	movl	%eax, -96(%ebp)
-#reg= %eax
-	movl	null, %eax
-	movl	%eax, -96(%ebp)
+	movl	null, %edi
+	movl	%edi, (%eax)
+
 	  #END ASSIGNMENT
 	jmp	.L2
 .L1:
@@ -155,99 +122,75 @@ insert:
 	    #ID
 	    #END ID
 	#MULTIPLY
-	#fp=false
 	   #INT
 	   #END INT
 	   #INT
 	   #END INT
-	movl	%eax, -112(%ebp)
-#reg= %eax
 	movl	$0, %eax
-	imull	$16, %eax
+	imull	$4, %eax
 	#END MULTIPLY
-	movl	%eax, -116(%ebp)
-#reg= %eax
-	movl	20(%ebp), %eax
-	addl	-116(%ebp), %eax
+	movl	20(%ebp), %ecx
+	addl	%eax, %ecx
 	#END ADD
-	movl	(%eax), %eax
+	movl	(%ecx), %ecx
 	#END DEREFERENCE
-	movl	%eax, -132(%ebp)
-#reg= %eax
-	movl	36(%ebp), %eax
-	cmp	-132(%ebp), %eax
+	movl	24(%ebp), %eax
+	cmp	%ecx, %eax
 	setl	%al
 	movzbl	%al, %eax
 	#END LESS THAN
 	cmpl	$0, %eax
 	je	.L3
 	  #ASSIGNMENT
-	#DEREFERENCE
 	#ADD
 	    #ID
 	    #END ID
 	#MULTIPLY
-	#fp=false
 	   #INT
 	   #END INT
 	   #INT
 	   #END INT
-#register %eax is empty
-#reg= %eax
 	movl	$1, %eax
-	imull	$16, %eax
+	imull	$4, %eax
 	#END MULTIPLY
-	movl	%eax, -136(%ebp)
-#reg= %eax
-	movl	20(%ebp), %eax
-	addl	-136(%ebp), %eax
+	movl	20(%ebp), %ecx
+	addl	%eax, %ecx
 	#END ADD
-	movl	(%eax), %eax
-	#END DEREFERENCE
 	#CAST
 	#CALL
-	movl	%eax, -152(%ebp)
-	movl	%ecx, -168(%ebp)
-	movl	%edx, -184(%ebp)
+	movl	%ecx, -12(%ebp)
 	    #ID
 	    #END ID
-	pushl	36(%ebp)
+	pushl	24(%ebp)
 	#CAST
 	#DEREFERENCE
 	#ADD
 	    #ID
 	    #END ID
 	#MULTIPLY
-	#fp=false
 	   #INT
 	   #END INT
 	   #INT
 	   #END INT
-#register %eax is empty
-#reg= %eax
 	movl	$1, %eax
-	imull	$16, %eax
+	imull	$4, %eax
 	#END MULTIPLY
-#register %ecx is empty
-#reg= %ecx
 	movl	20(%ebp), %ecx
 	addl	%eax, %ecx
 	#END ADD
 	movl	(%ecx), %ecx
 	#END DEREFERENCE
+	#LONG TO BYTE/LONG
 	#END CAST
-	pushl	
+	pushl	%ecx
 	call	insert
-	addl	$32, %esp
+	addl	$8, %esp
 	#END CALL
-#register %eax is empty
-#reg= %eax
-	movl	, %eax
+	#LONG TO BYTE/LONG
 	#END CAST
-#register %edx is empty
-#reg= %edx
-	movl	, %edx
-	movl	%edx, -152(%ebp)
+	movl	-12(%ebp), %edx
+	movl	%eax, (%edx)
+
 	  #END ASSIGNMENT
 	jmp	.L4
 .L3:
@@ -261,99 +204,81 @@ insert:
 	    #ID
 	    #END ID
 	#MULTIPLY
-	#fp=false
 	   #INT
 	   #END INT
 	   #INT
 	   #END INT
-	movl	%eax, -200(%ebp)
-#reg= %eax
+	movl	%eax, -16(%ebp)
 	movl	$0, %eax
-	imull	$16, %eax
+	imull	$4, %eax
 	#END MULTIPLY
-	movl	%eax, -204(%ebp)
-#reg= %eax
+	movl	%eax, -20(%ebp)
 	movl	20(%ebp), %eax
-	addl	-204(%ebp), %eax
+	addl	-20(%ebp), %eax
 	#END ADD
 	movl	(%eax), %eax
 	#END DEREFERENCE
-	movl	%eax, -220(%ebp)
-#reg= %eax
-	movl	36(%ebp), %eax
-	cmp	-220(%ebp), %eax
+	movl	%eax, -24(%ebp)
+	movl	24(%ebp), %eax
+	cmp	-24(%ebp), %eax
 	setg	%al
 	movzbl	%al, %eax
 	#END GREATER THAN
 	cmpl	$0, %eax
 	je	.L5
 	  #ASSIGNMENT
-	#DEREFERENCE
 	#ADD
 	    #ID
 	    #END ID
 	#MULTIPLY
-	#fp=false
 	   #INT
 	   #END INT
 	   #INT
 	   #END INT
-#register %eax is empty
-#reg= %eax
 	movl	$2, %eax
-	imull	$16, %eax
+	imull	$4, %eax
 	#END MULTIPLY
-	movl	%eax, -224(%ebp)
-#reg= %eax
+	movl	%eax, -28(%ebp)
 	movl	20(%ebp), %eax
-	addl	-224(%ebp), %eax
+	addl	-28(%ebp), %eax
 	#END ADD
-	movl	(%eax), %eax
-	#END DEREFERENCE
 	#CAST
 	#CALL
-	movl	%eax, -240(%ebp)
-	movl	%ecx, -256(%ebp)
-	movl	%edx, -272(%ebp)
+	movl	%eax, -32(%ebp)
+	movl	%ecx, -36(%ebp)
+	movl	%edx, -40(%ebp)
 	    #ID
 	    #END ID
-	pushl	36(%ebp)
+	pushl	24(%ebp)
 	#CAST
 	#DEREFERENCE
 	#ADD
 	    #ID
 	    #END ID
 	#MULTIPLY
-	#fp=false
 	   #INT
 	   #END INT
 	   #INT
 	   #END INT
-#register %eax is empty
-#reg= %eax
 	movl	$2, %eax
-	imull	$16, %eax
+	imull	$4, %eax
 	#END MULTIPLY
-#register %ecx is empty
-#reg= %ecx
 	movl	20(%ebp), %ecx
 	addl	%eax, %ecx
 	#END ADD
 	movl	(%ecx), %ecx
 	#END DEREFERENCE
+	#LONG TO BYTE/LONG
 	#END CAST
-	pushl	
+	pushl	%ecx
 	call	insert
-	addl	$32, %esp
+	addl	$8, %esp
 	#END CALL
-#register %eax is empty
-#reg= %eax
-	movl	, %eax
+	#LONG TO BYTE/LONG
 	#END CAST
-#register %edx is empty
-#reg= %edx
-	movl	, %edx
-	movl	%edx, -240(%ebp)
+	movl	-32(%ebp), %edx
+	movl	%eax, (%edx)
+
 	  #END ASSIGNMENT
 .L5:
 	#END IF
@@ -364,8 +289,6 @@ insert:
 	#RETURN
 	    #ID
 	    #END ID
-	movl	%eax, -288(%ebp)
-#reg= %eax
 	movl	20(%ebp), %eax
 	jmp	.L0
 	#END RETURN
@@ -378,7 +301,7 @@ insert:
 	popl	%ebx
 	pop	%ebp
 	ret
-	.set	insert.size, 288
+	.set	insert.size, 40
 	.globl	insert
 #FUNCTION
 	#PROLOGUE
@@ -396,8 +319,6 @@ search:
 	#NOT
 	    #ID
 	    #END ID
-	movl	%eax, -16(%ebp)
-#reg= %eax
 	movl	20(%ebp), %eax
 	cmpl	$0, %eax
 	sete	%al
@@ -408,7 +329,6 @@ search:
 	#RETURN
 	   #INT
 	   #END INT
-#reg= %eax
 	movl	$0, %eax
 	jmp	.L7
 	#END RETURN
@@ -424,27 +344,20 @@ search:
 	    #ID
 	    #END ID
 	#MULTIPLY
-	#fp=false
 	   #INT
 	   #END INT
 	   #INT
 	   #END INT
-	movl	%eax, -20(%ebp)
-#reg= %eax
 	movl	$0, %eax
-	imull	$16, %eax
+	imull	$4, %eax
 	#END MULTIPLY
-	movl	%eax, -24(%ebp)
-#reg= %eax
-	movl	20(%ebp), %eax
-	addl	-24(%ebp), %eax
+	movl	20(%ebp), %ecx
+	addl	%eax, %ecx
 	#END ADD
-	movl	(%eax), %eax
+	movl	(%ecx), %ecx
 	#END DEREFERENCE
-	movl	%eax, -40(%ebp)
-#reg= %eax
-	movl	36(%ebp), %eax
-	cmp	-40(%ebp), %eax
+	movl	24(%ebp), %eax
+	cmp	%ecx, %eax
 	setl	%al
 	movzbl	%al, %eax
 	#END LESS THAN
@@ -452,41 +365,33 @@ search:
 	je	.L10
 	#RETURN
 	#CALL
-	movl	%ecx, -56(%ebp)
-	movl	%edx, -72(%ebp)
 	    #ID
 	    #END ID
-	pushl	36(%ebp)
+	pushl	24(%ebp)
 	#CAST
 	#DEREFERENCE
 	#ADD
 	    #ID
 	    #END ID
 	#MULTIPLY
-	#fp=false
 	   #INT
 	   #END INT
 	   #INT
 	   #END INT
-#register %eax is empty
-#reg= %eax
 	movl	$1, %eax
-	imull	$16, %eax
+	imull	$4, %eax
 	#END MULTIPLY
-#register %ecx is empty
-#reg= %ecx
 	movl	20(%ebp), %ecx
 	addl	%eax, %ecx
 	#END ADD
 	movl	(%ecx), %ecx
 	#END DEREFERENCE
+	#LONG TO BYTE/LONG
 	#END CAST
-	pushl	
+	pushl	%ecx
 	call	search
-	addl	$32, %esp
+	addl	$8, %esp
 	#END CALL
-#reg= %eax
-	movl	, %eax
 	jmp	.L7
 	#END RETURN
 .L10:
@@ -501,68 +406,54 @@ search:
 	    #ID
 	    #END ID
 	#MULTIPLY
-	#fp=false
 	   #INT
 	   #END INT
 	   #INT
 	   #END INT
-#register %edx is empty
-#reg= %edx
-	movl	$0, %edx
-	imull	$16, %edx
+	movl	$0, %eax
+	imull	$4, %eax
 	#END MULTIPLY
-	movl	%eax, -76(%ebp)
-#reg= %eax
-	movl	20(%ebp), %eax
-	addl	%edx, %eax
+	movl	20(%ebp), %ecx
+	addl	%eax, %ecx
 	#END ADD
-	movl	(%eax), %eax
+	movl	(%ecx), %ecx
 	#END DEREFERENCE
-#register %edx is empty
-#reg= %edx
-	movl	36(%ebp), %edx
-	cmp	%eax, %edx
-	setg	%dl
-	movzbl	%dl, %edx
+	movl	24(%ebp), %eax
+	cmp	%ecx, %eax
+	setg	%al
+	movzbl	%al, %eax
 	#END GREATER THAN
-	cmpl	$0, %edx
+	cmpl	$0, %eax
 	je	.L12
 	#RETURN
 	#CALL
-	movl	%ecx, -92(%ebp)
 	    #ID
 	    #END ID
-	pushl	36(%ebp)
+	pushl	24(%ebp)
 	#CAST
 	#DEREFERENCE
 	#ADD
 	    #ID
 	    #END ID
 	#MULTIPLY
-	#fp=false
 	   #INT
 	   #END INT
 	   #INT
 	   #END INT
-#register %eax is empty
-#reg= %eax
 	movl	$2, %eax
-	imull	$16, %eax
+	imull	$4, %eax
 	#END MULTIPLY
-#register %ecx is empty
-#reg= %ecx
 	movl	20(%ebp), %ecx
 	addl	%eax, %ecx
 	#END ADD
 	movl	(%ecx), %ecx
 	#END DEREFERENCE
+	#LONG TO BYTE/LONG
 	#END CAST
-	pushl	
+	pushl	%ecx
 	call	search
-	addl	$32, %esp
+	addl	$8, %esp
 	#END CALL
-#reg= %eax
-	movl	, %eax
 	jmp	.L7
 	#END RETURN
 .L12:
@@ -570,8 +461,6 @@ search:
 	#RETURN
 	   #INT
 	   #END INT
-	movl	%eax, -96(%ebp)
-#reg= %eax
 	movl	$1, %eax
 	jmp	.L7
 	#END RETURN
@@ -584,7 +473,7 @@ search:
 	popl	%ebx
 	pop	%ebp
 	ret
-	.set	search.size, 96
+	.set	search.size, 0
 	.globl	search
 #FUNCTION
 	#PROLOGUE
@@ -601,33 +490,24 @@ preorder:
 	#EXPRESSION::TEST
 	    #ID
 	    #END ID
-#register %edx is empty
-#reg= %edx
-	movl	20(%ebp), %edx
-	cmpl	$0, %edx
+	movl	20(%ebp), %eax
+	cmpl	$0, %eax
 	je	.L15
 	 #BLOCK
 	#CALL
-	movl	%eax, -4(%ebp)
-	movl	%ecx, -20(%ebp)
 	#DEREFERENCE
 	#DEREFERENCE
 	#ADD
 	    #ID
 	    #END ID
 	#MULTIPLY
-	#fp=false
 	   #INT
 	   #END INT
 	   #INT
 	   #END INT
-#register %eax is empty
-#reg= %eax
 	movl	$0, %eax
-	imull	$16, %eax
+	imull	$4, %eax
 	#END MULTIPLY
-#register %ecx is empty
-#reg= %ecx
 	movl	20(%ebp), %ecx
 	addl	%eax, %ecx
 	#END ADD
@@ -637,8 +517,8 @@ preorder:
 	#END DEREFERENCE
 	pushl	%ecx
 	#ADDRESS
+	#operand = 
 	   #STRING
-#register %eax is empty
 	leal	.L17, %eax
 	#END ADDRESS
 	pushl	%eax
@@ -646,65 +526,58 @@ preorder:
 	addl	$8, %esp
 	#END CALL
 	#CALL
-	movl	%eax, -24(%ebp)
-	movl	%ecx, -28(%ebp)
+	movl	%eax, -4(%ebp)
+	movl	%ecx, -8(%ebp)
 	#CAST
 	#DEREFERENCE
 	#ADD
 	    #ID
 	    #END ID
 	#MULTIPLY
-	#fp=false
 	   #INT
 	   #END INT
 	   #INT
 	   #END INT
-#register %eax is empty
-#reg= %eax
 	movl	$1, %eax
-	imull	$16, %eax
+	imull	$4, %eax
 	#END MULTIPLY
-#register %ecx is empty
-#reg= %ecx
 	movl	20(%ebp), %ecx
 	addl	%eax, %ecx
 	#END ADD
 	movl	(%ecx), %ecx
 	#END DEREFERENCE
+	#LONG TO BYTE/LONG
 	#END CAST
-	pushl	
+	pushl	%ecx
 	call	preorder
-	addl	$16, %esp
+	addl	$4, %esp
 	#END CALL
 	#CALL
-	movl	%ecx, -44(%ebp)
+	movl	%eax, -12(%ebp)
+	movl	%ecx, -16(%ebp)
 	#CAST
 	#DEREFERENCE
 	#ADD
 	    #ID
 	    #END ID
 	#MULTIPLY
-	#fp=false
 	   #INT
 	   #END INT
 	   #INT
 	   #END INT
-#register %eax is empty
-#reg= %eax
 	movl	$2, %eax
-	imull	$16, %eax
+	imull	$4, %eax
 	#END MULTIPLY
-#register %ecx is empty
-#reg= %ecx
 	movl	20(%ebp), %ecx
 	addl	%eax, %ecx
 	#END ADD
 	movl	(%ecx), %ecx
 	#END DEREFERENCE
+	#LONG TO BYTE/LONG
 	#END CAST
-	pushl	
+	pushl	%ecx
 	call	preorder
-	addl	$16, %esp
+	addl	$4, %esp
 	#END CALL
 .L15:
 	#END IF
@@ -717,7 +590,7 @@ preorder:
 	popl	%ebx
 	pop	%ebp
 	ret
-	.set	preorder.size, 44
+	.set	preorder.size, 16
 	.globl	preorder
 #FUNCTION
 	#PROLOGUE
@@ -734,62 +607,51 @@ inorder:
 	#EXPRESSION::TEST
 	    #ID
 	    #END ID
-#register %eax is empty
-#reg= %eax
 	movl	20(%ebp), %eax
 	cmpl	$0, %eax
 	je	.L19
 	 #BLOCK
 	#CALL
-	movl	%ecx, -16(%ebp)
 	#CAST
 	#DEREFERENCE
 	#ADD
 	    #ID
 	    #END ID
 	#MULTIPLY
-	#fp=false
 	   #INT
 	   #END INT
 	   #INT
 	   #END INT
-#register %eax is empty
-#reg= %eax
 	movl	$1, %eax
-	imull	$16, %eax
+	imull	$4, %eax
 	#END MULTIPLY
-#register %ecx is empty
-#reg= %ecx
 	movl	20(%ebp), %ecx
 	addl	%eax, %ecx
 	#END ADD
 	movl	(%ecx), %ecx
 	#END DEREFERENCE
+	#LONG TO BYTE/LONG
 	#END CAST
-	pushl	
+	pushl	%ecx
 	call	inorder
-	addl	$16, %esp
+	addl	$4, %esp
 	#END CALL
 	#CALL
-	movl	%ecx, -32(%ebp)
+	movl	%eax, -4(%ebp)
+	movl	%ecx, -8(%ebp)
 	#DEREFERENCE
 	#DEREFERENCE
 	#ADD
 	    #ID
 	    #END ID
 	#MULTIPLY
-	#fp=false
 	   #INT
 	   #END INT
 	   #INT
 	   #END INT
-#register %eax is empty
-#reg= %eax
 	movl	$0, %eax
-	imull	$16, %eax
+	imull	$4, %eax
 	#END MULTIPLY
-#register %ecx is empty
-#reg= %ecx
 	movl	20(%ebp), %ecx
 	addl	%eax, %ecx
 	#END ADD
@@ -799,8 +661,8 @@ inorder:
 	#END DEREFERENCE
 	pushl	%ecx
 	#ADDRESS
+	#operand = 
 	   #STRING
-#register %eax is empty
 	leal	.L21, %eax
 	#END ADDRESS
 	pushl	%eax
@@ -808,35 +670,31 @@ inorder:
 	addl	$8, %esp
 	#END CALL
 	#CALL
-	movl	%eax, -36(%ebp)
-	movl	%ecx, -40(%ebp)
+	movl	%eax, -12(%ebp)
+	movl	%ecx, -16(%ebp)
 	#CAST
 	#DEREFERENCE
 	#ADD
 	    #ID
 	    #END ID
 	#MULTIPLY
-	#fp=false
 	   #INT
 	   #END INT
 	   #INT
 	   #END INT
-#register %eax is empty
-#reg= %eax
 	movl	$2, %eax
-	imull	$16, %eax
+	imull	$4, %eax
 	#END MULTIPLY
-#register %ecx is empty
-#reg= %ecx
 	movl	20(%ebp), %ecx
 	addl	%eax, %ecx
 	#END ADD
 	movl	(%ecx), %ecx
 	#END DEREFERENCE
+	#LONG TO BYTE/LONG
 	#END CAST
-	pushl	
+	pushl	%ecx
 	call	inorder
-	addl	$16, %esp
+	addl	$4, %esp
 	#END CALL
 .L19:
 	#END IF
@@ -849,7 +707,7 @@ inorder:
 	popl	%ebx
 	pop	%ebp
 	ret
-	.set	inorder.size, 40
+	.set	inorder.size, 16
 	.globl	inorder
 #FUNCTION
 	#PROLOGUE
@@ -863,14 +721,14 @@ main:
 	#BODY
 	 #BLOCK
 	  #ASSIGNMENT
+#before 
 	    #ID
 	    #END ID
+#after -48(%ebp)
 	   #INT
 	   #END INT
-#register %eax is empty
-#reg= %eax
-	movl	$0, %eax
-	movl	%eax, -44(%ebp)
+	movl	$0, %ebx
+	movl	%ebx, -48(%ebp)
 	  #END ASSIGNMENT
 	#WHILE
 .L23:
@@ -880,455 +738,354 @@ main:
 	    #END ID
 	   #INT
 	   #END INT
-#register %edx is empty
-#reg= %edx
-	movl	-44(%ebp), %edx
-	cmp	$8, %edx
-	setl	%dl
-	movzbl	%dl, %edx
+	movl	-48(%ebp), %eax
+	cmp	$8, %eax
+	setl	%al
+	movzbl	%al, %eax
 	#END LESS THAN
-	cmpl	$0, %edx
+	cmpl	$0, %eax
 	je	.L24
 	 #BLOCK
 	  #ASSIGNMENT
-	#DEREFERENCE
 	#ADD
 	#ADDRESS
+	#operand = 
 	    #ID
 	    #END ID
-#register %edx is empty
-	leal	-40(%ebp), %edx
+	leal	-44(%ebp), %eax
 	#END ADDRESS
 	#MULTIPLY
-	#fp=false
 	    #ID
 	    #END ID
 	   #INT
 	   #END INT
-	movl	%eax, -48(%ebp)
-#reg= %eax
-	movl	-44(%ebp), %eax
-	imull	$4, %eax
+	movl	-48(%ebp), %ecx
+	imull	$4, %ecx
 	#END MULTIPLY
-	movl	%eax, -52(%ebp)
-	addl	-52(%ebp), %edx
+	addl	%ecx, %eax
 	#END ADD
-	movl	(%edx), %edx
-	#END DEREFERENCE
 	    #ID
 	    #END ID
-#register %eax is empty
-#reg= %eax
-	movl	-44(%ebp), %eax
-	movl	%eax, %edx
+	movl	-48(%ebp), %esi
+	movl	%esi, (%eax)
+
 	  #END ASSIGNMENT
 	  #ASSIGNMENT
+#before 
 	    #ID
 	    #END ID
+#after -48(%ebp)
 	#ADD
 	    #ID
 	    #END ID
 	   #INT
 	   #END INT
-	movl	%eax, -56(%ebp)
-#reg= %eax
-	movl	-44(%ebp), %eax
-	addl	$1, %eax
+	movl	-48(%ebp), %ecx
+	addl	$1, %ecx
 	#END ADD
-	movl	%eax, -44(%ebp)
+	movl	%ecx, -48(%ebp)
 	  #END ASSIGNMENT
 	jmp	.L23
 .L24:
 	#END WHILE
 	  #ASSIGNMENT
+#before 
 	    #ID
 	    #END ID
+#after -4(%ebp)
 	#CAST
 	    #ID
 	    #END ID
-#register %eax is empty
-#reg= %eax
 	movl	null, %eax
+	#LONG TO BYTE/LONG
 	#END CAST
-#register %ecx is empty
-#reg= %ecx
-	movl	, %ecx
-	movl	%ecx, 825379886(%ebp)
+	movl	%eax, -4(%ebp)
 	  #END ASSIGNMENT
 	  #ASSIGNMENT
+#before 
 	    #ID
 	    #END ID
+#after -4(%ebp)
 	#CALL
-	movl	%eax, -72(%ebp)
-	movl	%ecx, -88(%ebp)
+	movl	%eax, -52(%ebp)
 	#ADDRESS
-	#DEREFERENCE
+	#operand = 
 	#ADD
 	#ADDRESS
+	#operand = 
 	    #ID
 	    #END ID
-#register %eax is empty
-	leal	-40(%ebp), %eax
+	leal	-44(%ebp), %eax
 	#END ADDRESS
 	#MULTIPLY
-	#fp=false
 	   #INT
 	   #END INT
 	   #INT
 	   #END INT
-#register %ecx is empty
-#reg= %ecx
 	movl	$7, %ecx
 	imull	$4, %ecx
 	#END MULTIPLY
-#register %edx is empty
 	addl	%ecx, %eax
 	#END ADD
-	movl	(%eax), %eax
-	#END DEREFERENCE
-#register %ecx is empty
-	leal	, %ecx
-	#END ADDRESS
-	pushl	%ecx
+	pushl	%eax
 	    #ID
 	    #END ID
-	pushl	825379886(%ebp)
+	pushl	-4(%ebp)
 	call	insert
-	addl	$32, %esp
+	addl	$8, %esp
 	#END CALL
-#register %eax is empty
-#reg= %eax
-	movl	, %eax
-	movl	%eax, 825379886(%ebp)
+	movl	%eax, -4(%ebp)
 	  #END ASSIGNMENT
 	  #ASSIGNMENT
+#before 
 	    #ID
 	    #END ID
+#after -4(%ebp)
 	#CALL
-	movl	%eax, -104(%ebp)
-	movl	%ecx, -120(%ebp)
+	movl	%eax, -56(%ebp)
 	#ADDRESS
-	#DEREFERENCE
+	#operand = 
 	#ADD
 	#ADDRESS
+	#operand = 
 	    #ID
 	    #END ID
-#register %eax is empty
-	leal	-40(%ebp), %eax
+	leal	-44(%ebp), %eax
 	#END ADDRESS
 	#MULTIPLY
-	#fp=false
 	   #INT
 	   #END INT
 	   #INT
 	   #END INT
-#register %ecx is empty
-#reg= %ecx
 	movl	$4, %ecx
 	imull	$4, %ecx
 	#END MULTIPLY
-#register %edx is empty
 	addl	%ecx, %eax
 	#END ADD
-	movl	(%eax), %eax
-	#END DEREFERENCE
-#register %ecx is empty
-	leal	, %ecx
-	#END ADDRESS
-	pushl	%ecx
+	pushl	%eax
 	    #ID
 	    #END ID
-	pushl	825379886(%ebp)
+	pushl	-4(%ebp)
 	call	insert
-	addl	$32, %esp
+	addl	$8, %esp
 	#END CALL
-#register %eax is empty
-#reg= %eax
-	movl	, %eax
-	movl	%eax, 825379886(%ebp)
+	movl	%eax, -4(%ebp)
 	  #END ASSIGNMENT
 	  #ASSIGNMENT
+#before 
 	    #ID
 	    #END ID
+#after -4(%ebp)
 	#CALL
-	movl	%eax, -136(%ebp)
-	movl	%ecx, -152(%ebp)
+	movl	%eax, -60(%ebp)
 	#ADDRESS
-	#DEREFERENCE
+	#operand = 
 	#ADD
 	#ADDRESS
+	#operand = 
 	    #ID
 	    #END ID
-#register %eax is empty
-	leal	-40(%ebp), %eax
+	leal	-44(%ebp), %eax
 	#END ADDRESS
 	#MULTIPLY
-	#fp=false
 	   #INT
 	   #END INT
 	   #INT
 	   #END INT
-#register %ecx is empty
-#reg= %ecx
 	movl	$1, %ecx
 	imull	$4, %ecx
 	#END MULTIPLY
-#register %edx is empty
 	addl	%ecx, %eax
 	#END ADD
-	movl	(%eax), %eax
-	#END DEREFERENCE
-#register %ecx is empty
-	leal	, %ecx
-	#END ADDRESS
-	pushl	%ecx
+	pushl	%eax
 	    #ID
 	    #END ID
-	pushl	825379886(%ebp)
+	pushl	-4(%ebp)
 	call	insert
-	addl	$32, %esp
+	addl	$8, %esp
 	#END CALL
-#register %eax is empty
-#reg= %eax
-	movl	, %eax
-	movl	%eax, 825379886(%ebp)
+	movl	%eax, -4(%ebp)
 	  #END ASSIGNMENT
 	  #ASSIGNMENT
+#before 
 	    #ID
 	    #END ID
+#after -4(%ebp)
 	#CALL
-	movl	%eax, -168(%ebp)
-	movl	%ecx, -184(%ebp)
+	movl	%eax, -64(%ebp)
 	#ADDRESS
-	#DEREFERENCE
+	#operand = 
 	#ADD
 	#ADDRESS
+	#operand = 
 	    #ID
 	    #END ID
-#register %eax is empty
-	leal	-40(%ebp), %eax
+	leal	-44(%ebp), %eax
 	#END ADDRESS
 	#MULTIPLY
-	#fp=false
 	   #INT
 	   #END INT
 	   #INT
 	   #END INT
-#register %ecx is empty
-#reg= %ecx
 	movl	$0, %ecx
 	imull	$4, %ecx
 	#END MULTIPLY
-#register %edx is empty
 	addl	%ecx, %eax
 	#END ADD
-	movl	(%eax), %eax
-	#END DEREFERENCE
-#register %ecx is empty
-	leal	, %ecx
-	#END ADDRESS
-	pushl	%ecx
+	pushl	%eax
 	    #ID
 	    #END ID
-	pushl	825379886(%ebp)
+	pushl	-4(%ebp)
 	call	insert
-	addl	$32, %esp
+	addl	$8, %esp
 	#END CALL
-#register %eax is empty
-#reg= %eax
-	movl	, %eax
-	movl	%eax, 825379886(%ebp)
+	movl	%eax, -4(%ebp)
 	  #END ASSIGNMENT
 	  #ASSIGNMENT
+#before 
 	    #ID
 	    #END ID
+#after -4(%ebp)
 	#CALL
-	movl	%eax, -200(%ebp)
-	movl	%ecx, -216(%ebp)
+	movl	%eax, -68(%ebp)
 	#ADDRESS
-	#DEREFERENCE
+	#operand = 
 	#ADD
 	#ADDRESS
+	#operand = 
 	    #ID
 	    #END ID
-#register %eax is empty
-	leal	-40(%ebp), %eax
+	leal	-44(%ebp), %eax
 	#END ADDRESS
 	#MULTIPLY
-	#fp=false
 	   #INT
 	   #END INT
 	   #INT
 	   #END INT
-#register %ecx is empty
-#reg= %ecx
 	movl	$5, %ecx
 	imull	$4, %ecx
 	#END MULTIPLY
-#register %edx is empty
 	addl	%ecx, %eax
 	#END ADD
-	movl	(%eax), %eax
-	#END DEREFERENCE
-#register %ecx is empty
-	leal	, %ecx
-	#END ADDRESS
-	pushl	%ecx
+	pushl	%eax
 	    #ID
 	    #END ID
-	pushl	825379886(%ebp)
+	pushl	-4(%ebp)
 	call	insert
-	addl	$32, %esp
+	addl	$8, %esp
 	#END CALL
-#register %eax is empty
-#reg= %eax
-	movl	, %eax
-	movl	%eax, 825379886(%ebp)
+	movl	%eax, -4(%ebp)
 	  #END ASSIGNMENT
 	  #ASSIGNMENT
+#before 
 	    #ID
 	    #END ID
+#after -4(%ebp)
 	#CALL
-	movl	%eax, -232(%ebp)
-	movl	%ecx, -248(%ebp)
+	movl	%eax, -72(%ebp)
 	#ADDRESS
-	#DEREFERENCE
+	#operand = 
 	#ADD
 	#ADDRESS
+	#operand = 
 	    #ID
 	    #END ID
-#register %eax is empty
-	leal	-40(%ebp), %eax
+	leal	-44(%ebp), %eax
 	#END ADDRESS
 	#MULTIPLY
-	#fp=false
 	   #INT
 	   #END INT
 	   #INT
 	   #END INT
-#register %ecx is empty
-#reg= %ecx
 	movl	$2, %ecx
 	imull	$4, %ecx
 	#END MULTIPLY
-#register %edx is empty
 	addl	%ecx, %eax
 	#END ADD
-	movl	(%eax), %eax
-	#END DEREFERENCE
-#register %ecx is empty
-	leal	, %ecx
-	#END ADDRESS
-	pushl	%ecx
+	pushl	%eax
 	    #ID
 	    #END ID
-	pushl	825379886(%ebp)
+	pushl	-4(%ebp)
 	call	insert
-	addl	$32, %esp
+	addl	$8, %esp
 	#END CALL
-#register %eax is empty
-#reg= %eax
-	movl	, %eax
-	movl	%eax, 825379886(%ebp)
+	movl	%eax, -4(%ebp)
 	  #END ASSIGNMENT
 	  #ASSIGNMENT
+#before 
 	    #ID
 	    #END ID
+#after -4(%ebp)
 	#CALL
-	movl	%eax, -264(%ebp)
-	movl	%ecx, -280(%ebp)
+	movl	%eax, -76(%ebp)
 	#ADDRESS
-	#DEREFERENCE
+	#operand = 
 	#ADD
 	#ADDRESS
+	#operand = 
 	    #ID
 	    #END ID
-#register %eax is empty
-	leal	-40(%ebp), %eax
+	leal	-44(%ebp), %eax
 	#END ADDRESS
 	#MULTIPLY
-	#fp=false
 	   #INT
 	   #END INT
 	   #INT
 	   #END INT
-#register %ecx is empty
-#reg= %ecx
 	movl	$3, %ecx
 	imull	$4, %ecx
 	#END MULTIPLY
-#register %edx is empty
 	addl	%ecx, %eax
 	#END ADD
-	movl	(%eax), %eax
-	#END DEREFERENCE
-#register %ecx is empty
-	leal	, %ecx
-	#END ADDRESS
-	pushl	%ecx
+	pushl	%eax
 	    #ID
 	    #END ID
-	pushl	825379886(%ebp)
+	pushl	-4(%ebp)
 	call	insert
-	addl	$32, %esp
+	addl	$8, %esp
 	#END CALL
-#register %eax is empty
-#reg= %eax
-	movl	, %eax
-	movl	%eax, 825379886(%ebp)
+	movl	%eax, -4(%ebp)
 	  #END ASSIGNMENT
 	  #ASSIGNMENT
+#before 
 	    #ID
 	    #END ID
+#after -4(%ebp)
 	#CALL
-	movl	%eax, -296(%ebp)
-	movl	%ecx, -312(%ebp)
+	movl	%eax, -80(%ebp)
 	#ADDRESS
-	#DEREFERENCE
+	#operand = 
 	#ADD
 	#ADDRESS
+	#operand = 
 	    #ID
 	    #END ID
-#register %eax is empty
-	leal	-40(%ebp), %eax
+	leal	-44(%ebp), %eax
 	#END ADDRESS
 	#MULTIPLY
-	#fp=false
 	   #INT
 	   #END INT
 	   #INT
 	   #END INT
-#register %ecx is empty
-#reg= %ecx
 	movl	$6, %ecx
 	imull	$4, %ecx
 	#END MULTIPLY
-#register %edx is empty
 	addl	%ecx, %eax
 	#END ADD
-	movl	(%eax), %eax
-	#END DEREFERENCE
-#register %ecx is empty
-	leal	, %ecx
-	#END ADDRESS
-	pushl	%ecx
+	pushl	%eax
 	    #ID
 	    #END ID
-	pushl	825379886(%ebp)
+	pushl	-4(%ebp)
 	call	insert
-	addl	$32, %esp
+	addl	$8, %esp
 	#END CALL
-#register %eax is empty
-#reg= %eax
-	movl	, %eax
-	movl	%eax, 825379886(%ebp)
+	movl	%eax, -4(%ebp)
 	  #END ASSIGNMENT
 	#CALL
-	movl	%eax, -328(%ebp)
-	movl	%ecx, -344(%ebp)
+	movl	%eax, -84(%ebp)
 	#ADDRESS
+	#operand = 
 	   #STRING
-#register %eax is empty
 	leal	.L25, %eax
 	#END ADDRESS
 	pushl	%eax
@@ -1336,17 +1093,18 @@ main:
 	addl	$4, %esp
 	#END CALL
 	#CALL
-	movl	%eax, -348(%ebp)
+	movl	%eax, -88(%ebp)
 	    #ID
 	    #END ID
-	pushl	825379886(%ebp)
+	pushl	-4(%ebp)
 	call	preorder
-	addl	$16, %esp
+	addl	$4, %esp
 	#END CALL
 	#CALL
+	movl	%eax, -92(%ebp)
 	#ADDRESS
+	#operand = 
 	   #STRING
-#register %eax is empty
 	leal	.L26, %eax
 	#END ADDRESS
 	pushl	%eax
@@ -1354,12 +1112,12 @@ main:
 	addl	$4, %esp
 	#END CALL
 	#CALL
-	movl	%eax, -352(%ebp)
+	movl	%eax, -96(%ebp)
 	    #ID
 	    #END ID
-	pushl	825379886(%ebp)
+	pushl	-4(%ebp)
 	call	inorder
-	addl	$16, %esp
+	addl	$4, %esp
 	#END CALL
 .L22:
 	#END BODY
@@ -1370,10 +1128,10 @@ main:
 	popl	%ebx
 	pop	%ebp
 	ret
-	.set	main.size, 352
+	.set	main.size, 96
 	.globl	main
 #GLOBALS
-	.comm	null, 16
+	.comm	null, 4
 #STRINGS
 .L17:	.asciz	"%d\n"
 .L21:	.asciz	"%d\n"

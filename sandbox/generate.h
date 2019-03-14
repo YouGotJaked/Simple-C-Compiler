@@ -9,7 +9,7 @@ void load(Expression *expr, Register *reg);
 void release();
 void assign(Expression *expr, Register *reg);
 void assignTemp(Expression *expr);
-std::string suffix(Expression *expr, bool isCast = false);
+std::string suffix(Expression *expr);
 Register *getRegister();
 Register *getFPRegister();
 Register *getCalleeRegister();
