@@ -95,8 +95,8 @@ ostream &operator <<(ostream &out, Expression *expr) {
     if (expr->_register == nullptr) {
 	return out << expr->_operand;
     }
-   
-    return out << expr->_register;
+    unsigned size = expr->type().size();  
+    return out << expr->_register->name(size);
 }
 
 /*

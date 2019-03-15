@@ -10,22 +10,19 @@ allocate:
 	#BODY
 	 #BLOCK
 	  #ASSIGNMENT
-#before 
 	    #ID
 	    #END ID
-#after -4(%ebp)
 	   #INT
 	   #END INT
-	movl	$0, %ebx
-	movl	%ebx, -4(%ebp)
+	movl	$0, %eax
+	movl	%eax, -4(%ebp)
 	  #END ASSIGNMENT
 	  #ASSIGNMENT
-#before 
 	    #ID
 	    #END ID
-#after -8(%ebp)
 	#CAST
 	#CALL
+	movl	%eax, -12(%ebp)
 	#MULTIPLY
 	    #ID
 	    #END ID
@@ -74,8 +71,8 @@ allocate:
 	addl	%ecx, %edx
 	#END ADD
 	#CALL
-	movl	%eax, -12(%ebp)
-	movl	%edx, -16(%ebp)
+	movl	%eax, -16(%ebp)
+	movl	%edx, -20(%ebp)
 	#MULTIPLY
 	    #ID
 	    #END ID
@@ -88,15 +85,12 @@ allocate:
 	call	malloc
 	addl	$4, %esp
 	#END CALL
-	movl	-16(%ebp), %ecx
+	movl	-20(%ebp), %ecx
 	movl	%eax, (%ecx)
-
 	  #END ASSIGNMENT
 	  #ASSIGNMENT
-#before 
 	    #ID
 	    #END ID
-#after -4(%ebp)
 	#ADD
 	    #ID
 	    #END ID
@@ -125,7 +119,7 @@ allocate:
 	popl	%ebx
 	pop	%ebp
 	ret
-	.set	allocate.size, 16
+	.set	allocate.size, 20
 	.globl	allocate
 #FUNCTION
 	#PROLOGUE
@@ -139,14 +133,12 @@ initialize:
 	#BODY
 	 #BLOCK
 	  #ASSIGNMENT
-#before 
 	    #ID
 	    #END ID
-#after -4(%ebp)
 	   #INT
 	   #END INT
-	movl	$0, %ebx
-	movl	%ebx, -4(%ebp)
+	movl	$0, %eax
+	movl	%eax, -4(%ebp)
 	  #END ASSIGNMENT
 	#WHILE
 .L4:
@@ -156,23 +148,21 @@ initialize:
 	    #END ID
 	    #ID
 	    #END ID
-	movl	-4(%ebp), %eax
-	cmp	24(%ebp), %eax
-	setl	%al
-	movzbl	%al, %eax
+	movl	-4(%ebp), %ecx
+	cmp	24(%ebp), %ecx
+	setl	%cl
+	movzbl	%cl, %ecx
 	#END LESS THAN
-	cmpl	$0, %eax
+	cmpl	$0, %ecx
 	je	.L5
 	 #BLOCK
 	  #ASSIGNMENT
-#before 
 	    #ID
 	    #END ID
-#after -8(%ebp)
 	   #INT
 	   #END INT
-	movl	$0, %esi
-	movl	%esi, -8(%ebp)
+	movl	$0, %ecx
+	movl	%ecx, -8(%ebp)
 	  #END ASSIGNMENT
 	#WHILE
 .L6:
@@ -182,12 +172,12 @@ initialize:
 	    #END ID
 	    #ID
 	    #END ID
-	movl	-8(%ebp), %eax
-	cmp	24(%ebp), %eax
-	setl	%al
-	movzbl	%al, %eax
+	movl	-8(%ebp), %edx
+	cmp	24(%ebp), %edx
+	setl	%dl
+	movzbl	%dl, %edx
 	#END LESS THAN
-	cmpl	$0, %eax
+	cmpl	$0, %edx
 	je	.L7
 	 #BLOCK
 	  #ASSIGNMENT
@@ -201,58 +191,53 @@ initialize:
 	    #END ID
 	   #INT
 	   #END INT
-	movl	-4(%ebp), %eax
-	imull	$4, %eax
+	movl	-4(%ebp), %edx
+	imull	$4, %edx
 	#END MULTIPLY
-	movl	20(%ebp), %ecx
-	addl	%eax, %ecx
+	movl	20(%ebp), %ebx
+	addl	%edx, %ebx
 	#END ADD
-	movl	(%ecx), %ecx
+	movl	(%ebx), %ebx
 	#END DEREFERENCE
 	#MULTIPLY
 	    #ID
 	    #END ID
 	   #INT
 	   #END INT
-	movl	-8(%ebp), %eax
-	imull	$4, %eax
+	movl	-8(%ebp), %edx
+	imull	$4, %edx
 	#END MULTIPLY
-	addl	%eax, %ecx
+	addl	%edx, %ebx
 	#END ADD
 	#ADD
 	    #ID
 	    #END ID
 	    #ID
 	    #END ID
-	movl	-4(%ebp), %eax
-	addl	-8(%ebp), %eax
+	movl	-4(%ebp), %edx
+	addl	-8(%ebp), %edx
 	#END ADD
-	movl	%eax, (%ecx)
-
+	movl	%edx, (%ebx)
 	  #END ASSIGNMENT
 	  #ASSIGNMENT
-#before 
 	    #ID
 	    #END ID
-#after -8(%ebp)
 	#ADD
 	    #ID
 	    #END ID
 	   #INT
 	   #END INT
-	movl	-8(%ebp), %edx
-	addl	$1, %edx
+	movl	-8(%ebp), %esi
+	addl	$1, %esi
 	#END ADD
-	movl	%edx, -8(%ebp)
+	movl	%esi, -8(%ebp)
 	  #END ASSIGNMENT
 	jmp	.L6
 .L7:
 	#END WHILE
 	  #ASSIGNMENT
-#before 
 	    #ID
 	    #END ID
-#after -4(%ebp)
 	#ADD
 	    #ID
 	    #END ID
@@ -289,14 +274,12 @@ display:
 	#BODY
 	 #BLOCK
 	  #ASSIGNMENT
-#before 
 	    #ID
 	    #END ID
-#after -4(%ebp)
 	   #INT
 	   #END INT
-	movl	$0, %ebx
-	movl	%ebx, -4(%ebp)
+	movl	$0, %eax
+	movl	%eax, -4(%ebp)
 	  #END ASSIGNMENT
 	#WHILE
 .L9:
@@ -306,23 +289,21 @@ display:
 	    #END ID
 	    #ID
 	    #END ID
-	movl	-4(%ebp), %eax
-	cmp	24(%ebp), %eax
-	setl	%al
-	movzbl	%al, %eax
+	movl	-4(%ebp), %ecx
+	cmp	24(%ebp), %ecx
+	setl	%cl
+	movzbl	%cl, %ecx
 	#END LESS THAN
-	cmpl	$0, %eax
+	cmpl	$0, %ecx
 	je	.L10
 	 #BLOCK
 	  #ASSIGNMENT
-#before 
 	    #ID
 	    #END ID
-#after -8(%ebp)
 	   #INT
 	   #END INT
-	movl	$0, %esi
-	movl	%esi, -8(%ebp)
+	movl	$0, %ecx
+	movl	%ecx, -8(%ebp)
 	  #END ASSIGNMENT
 	#WHILE
 .L11:
@@ -332,19 +313,17 @@ display:
 	    #END ID
 	    #ID
 	    #END ID
-	movl	-8(%ebp), %eax
-	cmp	24(%ebp), %eax
-	setl	%al
-	movzbl	%al, %eax
+	movl	-8(%ebp), %edx
+	cmp	24(%ebp), %edx
+	setl	%dl
+	movzbl	%dl, %edx
 	#END LESS THAN
-	cmpl	$0, %eax
+	cmpl	$0, %edx
 	je	.L12
 	 #BLOCK
 	  #ASSIGNMENT
-#before 
 	    #ID
 	    #END ID
-#after -12(%ebp)
 	#DEREFERENCE
 	#ADD
 	    #ID
@@ -354,18 +333,19 @@ display:
 	    #END ID
 	   #INT
 	   #END INT
-	movl	-4(%ebp), %eax
-	imull	$4, %eax
+	movl	-4(%ebp), %edx
+	imull	$4, %edx
 	#END MULTIPLY
-	movl	20(%ebp), %ecx
-	addl	%eax, %ecx
+	movl	20(%ebp), %ebx
+	addl	%edx, %ebx
 	#END ADD
-	movl	(%ecx), %ecx
+	movl	(%ebx), %ebx
 	#END DEREFERENCE
-	movl	%ecx, -12(%ebp)
+	movl	%ebx, -12(%ebp)
 	  #END ASSIGNMENT
 	#CALL
-	movl	%ecx, -16(%ebp)
+	movl	%eax, -16(%ebp)
+	movl	%ecx, -20(%ebp)
 	#DEREFERENCE
 	#ADD
 	    #ID
@@ -385,19 +365,16 @@ display:
 	#END DEREFERENCE
 	pushl	%ecx
 	#ADDRESS
-	#operand = 
 	   #STRING
-	leal	.L13, %eax
+	leal	.L13, %esi
 	#END ADDRESS
-	pushl	%eax
+	pushl	%esi
 	call	printf
 	addl	$8, %esp
 	#END CALL
 	  #ASSIGNMENT
-#before 
 	    #ID
 	    #END ID
-#after -8(%ebp)
 	#ADD
 	    #ID
 	    #END ID
@@ -412,10 +389,8 @@ display:
 .L12:
 	#END WHILE
 	  #ASSIGNMENT
-#before 
 	    #ID
 	    #END ID
-#after -4(%ebp)
 	#ADD
 	    #ID
 	    #END ID
@@ -427,13 +402,12 @@ display:
 	movl	%eax, -4(%ebp)
 	  #END ASSIGNMENT
 	#CALL
-	movl	%eax, -20(%ebp)
+	movl	%eax, -24(%ebp)
 	#ADDRESS
-	#operand = 
 	   #STRING
-	leal	.L14, %eax
+	leal	.L14, %ebx
 	#END ADDRESS
-	pushl	%eax
+	pushl	%ebx
 	call	printf
 	addl	$4, %esp
 	#END CALL
@@ -449,7 +423,7 @@ display:
 	popl	%ebx
 	pop	%ebp
 	ret
-	.set	display.size, 20
+	.set	display.size, 24
 	.globl	display
 #FUNCTION
 	#PROLOGUE
@@ -463,14 +437,12 @@ deallocate:
 	#BODY
 	 #BLOCK
 	  #ASSIGNMENT
-#before 
 	    #ID
 	    #END ID
-#after -4(%ebp)
 	   #INT
 	   #END INT
-	movl	$0, %ebx
-	movl	%ebx, -4(%ebp)
+	movl	$0, %eax
+	movl	%eax, -4(%ebp)
 	  #END ASSIGNMENT
 	#WHILE
 .L16:
@@ -480,15 +452,16 @@ deallocate:
 	    #END ID
 	    #ID
 	    #END ID
-	movl	-4(%ebp), %eax
-	cmp	24(%ebp), %eax
-	setl	%al
-	movzbl	%al, %eax
+	movl	-4(%ebp), %ecx
+	cmp	24(%ebp), %ecx
+	setl	%cl
+	movzbl	%cl, %ecx
 	#END LESS THAN
-	cmpl	$0, %eax
+	cmpl	$0, %ecx
 	je	.L17
 	 #BLOCK
 	#CALL
+	movl	%eax, -8(%ebp)
 	#DEREFERENCE
 	#ADD
 	    #ID
@@ -511,10 +484,8 @@ deallocate:
 	addl	$4, %esp
 	#END CALL
 	  #ASSIGNMENT
-#before 
 	    #ID
 	    #END ID
-#after -4(%ebp)
 	#ADD
 	    #ID
 	    #END ID
@@ -544,7 +515,7 @@ deallocate:
 	popl	%ebx
 	pop	%ebp
 	ret
-	.set	deallocate.size, 4
+	.set	deallocate.size, 8
 	.globl	deallocate
 #FUNCTION
 	#PROLOGUE
@@ -559,29 +530,24 @@ main:
 	 #BLOCK
 	#CALL
 	#ADDRESS
-	#operand = 
 	    #ID
 	    #END ID
-	leal	-8(%ebp), %eax
+	leal	-8(%ebp), %ebx
 	#END ADDRESS
-	pushl	%eax
+	pushl	%ebx
 	#ADDRESS
-	#operand = 
 	   #STRING
-	leal	.L19, %ecx
+	leal	.L19, %esi
 	#END ADDRESS
-	pushl	%ecx
+	pushl	%esi
 	call	scanf
 	addl	$8, %esp
 	#END CALL
 	  #ASSIGNMENT
-#before 
 	    #ID
 	    #END ID
-#after -4(%ebp)
 	#CALL
 	movl	%eax, -12(%ebp)
-	movl	%ecx, -16(%ebp)
 	    #ID
 	    #END ID
 	pushl	-8(%ebp)
@@ -591,7 +557,7 @@ main:
 	movl	%eax, -4(%ebp)
 	  #END ASSIGNMENT
 	#CALL
-	movl	%eax, -20(%ebp)
+	movl	%eax, -16(%ebp)
 	    #ID
 	    #END ID
 	pushl	-8(%ebp)
@@ -602,7 +568,7 @@ main:
 	addl	$8, %esp
 	#END CALL
 	#CALL
-	movl	%eax, -24(%ebp)
+	movl	%eax, -20(%ebp)
 	    #ID
 	    #END ID
 	pushl	-8(%ebp)
@@ -613,7 +579,7 @@ main:
 	addl	$8, %esp
 	#END CALL
 	#CALL
-	movl	%eax, -28(%ebp)
+	movl	%eax, -24(%ebp)
 	    #ID
 	    #END ID
 	pushl	-8(%ebp)
@@ -632,7 +598,7 @@ main:
 	popl	%ebx
 	pop	%ebp
 	ret
-	.set	main.size, 28
+	.set	main.size, 24
 	.globl	main
 #GLOBALS
 #STRINGS

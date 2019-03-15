@@ -112,24 +112,21 @@ main:
 	 #BLOCK
 	#CALL
 	#ADDRESS
-	#operand = 
 	    #ID
 	    #END ID
-	leal	-4(%ebp), %eax
+	leal	-4(%ebp), %ebx
 	#END ADDRESS
-	pushl	%eax
+	pushl	%ebx
 	#ADDRESS
-	#operand = 
 	   #STRING
-	leal	.L10, %ecx
+	leal	.L10, %esi
 	#END ADDRESS
-	pushl	%ecx
+	pushl	%esi
 	call	scanf
 	addl	$8, %esp
 	#END CALL
 	#CALL
 	movl	%eax, -8(%ebp)
-	movl	%ecx, -12(%ebp)
 	#CALL
 	    #ID
 	    #END ID
@@ -139,11 +136,10 @@ main:
 	#END CALL
 	pushl	%eax
 	#ADDRESS
-	#operand = 
 	   #STRING
-	leal	.L11, %ecx
+	leal	.L11, %edi
 	#END ADDRESS
-	pushl	%ecx
+	pushl	%edi
 	call	printf
 	addl	$8, %esp
 	#END CALL
@@ -156,7 +152,7 @@ main:
 	popl	%ebx
 	pop	%ebp
 	ret
-	.set	main.size, 12
+	.set	main.size, 8
 	.globl	main
 #GLOBALS
 #STRINGS

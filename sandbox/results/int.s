@@ -10,100 +10,86 @@ main:
 	#BODY
 	 #BLOCK
 	  #ASSIGNMENT
-#before 
 	    #ID
 	    #END ID
-#after -4(%ebp)
 	   #INT
 	   #END INT
-	movl	$100, %ebx
-	movl	%ebx, -4(%ebp)
+	movl	$100, %eax
+	movl	%eax, -4(%ebp)
 	  #END ASSIGNMENT
 	  #ASSIGNMENT
-#before 
 	    #ID
 	    #END ID
-#after -8(%ebp)
 	   #INT
 	   #END INT
-	movl	$30, %esi
-	movl	%esi, -8(%ebp)
+	movl	$30, %ecx
+	movl	%ecx, -8(%ebp)
 	  #END ASSIGNMENT
 	  #ASSIGNMENT
-#before 
 	    #ID
 	    #END ID
-#after -12(%ebp)
 	   #INT
 	   #END INT
-	movl	$2, %edi
-	movl	%edi, -12(%ebp)
+	movl	$2, %edx
+	movl	%edx, -12(%ebp)
 	  #END ASSIGNMENT
 	  #ASSIGNMENT
-#before 
 	    #ID
 	    #END ID
-#after -16(%ebp)
 	#ADD
 	#ADD
 	    #ID
 	    #END ID
 	    #ID
 	    #END ID
-	movl	-4(%ebp), %eax
-	addl	-8(%ebp), %eax
+	movl	-4(%ebp), %ebx
+	addl	-8(%ebp), %ebx
 	#END ADD
 	    #ID
 	    #END ID
-	addl	-12(%ebp), %eax
+	addl	-12(%ebp), %ebx
 	#END ADD
-	movl	%eax, -16(%ebp)
+	movl	%ebx, -16(%ebp)
 	  #END ASSIGNMENT
 	  #ASSIGNMENT
-#before 
 	    #ID
 	    #END ID
-#after -20(%ebp)
 	#SUBTRACT
 	#SUBTRACT
 	    #ID
 	    #END ID
 	    #ID
 	    #END ID
-	movl	-4(%ebp), %ecx
-	subl	-8(%ebp), %ecx
+	movl	-4(%ebp), %esi
+	subl	-8(%ebp), %esi
 	#END SUBTRACT
 	    #ID
 	    #END ID
-	subl	-12(%ebp), %ecx
+	subl	-12(%ebp), %esi
 	#END SUBTRACT
-	movl	%ecx, -20(%ebp)
+	movl	%esi, -20(%ebp)
 	  #END ASSIGNMENT
 	  #ASSIGNMENT
-#before 
 	    #ID
 	    #END ID
-#after -24(%ebp)
 	#MULTIPLY
 	#MULTIPLY
 	    #ID
 	    #END ID
 	    #ID
 	    #END ID
-	movl	-4(%ebp), %edx
-	imull	-8(%ebp), %edx
+	movl	-4(%ebp), %edi
+	imull	-8(%ebp), %edi
 	#END MULTIPLY
 	    #ID
 	    #END ID
-	imull	-12(%ebp), %edx
+	imull	-12(%ebp), %edi
 	#END MULTIPLY
-	movl	%edx, -24(%ebp)
+	movl	%edi, -24(%ebp)
 	  #END ASSIGNMENT
 	  #ASSIGNMENT
-#before 
 	    #ID
 	    #END ID
-#after -28(%ebp)
 	#ADD
 	#DIVIDE
 	    #ID
@@ -122,10 +108,8 @@ main:
 	movl	%eax, -28(%ebp)
 	  #END ASSIGNMENT
 	  #ASSIGNMENT
-#before 
 	    #ID
 	    #END ID
-#after -32(%ebp)
 	#SUBTRACT
 	#REMAINDER
 	    #ID
@@ -150,25 +134,12 @@ main:
 	    #END ID
 	pushl	-16(%ebp)
 	#ADDRESS
-	#operand = 
 	   #STRING
-	leal	.L1, %eax
+#callee spill
+	movl	%ebx, -52(%ebp)
+	leal	.L1, %ebx
 	#END ADDRESS
-	pushl	%eax
-	call	printf
-	addl	$8, %esp
-	#END CALL
-	#CALL
-	movl	%eax, -52(%ebp)
-	    #ID
-	    #END ID
-	pushl	-20(%ebp)
-	#ADDRESS
-	#operand = 
-	   #STRING
-	leal	.L2, %eax
-	#END ADDRESS
-	pushl	%eax
+	pushl	%ebx
 	call	printf
 	addl	$8, %esp
 	#END CALL
@@ -176,27 +147,14 @@ main:
 	movl	%eax, -56(%ebp)
 	    #ID
 	    #END ID
-	pushl	-24(%ebp)
+	pushl	-20(%ebp)
 	#ADDRESS
-	#operand = 
 	   #STRING
-	leal	.L3, %eax
+#callee spill
+	movl	%ebx, -60(%ebp)
+	leal	.L2, %ebx
 	#END ADDRESS
-	pushl	%eax
-	call	printf
-	addl	$8, %esp
-	#END CALL
-	#CALL
-	movl	%eax, -60(%ebp)
-	    #ID
-	    #END ID
-	pushl	-28(%ebp)
-	#ADDRESS
-	#operand = 
-	   #STRING
-	leal	.L4, %eax
-	#END ADDRESS
-	pushl	%eax
+	pushl	%ebx
 	call	printf
 	addl	$8, %esp
 	#END CALL
@@ -204,13 +162,44 @@ main:
 	movl	%eax, -64(%ebp)
 	    #ID
 	    #END ID
+	pushl	-24(%ebp)
+	#ADDRESS
+	   #STRING
+#callee spill
+	movl	%ebx, -68(%ebp)
+	leal	.L3, %ebx
+	#END ADDRESS
+	pushl	%ebx
+	call	printf
+	addl	$8, %esp
+	#END CALL
+	#CALL
+	movl	%eax, -72(%ebp)
+	    #ID
+	    #END ID
+	pushl	-28(%ebp)
+	#ADDRESS
+	   #STRING
+#callee spill
+	movl	%ebx, -76(%ebp)
+	leal	.L4, %ebx
+	#END ADDRESS
+	pushl	%ebx
+	call	printf
+	addl	$8, %esp
+	#END CALL
+	#CALL
+	movl	%eax, -80(%ebp)
+	    #ID
+	    #END ID
 	pushl	-32(%ebp)
 	#ADDRESS
-	#operand = 
 	   #STRING
-	leal	.L5, %eax
+#callee spill
+	movl	%ebx, -84(%ebp)
+	leal	.L5, %ebx
 	#END ADDRESS
-	pushl	%eax
+	pushl	%ebx
 	call	printf
 	addl	$8, %esp
 	#END CALL
@@ -223,7 +212,7 @@ main:
 	popl	%ebx
 	pop	%ebp
 	ret
-	.set	main.size, 64
+	.set	main.size, 84
 	.globl	main
 #GLOBALS
 #STRINGS

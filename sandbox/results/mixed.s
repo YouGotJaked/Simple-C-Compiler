@@ -10,39 +10,31 @@ main:
 	#BODY
 	 #BLOCK
 	  #ASSIGNMENT
-#before 
 	    #ID
 	    #END ID
-#after -16(%ebp)
 	   #INT
 	   #END INT
-	movl	$100, %ebx
-	movl	%ebx, -16(%ebp)
+	movl	$100, %eax
+	movl	%eax, -16(%ebp)
 	  #END ASSIGNMENT
 	  #ASSIGNMENT
-#before 
 	    #ID
 	    #END ID
-#after -20(%ebp)
 	   #INT
 	   #END INT
-	movl	$30, %esi
-	movl	%esi, -20(%ebp)
+	movl	$30, %ecx
+	movl	%ecx, -20(%ebp)
 	  #END ASSIGNMENT
 	  #ASSIGNMENT
-#before 
 	    #ID
 	    #END ID
-#after -44(%ebp)
 	   #REAL
 	movsd	.L1, %xmm0
 	movsd	%xmm0, -44(%ebp)
 	  #END ASSIGNMENT
 	  #ASSIGNMENT
-#before 
 	    #ID
 	    #END ID
-#after -4(%ebp)
 	#CAST
 	#ADD
 	#CAST
@@ -51,26 +43,24 @@ main:
 	    #END ID
 	    #ID
 	    #END ID
-	movl	-16(%ebp), %eax
-	addl	-20(%ebp), %eax
+	movl	-16(%ebp), %edx
+	addl	-20(%ebp), %edx
 	#END ADD
 	#LONG TO FP
-	cvtsi2sd	%eax, %xmm1
+	cvtsi2sd	%edx, %xmm1
 	#END CAST
 	    #ID
 	    #END ID
 	addsd	-44(%ebp), %xmm1
 	#END ADD
 	#FP TO LONG
-	cvttsd2si	%xmm1, %eax
+	cvttsd2si	%xmm1, %edx
 	#END CAST
-	movl	%eax, -4(%ebp)
+	movl	%edx, -4(%ebp)
 	  #END ASSIGNMENT
 	  #ASSIGNMENT
-#before 
 	    #ID
 	    #END ID
-#after -8(%ebp)
 	#CAST
 	#SUBTRACT
 	#CAST
@@ -79,26 +69,24 @@ main:
 	    #END ID
 	    #ID
 	    #END ID
-	movl	-16(%ebp), %ecx
-	subl	-20(%ebp), %ecx
+	movl	-16(%ebp), %ebx
+	subl	-20(%ebp), %ebx
 	#END SUBTRACT
 	#LONG TO FP
-	cvtsi2sd	%ecx, %xmm1
+	cvtsi2sd	%ebx, %xmm1
 	#END CAST
 	    #ID
 	    #END ID
 	subsd	-44(%ebp), %xmm1
 	#END SUBTRACT
 	#FP TO LONG
-	cvttsd2si	%xmm1, %ecx
+	cvttsd2si	%xmm1, %ebx
 	#END CAST
-	movl	%ecx, -8(%ebp)
+	movl	%ebx, -8(%ebp)
 	  #END ASSIGNMENT
 	  #ASSIGNMENT
-#before 
 	    #ID
 	    #END ID
-#after -12(%ebp)
 	#CAST
 	#MULTIPLY
 	#CAST
@@ -107,26 +95,24 @@ main:
 	    #END ID
 	    #ID
 	    #END ID
-	movl	-16(%ebp), %edx
-	imull	-20(%ebp), %edx
+	movl	-16(%ebp), %esi
+	imull	-20(%ebp), %esi
 	#END MULTIPLY
 	#LONG TO FP
-	cvtsi2sd	%edx, %xmm1
+	cvtsi2sd	%esi, %xmm1
 	#END CAST
 	    #ID
 	    #END ID
 	mulsd	-44(%ebp), %xmm1
 	#END MULTIPLY
 	#FP TO LONG
-	cvttsd2si	%xmm1, %edx
+	cvttsd2si	%xmm1, %esi
 	#END CAST
-	movl	%edx, -12(%ebp)
+	movl	%esi, -12(%ebp)
 	  #END ASSIGNMENT
 	  #ASSIGNMENT
-#before 
 	    #ID
 	    #END ID
-#after -28(%ebp)
 	#ADD
 	#CAST
 	#DIVIDE
@@ -149,10 +135,8 @@ main:
 	movsd	%xmm1, -28(%ebp)
 	  #END ASSIGNMENT
 	  #ASSIGNMENT
-#before 
 	    #ID
 	    #END ID
-#after -36(%ebp)
 	#SUBTRACT
 	#CAST
 	#REMAINDER
@@ -179,11 +163,10 @@ main:
 	    #END ID
 	pushl	-4(%ebp)
 	#ADDRESS
-	#operand = 
 	   #STRING
-	leal	.L2, %eax
+	leal	.L2, %edi
 	#END ADDRESS
-	pushl	%eax
+	pushl	%edi
 	call	printf
 	addl	$8, %esp
 	#END CALL
@@ -193,25 +176,12 @@ main:
 	    #END ID
 	pushl	-8(%ebp)
 	#ADDRESS
-	#operand = 
 	   #STRING
-	leal	.L3, %eax
+#callee spill
+	movl	%ebx, -60(%ebp)
+	leal	.L3, %ebx
 	#END ADDRESS
-	pushl	%eax
-	call	printf
-	addl	$8, %esp
-	#END CALL
-	#CALL
-	movl	%eax, -60(%ebp)
-	    #ID
-	    #END ID
-	pushl	-12(%ebp)
-	#ADDRESS
-	#operand = 
-	   #STRING
-	leal	.L4, %eax
-	#END ADDRESS
-	pushl	%eax
+	pushl	%ebx
 	call	printf
 	addl	$8, %esp
 	#END CALL
@@ -219,31 +189,48 @@ main:
 	movl	%eax, -64(%ebp)
 	    #ID
 	    #END ID
+	pushl	-12(%ebp)
+	#ADDRESS
+	   #STRING
+#callee spill
+	movl	%ebx, -68(%ebp)
+	leal	.L4, %ebx
+	#END ADDRESS
+	pushl	%ebx
+	call	printf
+	addl	$8, %esp
+	#END CALL
+	#CALL
+	movl	%eax, -72(%ebp)
+	    #ID
+	    #END ID
 	movsd	-28(%ebp), %xmm3
 	subl	$8, %esp
 	movsd	%xmm3, (%esp)
 	#ADDRESS
-	#operand = 
 	   #STRING
-	leal	.L5, %eax
+#callee spill
+	movl	%ebx, -76(%ebp)
+	leal	.L5, %ebx
 	#END ADDRESS
-	pushl	%eax
+	pushl	%ebx
 	call	printf
 	addl	$12, %esp
 	#END CALL
 	#CALL
-	movl	%eax, -68(%ebp)
+	movl	%eax, -80(%ebp)
 	    #ID
 	    #END ID
 	movsd	-36(%ebp), %xmm3
 	subl	$8, %esp
 	movsd	%xmm3, (%esp)
 	#ADDRESS
-	#operand = 
 	   #STRING
-	leal	.L6, %eax
+#callee spill
+	movl	%ebx, -84(%ebp)
+	leal	.L6, %ebx
 	#END ADDRESS
-	pushl	%eax
+	pushl	%ebx
 	call	printf
 	addl	$12, %esp
 	#END CALL
@@ -256,7 +243,7 @@ main:
 	popl	%ebx
 	pop	%ebp
 	ret
-	.set	main.size, 68
+	.set	main.size, 84
 	.globl	main
 #GLOBALS
 #STRINGS

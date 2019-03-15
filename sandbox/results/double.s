@@ -10,37 +10,29 @@ main:
 	#BODY
 	 #BLOCK
 	  #ASSIGNMENT
-#before 
 	    #ID
 	    #END ID
-#after -8(%ebp)
 	   #REAL
 	movsd	.L1, %xmm0
 	movsd	%xmm0, -8(%ebp)
 	  #END ASSIGNMENT
 	  #ASSIGNMENT
-#before 
 	    #ID
 	    #END ID
-#after -16(%ebp)
 	   #REAL
 	movsd	.L2, %xmm1
 	movsd	%xmm1, -16(%ebp)
 	  #END ASSIGNMENT
 	  #ASSIGNMENT
-#before 
 	    #ID
 	    #END ID
-#after -24(%ebp)
 	   #REAL
 	movsd	.L3, %xmm2
 	movsd	%xmm2, -24(%ebp)
 	  #END ASSIGNMENT
 	  #ASSIGNMENT
-#before 
 	    #ID
 	    #END ID
-#after -32(%ebp)
 	#ADD
 	#ADD
 	    #ID
@@ -57,10 +49,8 @@ main:
 	movsd	%xmm3, -32(%ebp)
 	  #END ASSIGNMENT
 	  #ASSIGNMENT
-#before 
 	    #ID
 	    #END ID
-#after -40(%ebp)
 	#SUBTRACT
 	#SUBTRACT
 	    #ID
@@ -77,10 +67,8 @@ main:
 	movsd	%xmm4, -40(%ebp)
 	  #END ASSIGNMENT
 	  #ASSIGNMENT
-#before 
 	    #ID
 	    #END ID
-#after -48(%ebp)
 	#MULTIPLY
 	#MULTIPLY
 	    #ID
@@ -97,10 +85,8 @@ main:
 	movsd	%xmm5, -48(%ebp)
 	  #END ASSIGNMENT
 	  #ASSIGNMENT
-#before 
 	    #ID
 	    #END ID
-#after -56(%ebp)
 	#ADD
 	#DIVIDE
 	    #ID
@@ -117,10 +103,8 @@ main:
 	movsd	%xmm6, -56(%ebp)
 	  #END ASSIGNMENT
 	  #ASSIGNMENT
-#before 
 	    #ID
 	    #END ID
-#after -64(%ebp)
 	#SUBTRACT
 	#DIVIDE
 	    #ID
@@ -139,16 +123,16 @@ main:
 	#CALL
 	    #ID
 	    #END ID
+#fp spill
 	movsd	%xmm0, -72(%ebp)
 	movsd	-32(%ebp), %xmm0
 	subl	$8, %esp
 	movsd	%xmm0, (%esp)
 	#ADDRESS
-	#operand = 
 	   #STRING
-	leal	.L4, %eax
+	leal	.L4, %ebx
 	#END ADDRESS
-	pushl	%eax
+	pushl	%ebx
 	call	printf
 	addl	$12, %esp
 	#END CALL
@@ -160,11 +144,10 @@ main:
 	subl	$8, %esp
 	movsd	%xmm0, (%esp)
 	#ADDRESS
-	#operand = 
 	   #STRING
-	leal	.L5, %eax
+	leal	.L5, %esi
 	#END ADDRESS
-	pushl	%eax
+	pushl	%esi
 	call	printf
 	addl	$12, %esp
 	#END CALL
@@ -176,11 +159,10 @@ main:
 	subl	$8, %esp
 	movsd	%xmm0, (%esp)
 	#ADDRESS
-	#operand = 
 	   #STRING
-	leal	.L6, %eax
+	leal	.L6, %edi
 	#END ADDRESS
-	pushl	%eax
+	pushl	%edi
 	call	printf
 	addl	$12, %esp
 	#END CALL
@@ -192,7 +174,6 @@ main:
 	subl	$8, %esp
 	movsd	%xmm0, (%esp)
 	#ADDRESS
-	#operand = 
 	   #STRING
 	leal	.L7, %eax
 	#END ADDRESS
@@ -208,7 +189,6 @@ main:
 	subl	$8, %esp
 	movsd	%xmm0, (%esp)
 	#ADDRESS
-	#operand = 
 	   #STRING
 	leal	.L8, %eax
 	#END ADDRESS

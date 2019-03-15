@@ -10,6 +10,6 @@ void release();
 void assign(Expression *expr, Register *reg);
 void assignTemp(Expression *expr);
 std::string suffix(Expression *expr);
-Register *getRegister();
+Register *getRegister(bool isComparative = false);
 Register *getFPRegister();
 Register *getCalleeRegister();

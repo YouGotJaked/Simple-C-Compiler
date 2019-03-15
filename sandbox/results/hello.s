@@ -11,11 +11,10 @@ main:
 	 #BLOCK
 	#CALL
 	#ADDRESS
-	#operand = 
 	   #STRING
-	leal	.L1, %eax
+	leal	.L1, %ebx
 	#END ADDRESS
-	pushl	%eax
+	pushl	%ebx
 	call	printf
 	addl	$4, %esp
 	#END CALL

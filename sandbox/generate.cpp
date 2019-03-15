@@ -30,14 +30,14 @@ static int tempOffset = 0;
 static vector<string> stringLabels;
 static vector<string> realLabels;
 static Label *returnLabel;
-
+static bool callerSpill = false, calleeSpill = false;
 // Registers
 static Register *eax = new Register("%eax", "%al");
 static Register *ebx = new Register("%ebx", "%bl");
 static Register *ecx = new Register("%ecx", "%cl");
 static Register *edx = new Register("%edx", "%dl");
-static Register *esi = new Register("%esi", "");
-static Register *edi = new Register("%edi", "");
+static Register *esi = new Register("%esi", "%bp");
+static Register *edi = new Register("%edi", "%si");
 static Registers registers = { eax, ecx, edx };
 
 static Register *xmm0 = new Register("%xmm0");
@@ -221,7 +221,7 @@ void Call::generate() {
 	}
     }
 
-    // spill registers
+    // free registers
     for (auto const &reg: registers) {
 	load(nullptr, reg);
     }
@@ -346,9 +346,7 @@ void Assignment::generate() {
     cout << "\t  #ASSIGNMENT" << endl;
     
     if (_left->isDeref() == nullptr) {
-	cout << "#before " << _left << endl;
 	_left->generate();
-	cout << "#after " << _left << endl;
     } else {
 	_left->isDeref()->generate();
     }    
@@ -356,22 +354,19 @@ void Assignment::generate() {
     _right->generate();
    
     if (_right->_register == nullptr) {
-	load(_right, FP(_right) ? getFPRegister() : CALLEE_SAVED ? getCalleeRegister() : getRegister());
+	load(_right, FP(_right) ? getFPRegister() : getRegister(true));
     }
     
-    stringstream ss;
-
     if (_left->isDeref() == nullptr) {
-	ss << _left;
+    	cout << "\tmov" << suffix(_left) << _right << ", " << _left << endl;
     } else {
 	if (_left->isDeref()->_register == nullptr) {
 	    load(_left->isDeref(), FP(_left->isDeref()) ? getFPRegister() : getRegister());
+	//    load(_left->isDeref(), FP(_left->isDeref()) ? getFPRegister() : CALLEE_SAVED ? getCalleeRegister() : getRegister());
 	}
-	ss << "(" << _left->isDeref() << ")" << endl;
+    	cout << "\tmov" << suffix(_left) << _right << ", (" << _left->isDeref() << ")" << endl;
     }
 
-    cout << "\tmov" << suffix(_left) << _right << ", " << ss.str() << endl;
-  
     cout << "\t  #END ASSIGNMENT" << endl;
 }
 
@@ -409,7 +404,8 @@ void LogicalAnd::generate() {
     cout << "\tje\t" << label << endl;
     cout << "\tmov\t$1, " << temp << endl;
     cout << label << ":" << endl;
-	
+
+    assign(_right, nullptr);
     assign(this, temp);
 	
     cout << "\t#END AND" << endl;
@@ -449,6 +445,7 @@ void LogicalOr::generate() {
     cout << "\tmov\t$1, " << temp << endl;
     cout << L2 << ":" << endl;
 
+    assign(_right, nullptr);
     assign(this, temp);
     cout << "\t#END OR" << endl;
 }
@@ -466,7 +463,7 @@ void Equal::generate() {
     _right->generate();
 
     if (_left->_register == nullptr) {
-	load(_left, getRegister());
+	load(_left, FP(_left) ? getFPRegister() : getRegister(true));
     }
 
     cout << "\tcmpl\t" << _right << ", " << _left << endl;
@@ -487,7 +484,7 @@ void NotEqual::generate() {
     _right->generate();
 
     if (_left->_register == nullptr) {
-        load(_left, getRegister());
+        load(_left, getRegister(true));
     }
 
     cout << "\tcmpl\t" << _right << ", " << _left << endl;
@@ -497,8 +494,6 @@ void NotEqual::generate() {
 
     assign(_right, nullptr);
     assign(this, _left->_register);
-
-    cout << "\t#END EQUAL" << endl;
 
     cout << "\t#END NOT EQUAL" << endl;
 }
@@ -510,7 +505,7 @@ void LessOrEqual::generate() {
     _right->generate();
 
     if (_left->_register == nullptr) {
-	load(_left, getRegister());
+	load(_left, getRegister(true));
     }
 
     cout << "\tcmp\t" << _right << ", " << _left << endl;
@@ -531,7 +526,7 @@ void GreaterOrEqual::generate() {
     _right->generate();
 
     if (_left->_register == nullptr) {
-	load(_left, getRegister());
+	load(_left, getRegister(true));
     }
 
     cout << "\tcmp\t" << _right << ", " << _left << endl;
@@ -552,7 +547,7 @@ void LessThan::generate() {
     _right->generate();
 
     if (_left->_register == nullptr) {
-	load(_left, getRegister());
+	load(_left, getRegister(true));
     }
 
     cout << "\tcmp\t" << _right << ", " << _left << endl;
@@ -573,7 +568,7 @@ void GreaterThan::generate() {
     _right->generate();
 
     if (_left->_register == nullptr) {
-	load(_left, getRegister());
+	load(_left, getRegister(true));
     }
 
     cout << "\tcmp\t" << _right << ", " << _left << endl;
@@ -603,10 +598,9 @@ void Add::generate() {
     _left->generate();
     _right->generate();
    
-
     // if left child not in register, allocate and load it
     if (_left->_register == nullptr) {
-	 load(_left, FP(_left) ? getFPRegister() : getRegister());
+	load(_left, FP(_left) ? getFPRegister() : getRegister());
     }
     
     // perform operation
@@ -765,7 +759,8 @@ void Negate::generate() {
 	cout << "\tpxor\t" << zeroTemp << ", " << zeroTemp << endl;
 	cout << "\tsubsd\t" << _expr << ", " << zeroTemp << endl;
 	cout << "\tmovsd\t" << zeroTemp << ", " << _expr << endl;
-    } else {
+        assign(nullptr, zeroTemp);
+     } else {
 	cout << "\tneg" << suffix(_expr) << _expr << endl;
     }
 
@@ -786,7 +781,7 @@ void Not::generate() {
     _expr->generate();
 
     if (_expr->_register == nullptr) {
-	load(_expr, getRegister());
+	load(_expr, FP(_expr) ? getFPRegister() : getRegister(true));
     }
 
     cout << "\tcmp" << suffix(_expr) << "$0, " << _expr << endl;
@@ -808,7 +803,6 @@ void Not::generate() {
  */
 void Address::generate() {
     cout << "\t#ADDRESS" << endl;
-    cout << "\t#operand = " << _expr->_operand << endl; 
     
     // for &*p 
     if (_expr->isDeref() != nullptr) {
@@ -826,7 +820,7 @@ void Address::generate() {
 	assign(this, _expr->_register);
     }
 
-    assign(this, getRegister());
+    assign(this, CALLEE_SAVED ? getCalleeRegister() : getRegister());
   
         // address is always 32-bit long
         /*
@@ -837,7 +831,7 @@ void Address::generate() {
 	    cout << "\tleal\t" << _expr << ", " << this << endl;
    	}*/
    cout << "\tleal\t" << _expr << ", " << this << endl;
- 
+   
    cout << "\t#END ADDRESS" << endl;
 }
 
@@ -847,13 +841,13 @@ void Dereference::generate() {
     _expr->generate();
 
     if (_expr->_register == nullptr) {
-	load(_expr, FP(_expr) ? getFPRegister() : getRegister());
+	load(_expr, FP(_expr) ? getFPRegister() : CALLEE_SAVED ? getCalleeRegister() : getRegister());
     }
 
     cout << "\tmov" << suffix(_expr) << "(" << _expr << "), " << _expr << endl;
     
     assign(this, _expr->_register);
- 
+    
     cout << "\t#END DEREFERENCE" << endl;
 }
 
@@ -909,7 +903,7 @@ void Cast::generate() {
  	    if (dest.size() == 1) {
 		cout << "\t#FP TO BYTE" << endl;
 		Register *temp = getRegister();
-		assign(this, getRegister());
+		//iassign(this, getRegister());
 		cout << "\tcvttsd2si\t" << _expr << ", " << temp << endl;
 		assign(this, temp);
 		assign(nullptr, temp);
@@ -1156,26 +1150,6 @@ void GreaterThan::test(const Label &label, bool ifTrue) {
 
 */
 
-/*
- * Function:	If::test
- *
- * Description: Specialized version of test for If subclass.
- */
-
-/*
-void If::test(const Label &label, bool ifTrue) {
-    _left->generate();
-    _right->generate();
-
-    if (_left->_register == nullptr) {
-	load(_left, getRegister());
-    }
-
-    cout << 
-}
-
-*/
-
 // ################
 // ##    MISC    ##
 // ################
@@ -1285,15 +1259,23 @@ string suffix(Expression *expr) {
  * Description: Return the first available register. If no registers are
  *              available, spill the first register.
  */
-Register *getRegister() {
+Register *getRegister(bool isComparative) {
     for (auto const &reg: registers) {
         if (reg->_node == nullptr) {
             return reg;
         }
     }
-    // spill first register so it's available
-    load(nullptr, registers[0]);
-    return registers[0];
+    // all caller-saved registers are full
+    callerSpill = true;
+    // if all callee-saved registers are full, spill first caller-saved register
+    if (calleeSpill || isComparative) { 
+    	cout << "#caller spill" << endl;
+	callerSpill = false;
+    	load(nullptr, registers[0]);
+    	return registers[0];
+    } else {
+	return getCalleeRegister();
+    }
 }
 
 /*
@@ -1308,7 +1290,7 @@ Register *getFPRegister() {
 	    return fp_reg;
 	}
     }	
-
+    cout << "#fp spill" << endl;
     load(nullptr, fp_registers[0]);
     return fp_registers[0];
 }
@@ -1324,6 +1306,16 @@ Register *getCalleeRegister() {
 	    return reg;
 	}
     }
-    load(nullptr, callee_saved[0]);  
-    return callee_saved[0];
+
+    calleeSpill = true;
+
+    if (callerSpill) {
+    	cout << "#callee spill" << endl;
+	calleeSpill = false;
+    	load(nullptr, callee_saved[0]);  
+    	return callee_saved[0];
+    } else {
+	return getRegister();
+    }
 }
+

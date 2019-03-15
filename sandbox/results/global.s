@@ -10,10 +10,8 @@ foo:
 	#BODY
 	 #BLOCK
 	  #ASSIGNMENT
-#before 
 	    #ID
 	    #END ID
-#after x
 	#ADD
 	    #ID
 	    #END ID
@@ -60,16 +58,15 @@ main:
 	#BODY
 	 #BLOCK
 	  #ASSIGNMENT
-#before 
 	    #ID
 	    #END ID
-#after x
 	   #INT
 	   #END INT
-	movl	$65, %ebx
-	movl	%ebx, x
+	movl	$65, %eax
+	movl	%eax, x
 	  #END ASSIGNMENT
 	#CALL
+	movl	%eax, -4(%ebp)
 	    #ID
 	    #END ID
 	pushl	x
@@ -77,7 +74,7 @@ main:
 	addl	$4, %esp
 	#END CALL
 	#CALL
-	movl	%eax, -4(%ebp)
+	movl	%eax, -8(%ebp)
 	#CALL
 	call	foo
 	#END CALL
@@ -86,7 +83,7 @@ main:
 	addl	$4, %esp
 	#END CALL
 	#CALL
-	movl	%eax, -8(%ebp)
+	movl	%eax, -12(%ebp)
 	    #ID
 	    #END ID
 	pushl	x
@@ -94,7 +91,7 @@ main:
 	addl	$4, %esp
 	#END CALL
 	#CALL
-	movl	%eax, -12(%ebp)
+	movl	%eax, -16(%ebp)
 	   #INT
 	   #END INT
 	pushl	$10
@@ -110,7 +107,7 @@ main:
 	popl	%ebx
 	pop	%ebp
 	ret
-	.set	main.size, 12
+	.set	main.size, 16
 	.globl	main
 #GLOBALS
 	.comm	x, 4
